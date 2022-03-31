@@ -21,5 +21,33 @@
             ORDER BY    board_id desc
                         , update_date DESC
         </select>
+        <insert id="boardCreate">
+            INSERT INTO board_db
+            (
+                index_id
+                ,   title
+                ,   content
+                ,   gen_address
+                ,   det_address
+                ,   regdate
+                ,   update_date
+                ,   week
+                ,   tag_big_name
+                ,   tag_small_name
+            )
+            VALUES
+            (
+                "1000"
+                ,   #{title}
+                ,   #{content}
+                ,   #{genAddress}
+                ,   #{detAddress}
+                ,   sysdate()
+                ,   sysdate()
+                ,   #{week}
+                ,   #{tagBigName}
+                ,   #{tagSmallName}
 
+            )
+        </insert>
 </mapper>

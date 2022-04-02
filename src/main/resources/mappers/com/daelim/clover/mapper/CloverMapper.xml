@@ -21,6 +21,7 @@
             ORDER BY    board_id desc
                         , update_date DESC
         </select>
+
         <insert id="boardCreate">
             INSERT INTO board_db
             (

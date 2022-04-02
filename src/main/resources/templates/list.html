@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <tr th:each="boardList : ${boardList}">
+        <td align="center" th:text="${boardList.title}"></td>
+        <td align="center" th:text="${boardList.content}"></td>
+        <td align="center" th:text="${boardList.genAddress}"></td>
+        <td align="center" th:text="${boardList.detAddress}"></td>
+        <td align="center" th:text="${boardList.updateDate}"></td>
+        <td align="center" th:text="${boardList.week}"></td>
+        <td align="center" th:text="${boardList.tagBigName}"></td>
+        <td align="center" th:text="${boardList.tagSmallName}"></td>
+    </tr>
+</body>
+</html>

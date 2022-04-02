@@ -16,7 +16,7 @@ import java.util.List;
 
 @Log4j2
 @Controller
-//@RequestMapping("/board")
+@RequestMapping("/")
 public class BoardController {
 
 
@@ -32,23 +32,24 @@ public class BoardController {
 
         model.addAttribute("boardList", boardList);
 
-        return "/list";
+        return "list";
     }
 
 
     @GetMapping("/register")
-    public String boardModifyForm(Board board, Model model) throws Exception{
+    public String boardRegisterForm(Board board, Model model) throws Exception{
         log.info("get 입력 입니다.");
 
 
-        return "/register";
+        return "bRegister";
     }
 
     @PostMapping("/register")
-    public String boardModify(Board board, Model model) throws Exception{
+    public String boardRegister(Board board, Model model) throws Exception{
         log.info("post 입력 입니다.");
         boardService.boardRegister(board);
+        model.addAttribute("msg", "성공했스니다.");
 
-        return "/register";
+        return "success";
     }
 }

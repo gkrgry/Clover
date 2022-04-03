@@ -21,6 +21,23 @@
             ORDER BY    board_id desc
                         , update_date DESC
         </select>
+        <select id="boardRead"
+                resultType="com.daelim.clover.board.domain.Board">
+            SELECT      board_id        as boardId
+                 , index_id      as indexId
+                 , title
+                 , image
+                 , content
+                 , gen_address   as genAddress
+                 , det_address   as detAddress
+                 , update_date    as updateDate
+                 , week
+                 , tag_big_name  as tagBigName
+                 , tag_small_name as tagSmallName
+                 , board_count   as boardCount
+            from        board_db as boardDB
+            WHERE   board_id = #{boardId}
+        </select>
 
         <insert id="boardCreate">
             INSERT INTO board_db

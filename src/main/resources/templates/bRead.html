@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <h2>read</h2>
+    <form id="board" th:object="${board}" method="POST">
+        <input type="hidden" name="boardId" th:field="*{boardId}"/>
+
+        <table>
+            <tr>
+                <td>title</td>
+                <td><input type="text" name="title"
+                           th:field="*{title}" readonly="readonly" /></td>
+            </tr>
+            <tr>
+                <td>content</td>
+                <td><input type="text" name="content"
+                           th:field="*{content}" readonly="readonly" /></td>
+            </tr>
+            <tr>
+                <td>genAddress</td>
+                <td><input name="genAddress"
+                              th:field="*{genAddress}" readonly="readonly"></input></td>
+            </tr>
+            <tr>
+                <td>detAddress</td>
+                <td><input type="text" name="detAddress"
+                           th:field="*{detAddress}" readonly="readonly" /></td>
+            </tr>
+            <tr>
+                <td>updateDate</td>
+                <td th:text="${#dates.format(board.updateDate,'yyyy-MM-dd')}"></td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>

@@ -1,7 +1,8 @@
 package com.daelim.clover.user.service;
 
-import org.springframework.stereotype.Service;
 
-@Service
+import com.daelim.clover.user.domain.User;
+
 public interface UserService {
+    public void userSingUp(User user) throws  Exception;
 }

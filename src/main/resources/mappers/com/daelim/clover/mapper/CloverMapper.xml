@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-        <mapper namespace="com.daelim.clover.board.mapper.BoardMapper">
+<mapper namespace="com.daelim.clover.board.mapper.BoardMapper">
         <select id="boardList"
         resultType="com.daelim.clover.board.domain.Board">
             SELECT      board_id        as boardId
@@ -51,4 +51,8 @@
 
             )
         </insert>
+
+
+
 </mapper>
+

@@ -6,6 +6,7 @@
 </head>
 <body>
     <table>
+
         <tr th:each="boardList : ${boardList}">
             <td align="center" th:text="${boardList.title}"></td>
             <td align="center"><a  th:href="@{|/read?boardId=${boardList.boardId}|}" th:text="${boardList.content}"></a></td>

@@ -1,6 +1,7 @@
 package com.daelim.clover.board.mapper;
 
 import com.daelim.clover.board.domain.Board;
+import com.daelim.clover.board.domain.Criteria;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -13,7 +14,14 @@ public interface BoardMapper {
 
     public void boardUpdate(Board board) throws Exception;
 
-    public void boardDelete(Board board) throws Exception;
+    public void boardDelete(Integer boardId, Integer indexId) throws Exception;
 
     public List<Board> boardList() throws Exception;
+
+    public List<Board> getBoardListPaging(Criteria cri) throws Exception;
+
+
+
+
+
 }

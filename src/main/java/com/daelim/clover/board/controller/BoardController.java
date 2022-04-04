@@ -54,8 +54,20 @@ public class BoardController {
     public String boardRegister(Board board, Model model) throws Exception{
         log.info("post 입력 입니다.");
         boardService.boardRegister(board);
-        model.addAttribute("msg", "성공했스니다.");
+        model.addAttribute("msg", "입력 성공했스니다.");
 
+        return "success";
+    }
+
+    @PostMapping("/remove")
+    public String boardRemove(@RequestParam("boardId") int boardId
+                              ,@RequestParam("indexId") int indexId
+                              ,Model model) throws Exception{
+        log.info("remove.....");
+
+        boardService.boardRemove(boardId,indexId);
+
+        model.addAttribute("msg","삭제 성공");
         return "success";
     }
 }

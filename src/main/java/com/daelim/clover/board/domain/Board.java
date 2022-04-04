@@ -7,18 +7,18 @@ import java.util.Date;
 
 @Data
 public class Board {
-    private int boardId;
-    private int indexId;
-    private String title;
-    private String image;
-    private String content;
-    private String genAddress;
-    private String detAddress;
-    private Date regDate;
-    private Date updateDate;
-    private String week;
-    private String tagBigName;
-    private String tagSmallName;
-    private int board_count;
+    private int boardId; //기본키
+    private int indexId; //유저 테이블 기본키
+    private String title; //글 제목
+    private String image; //글 이미지 파일 이름
+    private String content; //글 내용
+    private String genAddress; //도로명 주소
+    private String detAddress; //상세 주소
+    private Date regDate;       //생성날짜
+    private Date updateDate;    //업데이트 날짜
+    private String week;        //활동할 요일
+    private String tagBigName;  //큰 태그
+    private String tagSmallName; //작은 태그
+    private int board_count;    //글 조회수
 
 }

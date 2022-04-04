@@ -3,13 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            var formObj = $("#board");
+
+            $("#btRemove").on("click", function (){
+                formObj.attr("action","/remove");
+                formObj.submit();
+            })
+        })
+    </script>
 </head>
 <body>
 
     <h2>read</h2>
     <form id="board" th:object="${board}" method="POST">
-        <input type="hidden" name="boardId" th:field="*{boardId}"/>
-
+        <input type="hidden" name="boardId" th:value="*{boardId}"/>
+        <input type="hidden" name="indexId" th:value="*{indexId}"/>
         <table>
             <tr>
                 <td>title</td>
@@ -34,8 +46,13 @@
             <tr>
                 <td>updateDate</td>
                 <td th:text="${#dates.format(board.updateDate,'yyyy-MM-dd')}"></td>
-            </tr>
+            </tr
+            >
         </table>
+
     </form>
+    <div>
+        <button type="submit" id="btRemove">삭제</button>
+    </div>
 </body>
 </html>

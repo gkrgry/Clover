@@ -6,6 +6,7 @@ import java.util.Date;
 
 @Data
 public class User {
+
     private int indexId;        //유저인데스 넘버
     private String userId;      //유저아이디
     private String pwd;         //비번

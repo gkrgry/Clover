@@ -1,6 +1,7 @@
 package com.daelim.clover.board.service;
 
 import com.daelim.clover.board.domain.Board;
+import com.daelim.clover.board.domain.Criteria;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,7 +15,10 @@ public interface BoardService {
 
     public void boardModify(Board board) throws Exception;
 
-    public void boardRemove(Board board) throws Exception;
+    public void boardRemove(Integer boardId, Integer indexId) throws Exception;
 
     public List<Board> boardList() throws Exception;
+//    public List<Board> boardList(Criteria cri) throws Exception;
+
+
 }

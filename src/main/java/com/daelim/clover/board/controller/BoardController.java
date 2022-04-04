@@ -3,14 +3,10 @@ package com.daelim.clover.board.controller;
 import com.daelim.clover.board.domain.Board;
 import com.daelim.clover.board.service.BoardService;
 import lombok.extern.log4j.Log4j2;
-import org.apache.ibatis.annotations.ConstructorArgs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,7 +26,7 @@ public class BoardController {
 
         model.addAttribute("boardList", boardList);
 
-        return "list";
+        return "bList";
     }
 
 
@@ -41,13 +37,35 @@ public class BoardController {
 
         return "bRegister";
     }
+    @GetMapping("/read")
+    public String boardRead(@RequestParam("boardId") int boardId, Model model) throws Exception{
+        log.info("read 입력 입니다.");
+        Board board = boardService.boardRead(boardId);
+
+        model.addAttribute("board",board);
+
+
+        return "bRead";
+    }
 
     @PostMapping("/register")
     public String boardRegister(Board board, Model model) throws Exception{
         log.info("post 입력 입니다.");
         boardService.boardRegister(board);
-        model.addAttribute("msg", "성공했스니다.");
+        model.addAttribute("msg", "입력 성공했스니다.");
 
+        return "success";
+    }
+
+    @PostMapping("/remove")
+    public String boardRemove(@RequestParam("boardId") int boardId
+                              ,@RequestParam("indexId") int indexId
+                              ,Model model) throws Exception{
+        log.info("remove.....");
+
+        boardService.boardRemove(boardId,indexId);
+
+        model.addAttribute("msg","삭제 성공");
         return "success";
     }
 }

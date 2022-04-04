@@ -22,6 +22,46 @@
                         , update_date DESC
         </select>
 
+    <select id="getBoardListPaging"
+            resultType="com.daelim.clover.board.domain.Board">
+        <![CDATA[
+        SELECT      board_id        as boardId
+             , index_id      as indexId
+             , title
+             , gen_address   as genAddress
+             , update_date    as updateDate
+             , week
+             , tag_big_name  as tagBigName
+             , board_count   as boardCount
+        from        (
+                        SELECT @RUWNUM := @ROWNUM+1 as rn, board_id, index_id, title, gen_address, update_date
+                                , week, tag_big_name, tag_small_name as tagSmallName, board_count
+                        FROM    board_db, (SELECT @ROWNUM :=0 ) A
+                        ORDER BY board_id desc
+                    ) RESULT
+        WHERE       rn > (#{pageNum} - 1 ) * #{amount}
+        LIMIT       #{amount};
+            ]]>
+    </select>
+
+    <select id="boardRead"
+                resultType="com.daelim.clover.board.domain.Board">
+            SELECT      board_id        as boardId
+                 , index_id      as indexId
+                 , title
+                 , image
+                 , content
+                 , gen_address   as genAddress
+                 , det_address   as detAddress
+                 , update_date    as updateDate
+                 , week
+                 , tag_big_name  as tagBigName
+                 , tag_small_name as tagSmallName
+                 , board_count   as boardCount
+            from        board_db as boardDB
+            WHERE   board_id = #{boardId}
+        </select>
+
         <insert id="boardCreate">
             INSERT INTO board_db
             (
@@ -52,7 +92,11 @@
             )
         </insert>
 
-
+        <delete id="boardDelete">
+            DELETE FROM board_db
+            WHERE board_id = #{boardId}
+            AND   index_id = #{indexId}
+        </delete>
 
 </mapper>
 

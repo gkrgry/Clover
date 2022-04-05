@@ -57,6 +57,31 @@ public class BoardController {
         return "success";
     }
 
+    @GetMapping("/modify")
+    public String boardModify(@RequestParam("boardId") int boardId, Model model) throws Exception{
+        log.info("modify get");
+
+        Board board = boardService.boardRead(boardId);
+
+        model.addAttribute("board",board);
+
+
+        return "bModify";
+    }
+
+    @PostMapping("/modify")
+    public String boardModifyForm(Board board, Model model) throws Exception{
+        log.info("modify post 입력 입니다.");
+
+        boardService.boardModify(board);
+
+        model.addAttribute("msg","수정 성공");
+
+        return "success";
+    }
+
+
+
     @PostMapping("/remove")
     public String boardRemove(@RequestParam("boardId") int boardId
                               ,@RequestParam("indexId") int indexId

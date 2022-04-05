@@ -9,8 +9,16 @@
 
             var formObj = $("#board");
 
+            $("#btModify").on("click", function() {
+                var boardId = $("#boardId");
+                var boardIdVal = boardId.val();
+
+                self.location = "/modify?boardId=" + boardIdVal;
+            });
+
             $("#btRemove").on("click", function (){
                 formObj.attr("action","/remove");
+                formObj.attr("method","post");
                 formObj.submit();
             })
         })
@@ -19,8 +27,8 @@
 <body>
 
     <h2>read</h2>
-    <form id="board" th:object="${board}" method="POST">
-        <input type="hidden" name="boardId" th:value="*{boardId}"/>
+    <form id="board" th:object="${board}">
+        <input type="hidden"  id="boardId" name="boardId" th:value="*{boardId}"/>
         <input type="hidden" name="indexId" th:value="*{indexId}"/>
         <table>
             <tr>
@@ -37,7 +45,8 @@
                 <td>genAddress</td>
                 <td width="100%" height="100%">
                     <div id="map" style="width:100%;height:350px;">
-
+                        <input type="hidden" name="genAddress"
+                               th:field="*{genAddress}" readonly="readonly" /><
                     </div>
                 </td>
 
@@ -56,6 +65,7 @@
 
     </form>
     <div>
+        <button type="submit" id="btModify">수정</button>
         <button type="submit" id="btRemove">삭제</button>
     </div>
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=36bff8b96636a6127542c2c517175d6f&libraries=services"></script>

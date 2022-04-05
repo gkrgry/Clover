@@ -91,6 +91,20 @@
 
             )
         </insert>
+        <update id="boardUpdate"
+            parameterType="com.daelim.clover.board.domain.Board">
+            UPDATE board_db
+            SET    title            =#{title}
+                ,   content         =#{content}
+                ,   gen_address     =#{genAddress}
+                ,   det_address     =#{detAddress}
+                ,   update_date     = sysdate()
+                ,   week            =#{week}
+                ,   tag_big_name    =#{tagBigName}
+                ,   tag_small_name  =#{tagSmallName}
+            WHERE board_id = #{boardId}
+            AND   index_id = #{indexId}
+        </update>
 
         <delete id="boardDelete">
             DELETE FROM board_db

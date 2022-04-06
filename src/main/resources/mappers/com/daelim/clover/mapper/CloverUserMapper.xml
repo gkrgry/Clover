@@ -4,6 +4,7 @@
 <mapper namespace="com.daelim.clover.user.mapper.UserMapper">
     <!--        USER SQL           -->
 
+    <!--회원가입-->
     <insert id="saveUser" >
         INSERT  INTO user_db
         (
@@ -28,4 +29,14 @@
             ,   sysdate()
             )
     </insert>
+
+   <!-- 로그인-->
+    <select id="getUserAccount" resultType="com.daelim.clover.user.domain.User">
+        SELECT
+        *
+        FROM
+        user_db
+        WHERE
+        user_id = #{userId}
+    </select>
 </mapper>

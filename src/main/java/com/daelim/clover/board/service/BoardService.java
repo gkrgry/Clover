@@ -17,8 +17,9 @@ public interface BoardService {
 
     public void boardRemove(Integer boardId, Integer indexId) throws Exception;
 
-    public List<Board> boardList() throws Exception;
-//    public List<Board> boardList(Criteria cri) throws Exception;
+//    public List<Board> boardList() throws Exception;
+    public List<Board> boardList(Criteria cri) throws Exception;
 
+    public int listGetTotal(Criteria cri) throws Exception;
 
 }

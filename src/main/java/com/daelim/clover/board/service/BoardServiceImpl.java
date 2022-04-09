@@ -2,6 +2,7 @@ package com.daelim.clover.board.service;
 
 
 import com.daelim.clover.board.domain.Board;
+import com.daelim.clover.board.domain.Criteria;
 import com.daelim.clover.board.mapper.BoardMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,12 +31,21 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void boardRemove(Board board) throws Exception {
-        boardMapper.boardDelete(board);
+    public void boardRemove(Integer boardId, Integer indexId) throws Exception {
+        boardMapper.boardDelete(boardId,indexId);
+    }
+
+//    @Override
+//    public List<Board> boardList() throws Exception {
+//        return boardMapper.boardList();
+//    }
+    @Override
+    public List<Board> boardList(Criteria cri) throws Exception {
+        return boardMapper.getBoardListPaging(cri);
     }
 
     @Override
-    public List<Board> boardList() throws Exception {
-        return boardMapper.boardList();
+    public int listGetTotal(Criteria cri) throws Exception {
+        return boardMapper.listGetTotal(cri);
     }
 }

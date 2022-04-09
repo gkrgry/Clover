@@ -39,10 +39,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
 
         log.info(user);
-        log.info(user.getUserId());
         return user;
     }
-
-
-
 }

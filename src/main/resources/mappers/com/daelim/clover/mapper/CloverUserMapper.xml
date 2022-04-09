@@ -33,7 +33,14 @@
    <!-- 로그인-->
     <select id="getUserAccount" resultType="com.daelim.clover.user.domain.User">
         SELECT
-        *
+               user_id
+             ,  password
+             ,  name
+             ,  nickname
+             ,  email
+             ,  phone
+             ,  sex
+             ,  regdate
         FROM
         user_db
         WHERE

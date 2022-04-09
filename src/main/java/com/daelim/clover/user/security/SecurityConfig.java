@@ -42,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                     .loginPage("/login")
                     .defaultSuccessUrl("/user_access")//로그인 성공 후 리다이렉트 주소
-//                    .failureUrl("/access_denied")  //인증에 실패했을 떄 보여주는 화면
+                    .failureUrl("/access_denied")  //인증에 실패했을 떄 보여주는 화면
                     .and()
                 .logout()
                 .logoutSuccessUrl("/sign")// 로그아웃 성공시 리다이렉트 주소
@@ -57,8 +57,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
    @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception{
        log.info("로그인인증");
-        auth.userDetailsService(userService).passwordEncoder(new BCryptPasswordEncoder());//해당 서비스(userService)에서는  UserDetailsService를  implements해서
-       //loadUserByUsername() 구현해야함 (서비스참고)
+            auth.userDetailsService(userService).passwordEncoder(new BCryptPasswordEncoder());//해당 서비스(userService)에서는  UserDetailsService를  implements해서
+       //LoadUserByUsername() 구현해야함 (서비스참고)
 
     }
 }

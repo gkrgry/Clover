@@ -1,0 +1,75 @@
+@charset "UTF-8";
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Malgun Gothic', Gulim, sans-serif;
+}
+a {
+    text-decoration: none;
+    color:  #474747;
+}
+
+/* 중간 위치 */
+
+section {
+    text-align: center;
+    width: 360px;
+    margin: auto;
+    margin-top: 20%;
+}
+
+/* 로고 */
+#logo {
+    margin-bottom: 15px;
+    font-size: 30px;
+}
+
+form {
+    background-color: white;
+    border: 1px solid #1A732E;
+    width: 250px;
+    margin-left: 50px;
+}
+
+form :first-child {
+    margin-top: 20px;
+}
+
+::placeholder {
+    font-size: 10px;
+}
+
+button {
+    background-color: #1A732E;
+    color: white;
+    width: 180px;
+    height: 45px;
+    font-size: 15px;
+    margin-top: 20px;
+    margin-bottom: 15px;
+}
+
+button:hover {
+    background-color: #063510;
+}
+
+/* 로그인 하단 */
+
+#login_bottom {
+    margin: 12px 12px 8px 12px;
+    font-size: 10px;
+    color:#424242;
+}
+
+a {
+    color:#bbbbbb;
+}
+
+article {
+    margin: 0;
+    font-size: 10px;
+}

@@ -5,7 +5,7 @@
     <!--        USER SQL           -->
 
     <!--회원가입-->
-    <insert id="saveUser" >
+    <insert id="saveUser" parameterType="com.daelim.clover.user.domain.User" >
         INSERT  INTO user_db
         (
             user_id
@@ -33,7 +33,14 @@
    <!-- 로그인-->
     <select id="getUserAccount" resultType="com.daelim.clover.user.domain.User">
         SELECT
-        *
+               user_id
+             ,  password
+             ,  name
+             ,  nickname
+             ,  email
+             ,  phone
+             ,  sex
+             ,  regdate
         FROM
         user_db
         WHERE

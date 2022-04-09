@@ -22,21 +22,27 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
    @Transactional
     public void  userSingUp(User user) {
+
        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
        user.setPwd(passwordEncoder.encode(user.getPassword()));
-        userMapper.saveUser(user);
+
+       userMapper.saveUser(user);
     }
 
     @Override
     public User loadUserByUsername(String userId) throws UsernameNotFoundException {
         //여기서 받은 유저 패스워드와 비교하여 로그인 인증
-        log.info("로그인 인증@@@@");
         User user = userMapper.getUserAccount(userId);
+
         if(user == null){
-            log.info(userId+" 내부");
             throw new UsernameNotFoundException("User not authorized.");
         }
+
         log.info(user);
+        log.info(user.getUserId());
         return user;
     }
+
+
+
 }

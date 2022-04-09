@@ -1,0 +1,58 @@
+package com.daelim.clover.board.domain;
+
+import lombok.Data;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
+
+@Data
+public class Criteria {
+
+    private int pageNum;
+    private int amount;
+    /* 페이지 skip */
+    private int skip;
+
+    /* 검색 타입 */
+    private String type;
+
+    /* 검색 키워드 */
+    private String keyword;
+
+
+    public Criteria() {
+        this(1,10);
+    }
+
+    public Criteria(int pageNum, int amount) {
+        this.pageNum = pageNum;
+        this.amount = amount;
+    }
+
+    /* 검색 타입 데이터 배열 변환 */
+    public String[] getTypeArr() {
+        return type == null ? new String[]{} : type.split("");
+    }
+
+    public void setPageNum(int pageNum) {
+        this.pageNum = pageNum;
+        this.skip = (pageNum - 1) * this.amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+        this.skip = (this.pageNum - 1) * amount;
+    }
+
+    public String makeQueryString(int pageNum) {
+
+        UriComponents uriComponents = UriComponentsBuilder.newInstance()
+                .queryParam("pageNum", pageNum)
+                .queryParam("amount", amount)
+                .queryParam("searchType", type)
+                .queryParam("keyword", keyword)
+                .build()
+                .encode();
+
+        return uriComponents.toUriString();
+    }
+}

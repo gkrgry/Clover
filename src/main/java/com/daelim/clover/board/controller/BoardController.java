@@ -1,6 +1,8 @@
 package com.daelim.clover.board.controller;
 
 import com.daelim.clover.board.domain.Board;
+import com.daelim.clover.board.domain.Criteria;
+import com.daelim.clover.board.domain.PageDTO;
 import com.daelim.clover.board.service.BoardService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,16 +20,31 @@ public class BoardController {
     @Autowired
     BoardService boardService;
 
+//    @GetMapping("/list")
+//    public String boardList(Model model) throws Exception{
+//        log.info("List 입니다");
+//
+//        List<Board> boardList = boardService.boardList();
+//
+//        model.addAttribute("boardList", boardList);
+//
+//        return "bList";
+//    }
     @GetMapping("/list")
-    public String boardList(Model model) throws Exception{
-        log.info("List 입니다");
+    public String boardList(Criteria cri,Model model) throws Exception{
+        log.info("cri +List 입니다");
 
-        List<Board> boardList = boardService.boardList();
+        List<Board> boardList = boardService.boardList(cri);
+        int total = boardService.listGetTotal(cri);
+        total = total + 10;
+        log.info(total);
 
         model.addAttribute("boardList", boardList);
+        model.addAttribute("pageMaker",new PageDTO(cri,total));
 
         return "bList";
     }
+
 
 
     @GetMapping("/register")
@@ -56,6 +73,31 @@ public class BoardController {
 
         return "success";
     }
+
+    @GetMapping("/modify")
+    public String boardModify(@RequestParam("boardId") int boardId, Model model) throws Exception{
+        log.info("modify get");
+
+        Board board = boardService.boardRead(boardId);
+
+        model.addAttribute("board",board);
+
+
+        return "bModify";
+    }
+
+    @PostMapping("/modify")
+    public String boardModifyForm(Board board, Model model) throws Exception{
+        log.info("modify post 입력 입니다.");
+
+        boardService.boardModify(board);
+
+        model.addAttribute("msg","수정 성공");
+
+        return "success";
+    }
+
+
 
     @PostMapping("/remove")
     public String boardRemove(@RequestParam("boardId") int boardId

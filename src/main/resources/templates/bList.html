@@ -17,9 +17,17 @@
         actionForm.submit();
 
     })
+
 </script>
 <body>
 <th:block th:include="/include/navbar"></th:block>
+<h2  id="keywordVal"th:text="|`${param.keyword}` 을 입력하셨습니다.|">
+
+</h2>
+<br>
+<br>
+<hr>
+<br>
 <div id="totalList">
     <table>
         <thead>

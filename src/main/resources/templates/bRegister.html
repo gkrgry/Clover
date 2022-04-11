@@ -9,16 +9,21 @@
     <form action="register" method="post" id="board">
         제목 : <input type="text" name="title"><br>
         내용 : <input type="text" name="content"><br>
-        도로명주소 : <input type="text" name="genAddress" id="address_kakao" readonly=readonly><br>
+        도로명주소 : <input type="text" class="genAddress" name="genAddress" id="address_kakao" readonly=readonly><br>
         상세주소 : <input type="text" name="detAddress"><br>
         요일 : <input type="text" name="week"><br>
         큰태그 : <input type="text" name="tagBigName"><br>
         작은태그 : <input type="text" name="tagSmallName"><br>
+        <input type="hidden" name="lat" id="lat">
+        <input type="hidden" name="lon" id="lon">
         <input type="submit" value="전송">
     </form>
 </body>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=36bff8b96636a6127542c2c517175d6f&libraries=services"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<script>
+<script th:inline="javascript">
+
+
     window.onload = function(){
         document.getElementById("address_kakao").addEventListener("click", function(){ //주소입력칸을 클릭하면
             //카카오 지도 발생
@@ -26,6 +31,18 @@
                 oncomplete: function(data) { //선택시 입력값 세팅
                     document.getElementById("address_kakao").value = data.address; // 주소 넣기
                     document.querySelector("input[name=detAddress]").focus(); //상세입력 포커싱
+                    var geocoder = new kakao.maps.services.Geocoder();
+
+                    var callback = function(result, status) {
+                        if (status === kakao.maps.services.Status.OK) {
+                            document.getElementById("lat").value = result[0].address.y
+                            document.getElementById("lon").value = result[0].address.x
+                        }
+                    };
+
+                    geocoder.addressSearch(data.address, callback);
+
+
                 }
             }).open();
         });

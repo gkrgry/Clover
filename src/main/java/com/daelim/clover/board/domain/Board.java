@@ -20,5 +20,7 @@ public class Board {
     private String tagBigName;  //큰 태그
     private String tagSmallName; //작은 태그
     private int board_count;    //글 조회수
+    private double lat;          //위도
+    private double lon;          // 경도
 
 }

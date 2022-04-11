@@ -67,6 +67,8 @@
              , week
              , tag_big_name  as tagBigName
              , board_count   as boardCount
+             , lat
+             , lon
         ]]>
         FROM    (   SELECT * FROM board_db
             <if test="keyword != null">
@@ -151,6 +153,8 @@
                 ,   week
                 ,   tag_big_name
                 ,   tag_small_name
+                ,   lat
+                ,   lon
             )
             VALUES
             (
@@ -164,6 +168,8 @@
                 ,   #{week}
                 ,   #{tagBigName}
                 ,   #{tagSmallName}
+                ,   #{lat}
+                ,   #{lon}
 
             )
         </insert>

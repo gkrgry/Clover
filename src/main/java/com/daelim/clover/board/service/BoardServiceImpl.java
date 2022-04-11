@@ -45,7 +45,17 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public List<Board> boardMapSearchList(Criteria cri) throws Exception {
+        return boardMapper.getBoardMapSearchList(cri);
+    }
+
+    @Override
     public int listGetTotal(Criteria cri) throws Exception {
         return boardMapper.listGetTotal(cri);
+    }
+
+    @Override
+    public int mapSearchlistGetTotal(Criteria cri) throws Exception {
+        return boardMapper.mapSearchlistGetTotal(cri);
     }
 }

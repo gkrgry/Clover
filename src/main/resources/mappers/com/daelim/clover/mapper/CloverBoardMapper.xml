@@ -42,6 +42,9 @@
             title
             LIKE
             concat('%', #{keyword}, '%')
+            or  content
+            LIKE
+            concat('%', #{keyword}, '%')
                 ]]>
             </if>
         <![CDATA[
@@ -51,6 +54,41 @@
             LIMIT #{skip}, #{amount}
             ]]>
     </select>
+
+    <select id="getBoardMapSearchList"
+            resultType="com.daelim.clover.board.domain.Board">
+        <![CDATA[
+        SELECT      board_id        as boardId
+             , index_id      as indexId
+             , title
+             , content
+             , gen_address   as genAddress
+             , update_date    as updateDate
+             , week
+             , tag_big_name  as tagBigName
+             , board_count   as boardCount
+        ]]>
+        FROM    (   SELECT * FROM board_db
+            <if test="keyword != null">
+            <![CDATA[
+        WHERE
+            gen_address
+            LIKE
+            concat('%', #{keyword}, '%')
+            or  content
+            LIKE
+            concat('%', #{keyword}, '%')
+                ]]>
+            </if>
+        )
+        <![CDATA[
+        ORDER BY
+            board_id
+            asc
+            LIMIT #{skip}, #{amount}
+            ]]>
+    </select>
+
     <select id="listGetTotal" resultType="int">
         SELECT
         count(*)
@@ -59,6 +97,25 @@
         <if test="keyword != null">
             WHERE
             title
+            LIKE
+            concat('%', #{keyword}, '%')
+            or  content
+            LIKE
+            concat('%', #{keyword}, '%')
+        </if>
+    </select>
+
+    <select id="mapSearchlistGetTotal" resultType="int">
+        SELECT
+        count(*)
+        FROM
+        board_db
+        <if test="keyword != null">
+            WHERE
+            gen_address
+            LIKE
+            concat('%', #{keyword}, '%')
+            or  content
             LIKE
             concat('%', #{keyword}, '%')
         </if>

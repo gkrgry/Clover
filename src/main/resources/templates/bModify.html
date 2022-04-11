@@ -1,9 +1,37 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.88.1">
+    <title>Checkout example · Bootstrap v4.6</title>
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.6/examples/checkout/">
+    <!-- Bootstrap core CSS -->
+    <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        textarea{
+            resize: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+    <!-- Custom styles for this template -->
+    <link href="/css/form-validation.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
         $(document).ready(function (){
             var formObj = $("#board");
@@ -17,111 +45,194 @@
         })
     </script>
 </head>
-<body>
-    <form id="board" action="success.html" th:action="@{/modify}" th:object="${board}" method="post">
-        <input type="hidden" name="boardId" th:value="*{boardId}"/>
-        <input type="hidden" name="indexId" th:value="*{indexId}"/>
-        <table>
-            <tr>
-                <td>title</td>
-                <td><input type="text" name="title"
-                           th:field="*{title}"/></td>
-            </tr>
-            <tr>
-                <td>content</td>
-                <td><input type="text" name="content"
-                           th:field="*{content}" /></td>
-            </tr>
-            <tr>
-                <td>genAddress</td>
-                <td width="100%" height="100%">
+<body class="bg-light">
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-8 order-md-1">
+            <h3 class="mb-3">수정</h3>
+            <form class="needs-validation" id="board" action="success.html" th:action="@{/modify}" th:object="${board}" method="post" novalidate>
+                <input type="hidden" name="boardId" th:value="*{boardId}"/>
+                <input type="hidden" name="indexId" th:value="*{indexId}"/>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="title">제목</label>
+                        <input type="text" name="title" th:field="*{title}"
+                               class="form-control" id="title" placeholder="" value="" required>
+                        <div class="invalid-feedback">
+                            제목을 입력해 주세요
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <label for="content">내용</label>
+                        <textarea type="text" name="content" th:value="*{content}" th:text="*{content}" rows="4" cols="50"
+                                  class="form-control" id="content"></textarea>
+                        <div class="invalid-feedback">
+                            내용을 입력해 주세요
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="image">image</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                        </div>
+                        <!-- 고칠거-->
+                        <input type="text" class="form-control" id="image" required>
+                        <div class="invalid-feedback" style="width: 100%;">
+                            Your username is required.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label>도로명주소<span class="text-muted">(Optional)</span></label>
+                    <input type="text" name="genAddress" id="address_kakao" th:field="*{genAddress}"
+                           class="form-control"/>
                     <div id="map" style="width:100%;height:350px;">
                     </div>
-                    <input type="text" name="genAddress" id="address_kakao"
-                           th:field="*{genAddress}"/>
-                </td>
+                    <div class="invalid-feedback">
+                        도로명주소를 입력해 주세요
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="detAddress">상세주소</label>
+                    <input type="text" name="detAddress" th:field="*{detAddress}"
+                           class="form-control" id="detAddress" required>
+                    <div class="invalid-feedback">
+                        상세주소를 입력해 주세요
+                    </div>
+                </div>
 
-            </tr>
-            <tr>
-                <td>detAddress</td>
-                <td><input type="text" name="detAddress"
-                           th:field="*{detAddress}"/></td>
-            </tr>
-            <tr>
-                <td>tagBigName</td>
-                <td><input type="text" name="tagBigName"
-                           th:field="*{tagBigName}"/></td>
-            </tr>
-            <tr>
-                <td>tagSmallName</td>
-                <td><input type="text" name="tagSmallName"
-                           th:field="*{tagSmallName}"/></td>
-            </tr>
-            <tr>
-                <td>updateDate</td>
-                <td th:text="${#dates.format(board.updateDate,'yyyy-MM-dd')}"></td>
-            </tr
-            >
-        </table>
-    </form>
-    <div>
-        <button type="submit" id="btModify">수정</button>
+                <!--        <tr>-->
+                <!--          <td>tagBigName</td>-->
+                <!--          <td><input type="text" name="tagBigName"-->
+                <!--                     th:field="*{tagBigName}"/></td>-->
+                <!--        </tr>-->
+                <!--        <tr>-->
+                <!--          <td>tagSmallName</td>-->
+                <!--          <td><input type="text" name="tagSmallName"-->
+                <!--                     th:field="*{tagSmallName}"/></td>-->
+                <!--        </tr>-->
+
+
+
+<!--                <div class="row">-->
+<!--                    <div class="col-md-5 mb-3">-->
+<!--                        <label for="country">Country</label>-->
+<!--                        <select class="custom-select d-block w-100" id="country" required>-->
+<!--                            <option value="">Choose...</option>-->
+<!--                            <option>United States</option>-->
+<!--                        </select>-->
+<!--                        <div class="invalid-feedback">-->
+<!--                            Please select a valid country.-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="col-md-4 mb-3">-->
+<!--                        <label for="state">State</label>-->
+<!--                        <select class="custom-select d-block w-100" id="state" required>-->
+<!--                            <option value="">Choose...</option>-->
+<!--                            <option>California</option>-->
+<!--                        </select>-->
+<!--                        <div class="invalid-feedback">-->
+<!--                            Please provide a valid state.-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="col-md-3 mb-3">-->
+<!--                        <label for="zip">Zip</label>-->
+<!--                        <input type="text" class="form-control" id="zip" placeholder="" required>-->
+<!--                        <div class="invalid-feedback">-->
+<!--                            Zip code required.-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+                <div class="mb-3">
+                    <label for="updateDate">전 수정날짜 <span class="text-muted"></span></label>
+                    <p type="text" th:text="${#dates.format(board.updateDate,'yyyy-MM-dd')}"
+                           class="form-control" id="updateDate"/>
+                </div>
+
+                <hr class="mb-4">
+                <div>
+                    <button class="btn btn-primary btn-lg btn-block"
+                            type="submit" id="btModify">수정</button>
+                </div>
+            </form>
+        </div>
     </div>
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=36bff8b96636a6127542c2c517175d6f&libraries=services"></script>
-    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    <script>
-        window.onload = function(){
-            document.getElementById("address_kakao").addEventListener("click", function(){ //주소입력칸을 클릭하면
-                //카카오 지도 발생
-                new daum.Postcode({
-                    oncomplete: function(data) { //선택시 입력값 세팅
-                        document.getElementById("address_kakao").value = data.address; // 주소 넣기
-                        document.querySelector("input[name=detAddress]").focus(); //상세입력 포커싱
-                    }
-                }).open();
-            });
-        }
-    </script>
-    <script>
-        var genAddress = "[[${board.genAddress}]]"
-        var detAddress = "[[${board.detAddress}]]"
-        console.log("주소는 : " + genAddress);
-        var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-            mapOption = {
-                center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-                level: 3 // 지도의 확대 레벨
-            };
 
-        // 지도를 생성합니다
-        var map = new kakao.maps.Map(mapContainer, mapOption);
-
-        // 주소-좌표 변환 객체를 생성합니다
-        var geocoder = new kakao.maps.services.Geocoder();
-
-        // 주소로 좌표를 검색합니다
-        geocoder.addressSearch(genAddress, function(result, status) {
-
-            // 정상적으로 검색이 완료됐으면
-            if (status === kakao.maps.services.Status.OK) {
-
-                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-                // 결과값으로 받은 위치를 마커로 표시합니다
-                var marker = new kakao.maps.Marker({
-                    map: map,
-                    position: coords
-                });
-
-                // 인포윈도우로 장소에 대한 설명을 표시합니다
-                var infowindow = new kakao.maps.InfoWindow({
-                    content: '<div style="width:150px;text-align:center;padding:6px 0;">"[[${board.detAddress}]]"</div>'
-                });
-                infowindow.open(map, marker);
-
-                // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-                map.setCenter(coords);
-            }
+    <footer class="my-5 pt-5 text-muted text-center text-small">
+        <p class="mb-1">&copy; 2017-2021 Company Name</p>
+        <ul class="list-inline">
+            <li class="list-inline-item"><a href="#">Privacy</a></li>
+            <li class="list-inline-item"><a href="#">Terms</a></li>
+            <li class="list-inline-item"><a href="#">Support</a></li>
+        </ul>
+    </footer>
+</div>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=36bff8b96636a6127542c2c517175d6f&libraries=services"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+    window.onload = function(){
+        document.getElementById("address_kakao").addEventListener("click", function(){ //주소입력칸을 클릭하면
+            //카카오 지도 발생
+            new daum.Postcode({
+                oncomplete: function(data) { //선택시 입력값 세팅
+                    document.getElementById("address_kakao").value = data.address; // 주소 넣기
+                    document.querySelector("input[name=detAddress]").focus(); //상세입력 포커싱
+                }
+            }).open();
         });
-    </script>
+    }
+</script>
+<script>
+    var genAddress = "[[${board.genAddress}]]"
+    var detAddress = "[[${board.detAddress}]]"
+    console.log("주소는 : " + genAddress);
+    var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+        mapOption = {
+            center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+            level: 3 // 지도의 확대 레벨
+        };
+
+    // 지도를 생성합니다
+    var map = new kakao.maps.Map(mapContainer, mapOption);
+
+    // 주소-좌표 변환 객체를 생성합니다
+    var geocoder = new kakao.maps.services.Geocoder();
+
+    // 주소로 좌표를 검색합니다
+    geocoder.addressSearch(genAddress, function(result, status) {
+
+        // 정상적으로 검색이 완료됐으면
+        if (status === kakao.maps.services.Status.OK) {
+
+            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+            // 결과값으로 받은 위치를 마커로 표시합니다
+            var marker = new kakao.maps.Marker({
+                map: map,
+                position: coords
+            });
+
+            // 인포윈도우로 장소에 대한 설명을 표시합니다
+            var infowindow = new kakao.maps.InfoWindow({
+                content: '<div style="width:150px;text-align:center;padding:6px 0;">"[[${board.detAddress}]]"</div>'
+            });
+            infowindow.open(map, marker);
+
+            // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+            map.setCenter(coords);
+        }
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script>window.jQuery || document.write('<script src="/assets/js/vendor/jquery.slim.min.js"><\/script>')</script><script src="/assets/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<script src="/js/form-validation.js"></script>
 </body>
 </html>

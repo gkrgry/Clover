@@ -4,6 +4,7 @@ import com.daelim.clover.board.domain.Board;
 import com.daelim.clover.board.domain.Criteria;
 import com.daelim.clover.board.domain.PageDTO;
 import com.daelim.clover.board.service.BoardService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,11 +15,12 @@ import java.util.List;
 
 @Log4j2
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/")
 public class BoardController {
 
-    @Autowired
-    BoardService boardService;
+
+    private final BoardService boardService;
 
 //    @GetMapping("/list")
 //    public String boardList(Model model) throws Exception{
@@ -30,6 +32,27 @@ public class BoardController {
 //
 //        return "bList";
 //    }
+    @GetMapping("/main")
+    public String main(Model model) throws Exception{
+
+
+    return "mainpage";
+}
+    @GetMapping("/mapSearch")
+    public String mapSearch(Criteria cri, Model model) throws Exception{
+        log.info("map search");
+
+        //boardlist - > boardMaplist
+        List<Board> boardMapSearchList = boardService.boardList(cri);
+        int total = boardService.mapSearchlistGetTotal(cri);
+        total = total + 10;
+        log.info(total);
+
+        model.addAttribute("boardList", boardMapSearchList);
+        model.addAttribute("pageMaker",new PageDTO(cri,total));
+
+        return "bMapSearch";
+    }
     @GetMapping("/list")
     public String boardList(Criteria cri,Model model) throws Exception{
         log.info("cri +List 입니다");
@@ -54,6 +77,15 @@ public class BoardController {
 
         return "bRegister";
     }
+
+    @PostMapping("/register")
+    public String boardRegister(Board board, Model model) throws Exception{
+        log.info("post 입력 입니다.");
+        boardService.boardRegister(board);
+        model.addAttribute("msg", "입력 성공했스니다.");
+
+        return "success";
+    }
     @GetMapping("/read")
     public String boardRead(@RequestParam("boardId") int boardId, Model model) throws Exception{
         log.info("read 입력 입니다.");
@@ -63,15 +95,6 @@ public class BoardController {
 
 
         return "bRead";
-    }
-
-    @PostMapping("/register")
-    public String boardRegister(Board board, Model model) throws Exception{
-        log.info("post 입력 입니다.");
-        boardService.boardRegister(board);
-        model.addAttribute("msg", "입력 성공했스니다.");
-
-        return "success";
     }
 
     @GetMapping("/modify")

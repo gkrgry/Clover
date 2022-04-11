@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<link rel="stylesheet" href="/css/bootstrap.css">
+<link rel="stylesheet" href="/css/list.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.js"></script>
 <script type="text/javascript">
     $(".readMove").on("click",function (e){
         e.preventDefault();
@@ -16,48 +19,73 @@
     })
 </script>
 <body>
+<th:block th:include="/include/navbar"></th:block>
+<div id="totalList">
     <table>
-
-        <tr th:each="boardList : ${boardList}">
-            <td align="center" th:text="${boardList.title}"></td>
-            <td align="center">
-                <a class="readMove" th:href="@{|/read?boardId=${boardList.boardId}|}" th:text="${boardList.content}">
-                </a>
-            </td>
-            <td align="center" th:text="${boardList.genAddress}"></td>
-            <td align="center" th:text="${boardList.detAddress}"></td>
-            <td th:text="${#dates.format(boardList.updateDate,'yyyy-MM-dd')}"></td>
+        <thead>
+            <tr id="theadTh">
+                <th >요일</th>
+                <th >이미지</th>
+                <th  colspan="2">설명</th>
+                <th >등록일</th>
+            </tr>
+        </thead>
+        <tbody th:each="boardList : ${boardList}">
             <td align="center" th:text="${boardList.week}"></td>
-            <td align="center" th:text="${boardList.tagBigName}"></td>
-            <td align="center" th:text="${boardList.tagSmallName}"></td>
-        </tr>
+            <td align="center" th:text="${boardList.image}"></td>
+            <td>
+                <div id="listDivCol">
+                    <p>
+                        <a class="readMove" th:href="@{|/read?boardId=${boardList.boardId}|}" th:text="${boardList.title}">
+                    </p>
+                    <p>
+                        <a class="readMove" th:href="@{|/read?boardId=${boardList.boardId}|}" th:text="${boardList.indexId}">
+                    </p><br>
+                    <p th:text="${boardList.genAddress}"></p>
+                </div>
+            </td>
+            <td>
+                <div id="listDivCol">
+                    <p th:text="${boardList.tagBigName}"></p><br>
+                    <p th:text="${boardList.tagSmallName}"></p>
+                </div>
+            </td>
+            <td th:text="${#dates.format(boardList.updateDate,'yyyy-MM-dd')}"></td>
+
+        </tbody>
     </table>
     <!-- 페이징처리 -->
     <!-- 이전 버튼 -->
-    <div>
-    <th:block th:if="${pageMaker.prev}">
-        <li class="pageMaker_btn prev">
-            <a href="javascript:void(0)" th:onclick="movePage( [[ ${#request.requestURI} ]], [[ ${pageMaker.cri.makeQueryString(pageMaker.startPage - 1)} ]])">이전</a>
+    <div id="pagingButton">
+        <nav aria-label="Page navigation example">
+        <ul class="pagination">
+        <th:block th:if="${pageMaker.prev}">
+        <li class="page-item prev">
+            <a href="javascript:void(0)" class="page-link" th:onclick="movePage( [[ ${#request.requestURI} ]], [[ ${pageMaker.cri.makeQueryString(pageMaker.startPage - 1)} ]])">이전</a>
         </li>
-    </th:block>
+        </th:block>
         <!-- 페이지 번호-->
         <th:block th:with="pageMaker = ${pageMaker}">
             <th:block th:each="num : *{#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
-                <li class="pageMaker_btn" th:classappend="${pageMaker.cri.pageNum == num} ? 'active' : ''">
-                    <a href="javascript:void(0)" th:text="${num}" th:onclick="movePage([[ ${#request.requestURI} ]],[[ ${pageMaker.cri.makeQueryString(num)} ]])"></a>
+                <li class="page-item" th:classappend="${pageMaker.cri.pageNum == num} ? 'active' : ''">
+                    <a href="javascript:void(0)" class="page-link" th:text="${num}" th:onclick="movePage([[ ${#request.requestURI} ]],[[ ${pageMaker.cri.makeQueryString(num)} ]])"></a>
                 </li>
             </th:block>
         </th:block>
-    <th:block th:if="${pageMaker.next}">
-        <li class="pageMaker_btn next">
-            <a href="javascript:void(0)" th:onclick="movePage( [[ ${#request.requestURI} ]], [[ ${pageMaker.cri.makeQueryString(pageMaker.endPage + 1)} ]])">다음</a>
+        <th:block th:if="${pageMaker.next}">
+        <li class="page-item next">
+            <a href="javascript:void(0)" class="page-link" th:onclick="movePage( [[ ${#request.requestURI} ]], [[ ${pageMaker.cri.makeQueryString(pageMaker.endPage + 1)} ]])">다음</a>
         </li>
+        </th:block>
+        </ul>
+        </nav>
     </div>
     <!-- 페이징 처리에 같이 갈 데이터 -->
     <form id="actionForm" action="list" method="get">
         <input type="hidden" name="pageNum" th:value="${pageMaker.cri.pageNum}">
         <input type="hidden" name="amount" th:value="${pageMaker.cri.amount}">
     </form>
+</div>
     <script th:javascript>
         /* ![CDATA[ */
         function movePage(uri, queryString) {

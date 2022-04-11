@@ -28,9 +28,18 @@ class CloverApplicationTests {
     @Autowired
     BoardService service;
 
+
     @Test
     void contextLoads() {
     }
+
+
+
+    @Test
+    public void commentTest(){
+
+    }
+
 
     @Test
     @DisplayName("insert test")

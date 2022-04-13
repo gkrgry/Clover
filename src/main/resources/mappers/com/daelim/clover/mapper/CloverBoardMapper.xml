@@ -16,6 +16,8 @@
                         , tag_big_name  as tagBigName
                         , tag_small_name as tagSmallName
                         , board_count   as boardCount
+                        , lat
+                        , lon
             from        board_db as boardDB
             WHERE       board_id > 0
             ORDER BY    board_id desc
@@ -34,6 +36,8 @@
              , week
              , tag_big_name  as tagBigName
              , board_count   as boardCount
+             , lat
+             , lon
         FROM        board_db
         ]]>
             <if test="keyword != null">
@@ -136,6 +140,8 @@
                  , tag_big_name  as tagBigName
                  , tag_small_name as tagSmallName
                  , board_count   as boardCount
+                 , lat
+                 , lon
             from        board_db as boardDB
             WHERE   board_id = #{boardId}
         </select>
@@ -184,6 +190,8 @@
                 ,   week            =#{week}
                 ,   tag_big_name    =#{tagBigName}
                 ,   tag_small_name  =#{tagSmallName}
+                ,   lat             =#{lat}
+                ,   lon             =#{lon}
             WHERE board_id = #{boardId}
             AND   index_id = #{indexId}
         </update>

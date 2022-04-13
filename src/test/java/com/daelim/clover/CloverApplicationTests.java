@@ -65,5 +65,24 @@ class CloverApplicationTests {
 
 
     }
+    @Test
+    @DisplayName("insert test2")
+    public void testInsert2(){
+
+        IntStream.rangeClosed(1,100).forEach(i ->{
+            Board board = new Board();
+
+            board.setLat(37.403289794921875);
+            board.setLon(126.9306869506836);
+            try{
+                service.boardModify(board);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+            System.out.println("board " + i );
+        });
+
+
+    }
 
 }

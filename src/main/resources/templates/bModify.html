@@ -66,7 +66,7 @@
                     </div>
                     <div class="col-md-12">
                         <label for="content">내용</label>
-                        <textarea type="text" name="content" th:value="*{content}" th:text="*{content}" rows="4" cols="50"
+                        <textarea type="text" name="content" th:value="*{content}" th:text="*{content}" rows="8" cols="100"
                                   class="form-control" id="content"></textarea>
                         <div class="invalid-feedback">
                             내용을 입력해 주세요
@@ -80,10 +80,8 @@
                         <div class="input-group-prepend">
                         </div>
                         <!-- 고칠거-->
-                        <input type="text" class="form-control" id="image" required>
-                        <div class="invalid-feedback" style="width: 100%;">
-                            Your username is required.
-                        </div>
+                        <input type="text" id="image" required>
+                        <!-- class="form-control"-->
                     </div>
                 </div>
 
@@ -103,6 +101,14 @@
                            class="form-control" id="detAddress" required>
                     <div class="invalid-feedback">
                         상세주소를 입력해 주세요
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label>요일</label>
+                    <input type="text" name="week" th:field="*{week}"
+                           class="form-control">
+                    <div class="invalid-feedback">
+                        요일을 입력해 주세요
                     </div>
                 </div>
 
@@ -229,9 +235,6 @@
         }
     });
 </script>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script>window.jQuery || document.write('<script src="/assets/js/vendor/jquery.slim.min.js"><\/script>')</script><script src="/assets/dist/js/bootstrap.bundle.min.js"></script>
-
 
 <script src="/js/form-validation.js"></script>
 </body>

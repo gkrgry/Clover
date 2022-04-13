@@ -16,8 +16,8 @@
                         , tag_big_name  as tagBigName
                         , tag_small_name as tagSmallName
                         , board_count   as boardCount
-                        , lat
-                        , lon
+                        , lat           as lat
+                        , lon           as lon
             from        board_db as boardDB
             WHERE       board_id > 0
             ORDER BY    board_id desc
@@ -36,8 +36,7 @@
              , week
              , tag_big_name  as tagBigName
              , board_count   as boardCount
-             , lat
-             , lon
+
         FROM        board_db
         ]]>
             <if test="keyword != null">
@@ -62,11 +61,13 @@
     <select id="getBoardMapSearchList"
             resultType="com.daelim.clover.board.domain.Board">
         <![CDATA[
-        SELECT      board_id        as boardId
+        SELECT
+               board_id        as boardId
              , index_id      as indexId
              , title
              , content
              , gen_address   as genAddress
+             , det_address   as detAddress
              , update_date    as updateDate
              , week
              , tag_big_name  as tagBigName
@@ -74,23 +75,21 @@
              , lat
              , lon
         ]]>
-        FROM    (   SELECT * FROM board_db
+        FROM   board_db
             <if test="keyword != null">
             <![CDATA[
         WHERE
             gen_address
             LIKE
             concat('%', #{keyword}, '%')
-            or  content
+            or  det_address
             LIKE
             concat('%', #{keyword}, '%')
                 ]]>
             </if>
-        )
         <![CDATA[
         ORDER BY
-            board_id
-            asc
+            updateDate desc , board_id
             LIMIT #{skip}, #{amount}
             ]]>
     </select>
@@ -140,8 +139,6 @@
                  , tag_big_name  as tagBigName
                  , tag_small_name as tagSmallName
                  , board_count   as boardCount
-                 , lat
-                 , lon
             from        board_db as boardDB
             WHERE   board_id = #{boardId}
         </select>

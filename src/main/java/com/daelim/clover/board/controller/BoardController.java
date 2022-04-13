@@ -43,7 +43,7 @@ public class BoardController {
         log.info("map search");
 
         //boardlist - > boardMaplist
-        List<Board> boardMapSearchList = boardService.boardList(cri);
+        List<Board> boardMapSearchList = boardService.boardMapSearchList(cri);
         int total = boardService.mapSearchlistGetTotal(cri);
         total = total + 10;
         log.info(total);

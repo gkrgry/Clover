@@ -3,21 +3,163 @@
 <head>
     <meta charset="UTF-8">
     <title>입력</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.88.1">
+    <title>Checkout example · Bootstrap v4.6</title>
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.6/examples/checkout/">
+    <!-- Bootstrap core CSS -->
+    <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        textarea{
+            resize: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+    <!-- Custom styles for this template -->
+    <link href="/css/form-validation.css" rel="stylesheet">
+    <script src="/js/form-validation.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
-    <form action="register" method="post" id="board">
-        제목 : <input type="text" name="title"><br>
-        내용 : <input type="text" name="content"><br>
-        도로명주소 : <input type="text" class="genAddress" name="genAddress" id="address_kakao" readonly=readonly><br>
-        상세주소 : <input type="text" name="detAddress"><br>
-        요일 : <input type="text" name="week"><br>
-        큰태그 : <input type="text" name="tagBigName"><br>
-        작은태그 : <input type="text" name="tagSmallName"><br>
-        <input type="hidden" name="lat" id="lat">
-        <input type="hidden" name="lon" id="lon">
-        <input type="submit" value="전송">
-    </form>
+
+    <th:block th:include="/include/navbar"> </th:block>
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-8 order-md-1">
+                <h3 class="mb-3">입력</h3>
+                <form class="needs-validation" id="board" action="register" method="post" novalidate>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="title">제목</label>
+                            <input type="text" name="title"
+                                   class="form-control" id="title" placeholder="" value="" required>
+                            <div class="invalid-feedback">
+                                제목을 입력해 주세요
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <label for="content">내용</label>
+                            <textarea type="text" name="content" rows="8" cols="100"
+                                      class="form-control" id="content"></textarea>
+                            <div class="invalid-feedback">
+                                내용을 입력해 주세요
+                            </div>
+                        </div>
+                    </div>
+
+<!--                    <div class="mb-3">-->
+<!--                        <label for="image">image</label>-->
+<!--                        <div class="input-group">-->
+<!--                            <div class="input-group-prepend">-->
+<!--                            </div>-->
+<!--                            &lt;!&ndash; 고칠거&ndash;&gt;-->
+<!--                            <input type="text" id="image" required>-->
+<!--                            &lt;!&ndash; class="form-control"&ndash;&gt;-->
+
+<!--                        </div>-->
+<!--                    </div>-->
+                    <div class="mb-3">
+                        <label>도로명주소<span class="text-muted">(Optional)</span></label>
+                        <input type="text" name="genAddress" id="address_kakao" readonly="readonly"
+                               class="form-control genAddress"/>
+                        <div class="invalid-feedback">
+                            도로명주소를 입력해 주세요
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="detAddress">상세주소</label>
+                        <input type="text" name="detAddress"
+                               class="form-control" id="detAddress" required>
+                        <div class="invalid-feedback">
+                            상세주소를 입력해 주세요
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label>요일</label>
+                        <input type="text" name="week"
+                               class="form-control">
+                        <div class="invalid-feedback">
+                            요일을 입력해 주세요
+                        </div>
+                    </div>
+                    <!--        <tr>-->
+                    <!--          <td>tagBigName</td>-->
+                    <!--          <td><input type="text" name="tagBigName"-->
+                    <!--                     th:field="*{tagBigName}"/></td>-->
+                    <!--        </tr>-->
+                    <!--        <tr>-->
+                    <!--          <td>tagSmallName</td>-->
+                    <!--          <td><input type="text" name="tagSmallName"-->
+                    <!--                     th:field="*{tagSmallName}"/></td>-->
+                    <!--        </tr>-->
+
+
+
+                    <!--                <div class="row">-->
+                    <!--                    <div class="col-md-5 mb-3">-->
+                    <!--                        <label for="country">Country</label>-->
+                    <!--                        <select class="custom-select d-block w-100" id="country" required>-->
+                    <!--                            <option value="">Choose...</option>-->
+                    <!--                            <option>United States</option>-->
+                    <!--                        </select>-->
+                    <!--                        <div class="invalid-feedback">-->
+                    <!--                            Please select a valid country.-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="col-md-4 mb-3">-->
+                    <!--                        <label for="state">State</label>-->
+                    <!--                        <select class="custom-select d-block w-100" id="state" required>-->
+                    <!--                            <option value="">Choose...</option>-->
+                    <!--                            <option>California</option>-->
+                    <!--                        </select>-->
+                    <!--                        <div class="invalid-feedback">-->
+                    <!--                            Please provide a valid state.-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="col-md-3 mb-3">-->
+                    <!--                        <label for="zip">Zip</label>-->
+                    <!--                        <input type="text" class="form-control" id="zip" placeholder="" required>-->
+                    <!--                        <div class="invalid-feedback">-->
+                    <!--                            Zip code required.-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <!--                </div>-->
+
+
+                    <hr class="mb-4">
+                    <input type="hidden" name="lat" id="lat">
+                    <input type="hidden" name="lon" id="lon">
+                    <button class="btn btn-primary btn-lg btn-block"
+                            type="submit">등록</button>
+                </form>
+            </div>
+        </div>
+
+        <footer class="my-5 pt-5 text-muted text-center text-small">
+            <p class="mb-1">&copy; 2017-2021 Company Name</p>
+            <ul class="list-inline">
+                <li class="list-inline-item"><a href="#">Privacy</a></li>
+                <li class="list-inline-item"><a href="#">Terms</a></li>
+                <li class="list-inline-item"><a href="#">Support</a></li>
+            </ul>
+        </footer>
+    </div>
 </body>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=36bff8b96636a6127542c2c517175d6f&libraries=services"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>

@@ -3,6 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.88.1">
+    <title>Checkout example · Bootstrap v4.6</title>
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.6/examples/checkout/">
+    <!-- Bootstrap core CSS -->
+    <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        textarea{
+            resize: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+    <!-- Custom styles for this template -->
+    <link href="/css/form-validation.css" rel="stylesheet">
+    <script src="/js/form-validation.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
         $(document).ready(function () {
@@ -24,64 +54,163 @@
         })
     </script>
 </head>
-<body>
+<body class="bg-light">
 
-    <h2>read</h2>
-    <form id="board" th:object="${board}">
-        <input type="hidden"  id="boardId" name="boardId" th:value="*{boardId}"/>
-        <input type="hidden" name="indexId" th:value="*{indexId}"/>
-        <table>
-            <tr>
-                <td>title</td>
-                <td><input type="text" name="title"
-                           th:field="*{title}" readonly="readonly" /></td>
-            </tr>
-            <tr>
-                <td>content</td>
-                <td><input type="text" name="content"
-                           th:field="*{content}" readonly="readonly" /></td>
-            </tr>
-            <tr>
-                <td>genAddress</td>
-                <td width="100%" height="100%">
-                    <div id="map" style="width:100%;height:350px;">
-                        <input type="hidden" name="genAddress"
-                               th:field="*{genAddress}" readonly="readonly" /><
+
+    <th:block th:include="/include/navbar"> </th:block>
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-8 order-md-1">
+                <h3 class="mb-3">읽기</h3>
+                <form class="needs-validation" id="board" action="success.html" th:object="${board}" novalidate>
+                    <input type="hidden" id="boardId" name="boardId" th:value="*{boardId}"/>
+                    <input type="hidden" name="indexId" th:value="*{indexId}"/>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="title">제목</label>
+                            <input type="text" name="title" th:field="*{title}" readonly="readonly"
+                                   class="form-control" id="title" placeholder="" value="" required>
+                            <div class="invalid-feedback">
+                                제목을 입력해 주세요
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <label for="content">내용</label>
+                            <textarea type="text" name="content" th:value="*{content}" th:text="*{content}" rows="8" cols="100" readonly="readonly"
+                                      class="form-control" id="content"></textarea>
+                            <div class="invalid-feedback">
+                                내용을 입력해 주세요
+                            </div>
+                        </div>
                     </div>
-                </td>
 
-            </tr>
-            <tr>
-                <td>detAddress</td>
-                <td><input type="text" name="detAddress"
-                           th:field="*{detAddress}" readonly="readonly" /></td>
-            </tr>
-            <tr>
-                <td>updateDate</td>
-                <td th:text="${#dates.format(board.updateDate,'yyyy-MM-dd')}"></td>
-            </tr
-            >
-        </table>
+                    <div class="mb-3">
+                        <label for="image">image</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                            </div>
+                            <!-- 고칠거-->
+                            <input type="text" id="image" required>
+                            <!-- class="form-control"-->
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label>도로명주소<span class="text-muted">(Optional)</span></label>
+                        <input type="hidden" name="genAddress" id="address_kakao" th:field="*{genAddress}" readonly="readonly"
+                               class="form-control"/>
+                        <div id="map" style="width:100%;height:350px;">
+                        </div>
+                        <div class="invalid-feedback">
+                            도로명주소를 입력해 주세요
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="detAddress">상세주소</label>
+                        <input type="text" name="detAddress" th:field="*{detAddress}" readonly="readonly"
+                               class="form-control" id="detAddress" required>
+                        <div class="invalid-feedback">
+                            상세주소를 입력해 주세요
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label >요일</label>
+                        <input type="text" name="week" th:field="*{week}"
+                               class="form-control">
+                        <div class="invalid-feedback">
+                            요일을 입력해 주세요
+                        </div>
+                    </div>
 
-    </form>
-    <div>
-        <button type="submit" id="btModify">수정</button>
-        <button type="submit" id="btRemove">삭제</button>
-    </div>
-    <!-- 댓글 -->
-    <div>
-        <h5>댓글</h5>
-        <div>
-            <form name="comment-form" action="/comment/write" method="post">
+                    <!--        <tr>-->
+                    <!--          <td>tagBigName</td>-->
+                    <!--          <td><input type="text" name="tagBigName"-->
+                    <!--                     th:field="*{tagBigName}"/></td>-->
+                    <!--        </tr>-->
+                    <!--        <tr>-->
+                    <!--          <td>tagSmallName</td>-->
+                    <!--          <td><input type="text" name="tagSmallName"-->
+                    <!--                     th:field="*{tagSmallName}"/></td>-->
+                    <!--        </tr>-->
+
+
+
+                    <!--                <div class="row">-->
+                    <!--                    <div class="col-md-5 mb-3">-->
+                    <!--                        <label for="country">Country</label>-->
+                    <!--                        <select class="custom-select d-block w-100" id="country" required>-->
+                    <!--                            <option value="">Choose...</option>-->
+                    <!--                            <option>United States</option>-->
+                    <!--                        </select>-->
+                    <!--                        <div class="invalid-feedback">-->
+                    <!--                            Please select a valid country.-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="col-md-4 mb-3">-->
+                    <!--                        <label for="state">State</label>-->
+                    <!--                        <select class="custom-select d-block w-100" id="state" required>-->
+                    <!--                            <option value="">Choose...</option>-->
+                    <!--                            <option>California</option>-->
+                    <!--                        </select>-->
+                    <!--                        <div class="invalid-feedback">-->
+                    <!--                            Please provide a valid state.-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="col-md-3 mb-3">-->
+                    <!--                        <label for="zip">Zip</label>-->
+                    <!--                        <input type="text" class="form-control" id="zip" placeholder="" required>-->
+                    <!--                        <div class="invalid-feedback">-->
+                    <!--                            Zip code required.-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <!--                </div>-->
+
+                    <div class="mb-3">
+                        <label for="updateDate">전 수정날짜 <span class="text-muted"></span></label>
+                        <p type="text" th:text="${#dates.format(board.updateDate,'yyyy-MM-dd')}"
+                           class="form-control" id="updateDate"/>
+                    </div>
+
+                    <hr class="mb-4">
+
+                </form>
                 <div>
-                    <input type="hidden" name="commentId">
-                    <textarea name="content" >
-
-                    </textarea>
-                    <button type="submit">작성</button>
+                    <button class="btn btn-primary btn-lg btn-block"
+                            type="submit" id="btModify">수정</button>
+                    <button class="btn btn-primary btn-lg btn-block"
+                            type="submit" id="btRemove">삭제</button>
                 </div>
-            </form>
+            </div>
         </div>
+        <br>
+        <hr>
+        <br>
+        <!-- 댓글 -->
+        <div>
+            <h5>댓글</h5>
+            <div>
+                <form name="comment-form" action="/comment/write" method="post">
+                    <div>
+                        <input type="hidden" name="commentId" class="form-control">
+                        <textarea name="content" >
+
+                        </textarea>
+                        <br>
+                        <button class="btn btn-primary  btn-sm"
+                                type="submit">작성</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <footer class="my-5 pt-5 text-muted text-center text-small">
+            <p class="mb-1">&copy; 2017-2021 Company Name</p>
+            <ul class="list-inline">
+                <li class="list-inline-item"><a href="#">Privacy</a></li>
+                <li class="list-inline-item"><a href="#">Terms</a></li>
+                <li class="list-inline-item"><a href="#">Support</a></li>
+            </ul>
+        </footer>
     </div>
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=36bff8b96636a6127542c2c517175d6f&libraries=services"></script>
     <script>

@@ -25,7 +25,7 @@
     <th:block th:include="/include/navbar"> </th:block>
     <!-- search -->
     <form class="form-inline my-2 my-lg-0" action="mapSearch">
-        <input class="form-control mr-lg-6" name="keyword" type="search" placeholder="지역구를 입력히세요" aria-label="Search">
+        <input class="form-control mr-lg-6 mapSearch" name="keyword" type="search" placeholder="지역구를 입력히세요" aria-label="Search">
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">검색</button>
     </form>
 
@@ -44,6 +44,7 @@
                 <th >이미지</th>
                 <th  colspan="2">설명</th>
                 <th >등록일</th>
+                <th>조회수</th>
             </tr>
             </thead>
             <tbody th:each="boardList : ${boardList}">
@@ -67,7 +68,7 @@
                 </div>
             </td>
             <td th:text="${#dates.format(boardList.updateDate,'yyyy-MM-dd')}"></td>
-
+            <td th:text="${boardList.boardCount}"></td>
             </tbody>
         </table>
         <!-- 페이징처리 -->
@@ -102,6 +103,25 @@
             <input type="hidden" name="amount" th:value="${pageMaker.cri.amount}">
         </form>
     </div>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">오류</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="modalText">검색 결과가 없습니다.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script th:javascript>
         /* ![CDATA[ */
         function movePage(uri, queryString) {
@@ -119,30 +139,43 @@
     <script th:inline="javascript">
         <!-- db에서 가져온 값 -->
         boardLists = [[${boardList}]]
-        // console.log(JSON.stringify(boardLists))
 
 
+        listTotal = [[${total}]]
+        if(listTotal === 10){
+            $('#myModal').modal('show')
+        }
         // 주소-좌표 변환 객체를 생성합니다
         var geocoder = new kakao.maps.services.Geocoder();
 
-        var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-            mapOption = {
-                center: new kakao.maps.LatLng(boardLists[0].lat, boardLists[0].lon), // 지도의 중심좌표
-                level: 5 // 지도의 확대 레벨
-            };
+        if(boardLists.length < 1 || boardLists[0].lat < 1 || boardLists[0].lon < 1){
+            var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+                mapOption = {
+                    center: new kakao.maps.LatLng(37.553881 , 126.970488), // 지도의 중심좌표
+                    level: 5 // 지도의 확대 레벨
+                };
+        }else {
+            var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+                mapOption = {
+                    center: new kakao.maps.LatLng(boardLists[0].lat, boardLists[0].lon), // 지도의 중심좌표
+                    level: 5 // 지도의 확대 레벨
+                };
+        }
+
 
         var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 
 
         // 마커를 표시할 위치와 title 객체 배열입니다
         var positions = []
+
         for(idx in boardLists){
-            positions[idx] =
-                {
-                    content: boardLists[idx].title,
-                    latlng: new kakao.maps.LatLng(boardLists[idx].lat, boardLists[idx].lon),
-                    bigTag: boardLists[idx].tagBigName
-                }
+                positions[idx] =
+                    {
+                        content: boardLists[idx].title,
+                        latlng: new kakao.maps.LatLng(boardLists[idx].lat, boardLists[idx].lon),
+                        bigTag: boardLists[idx].tagBigName
+                    }
         }
 
 
@@ -167,10 +200,10 @@
                 content : "<a href=read?boardId='" + positions[i].boardId +"'>" +positions[i].content + " (" + positions[i].bigTag +")" + "</a>"
             });
             // 마커에 클릭이벤트를 등록합니다
-            kakao.maps.event.addListener(marker, 'click', function() {
-                // 마커 위에 인포윈도우를 표시합니다
-                infowindow.open(map, marker);
-            });
+            // kakao.maps.event.addListener(marker, 'click' ,function() {
+            //     // 마커 위에 인포윈도우를 표시합니다
+            //     infowindow.open(map, marker);
+            // });
             kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
             kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
         }

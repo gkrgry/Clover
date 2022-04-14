@@ -34,14 +34,15 @@
             <tr id="theadTh">
                 <th >요일</th>
                 <th >이미지</th>
-                <th  colspan="2">설명</th>
-                <th >등록일</th>
+                <th  colspan="3">설명</th>
+                <th>등록일</th>
+                <th>조회수</th>
             </tr>
         </thead>
         <tbody th:each="boardList : ${boardList}">
             <td align="center" th:text="${boardList.week}"></td>
             <td align="center" th:text="${boardList.image}"></td>
-            <td>
+            <td colspan="2">
                 <div id="listDivCol">
                     <p>
                         <a class="readMove" th:href="@{|/read?boardId=${boardList.boardId}|}" th:text="${boardList.title}">
@@ -58,7 +59,9 @@
                     <p th:text="${boardList.tagSmallName}"></p>
                 </div>
             </td>
+
             <td th:text="${#dates.format(boardList.updateDate,'yyyy-MM-dd')}"></td>
+            <td th:text="${boardList.boardCount}"></td>
 
         </tbody>
     </table>

@@ -2,6 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.daelim.clover.board.mapper.BoardMapper">
+
+
+    <!-- 조회수 -->
+        <update id="boardCountSet">
+            UPDATE      board_db
+            SET         board_count = board_count + 1
+            WHERE       board_id    = #{boardId}
+        </update>
+
+
+    <!-- 일반 검색 리스트 -->
         <select id="boardList"
         resultType="com.daelim.clover.board.domain.Board">
             SELECT      board_id        as boardId
@@ -24,6 +35,7 @@
                         , update_date DESC
         </select>
 
+    <!-- 검색 페이징 -->
     <select id="getBoardListPaging"
             resultType="com.daelim.clover.board.domain.Board">
         <![CDATA[
@@ -57,7 +69,7 @@
             LIMIT #{skip}, #{amount}
             ]]>
     </select>
-
+<!-- 지도 검색 리스트 -->
     <select id="getBoardMapSearchList"
             resultType="com.daelim.clover.board.domain.Board">
         <![CDATA[
@@ -93,7 +105,7 @@
             LIMIT #{skip}, #{amount}
             ]]>
     </select>
-
+ <!-- 일반 검색 리스트 총 개수 -->
     <select id="listGetTotal" resultType="int">
         SELECT
         count(*)
@@ -109,7 +121,7 @@
             concat('%', #{keyword}, '%')
         </if>
     </select>
-
+<!-- 지도 검색 리스트 총 개수 -->
     <select id="mapSearchlistGetTotal" resultType="int">
         SELECT
         count(*)
@@ -125,6 +137,7 @@
             concat('%', #{keyword}, '%')
         </if>
     </select>
+    <!-- 게시글 읽기 -->
     <select id="boardRead"
                 resultType="com.daelim.clover.board.domain.Board">
             SELECT      board_id        as boardId
@@ -142,7 +155,7 @@
             from        board_db as boardDB
             WHERE   board_id = #{boardId}
         </select>
-
+        <!-- 게시글 입력 -->
         <insert id="boardCreate">
             INSERT INTO board_db
             (
@@ -176,6 +189,7 @@
 
             )
         </insert>
+    <!-- 게시글 수정 -->
         <update id="boardUpdate"
             parameterType="com.daelim.clover.board.domain.Board">
             UPDATE board_db
@@ -192,7 +206,7 @@
             WHERE board_id = #{boardId}
             AND   index_id = #{indexId}
         </update>
-
+    <!-- 게시글 기능 -->
         <delete id="boardDelete">
             DELETE FROM board_db
             WHERE board_id = #{boardId}

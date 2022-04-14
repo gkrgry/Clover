@@ -64,7 +64,6 @@ public class BoardController {
 
         model.addAttribute("boardList", boardList);
         model.addAttribute("pageMaker",new PageDTO(cri,total));
-
         return "bList";
     }
 
@@ -90,7 +89,8 @@ public class BoardController {
     public String boardRead(@RequestParam("boardId") int boardId, Model model) throws Exception{
         log.info("read 입력 입니다.");
         Board board = boardService.boardRead(boardId);
-
+        int boardCountSet = boardService.boardCountSet(boardId);
+        model.addAttribute("boardCountSet", boardCountSet);
         model.addAttribute("board",board);
 
 

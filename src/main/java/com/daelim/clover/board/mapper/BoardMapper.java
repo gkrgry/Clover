@@ -26,6 +26,8 @@ public interface BoardMapper {
 
     public int mapSearchlistGetTotal(Criteria cri) throws Exception;
 
+    public int boardCountSet(Integer boardId) throws Exception;
+
 
 
 

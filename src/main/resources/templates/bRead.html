@@ -64,6 +64,8 @@
             <div class="col-md-8 order-md-1">
                 <h3 class="mb-3">읽기</h3>
                 <form class="needs-validation" id="board" action="success.html" th:object="${board}" novalidate>
+                    <h6>조회수</h6>
+                    <p th:text="*{boardCount}"></p>
                     <input type="hidden" id="boardId" name="boardId" th:value="*{boardId}"/>
                     <input type="hidden" name="indexId" th:value="*{indexId}"/>
                     <div class="row">

@@ -1,0 +1,14 @@
+.id_input_re1{
+        color: green;
+        display: none;
+}
+.id_input_re2{
+        color: red;
+        display: none;
+}
+.err{
+        font-size: 14px;
+        color: #ff4d78;
+        margin: 5px 0 0 5px;
+        display: none;
+}

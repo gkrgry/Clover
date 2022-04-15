@@ -5,5 +5,12 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface UserMapper {
+
     void saveUser(User user); //회원가입
+
+    //로그인 시큐리티
+    User  getUserAccount(String userId);
+
+    //아이디 중복 검사
+    public int idCheck(String userId);
 }

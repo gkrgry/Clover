@@ -35,10 +35,6 @@ public class BoardServiceImpl implements BoardService {
         boardMapper.boardDelete(boardId,indexId);
     }
 
-//    @Override
-//    public List<Board> boardList() throws Exception {
-//        return boardMapper.boardList();
-//    }
     @Override
     public List<Board> boardList(Criteria cri) throws Exception {
         return boardMapper.getBoardListPaging(cri);

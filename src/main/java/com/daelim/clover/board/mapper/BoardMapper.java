@@ -20,7 +20,13 @@ public interface BoardMapper {
 
     public List<Board> getBoardListPaging(Criteria cri) throws Exception;
 
+    public List<Board> getBoardMapSearchList(Criteria cri) throws Exception;
+
     public int listGetTotal(Criteria cri) throws Exception;
+
+    public int mapSearchlistGetTotal(Criteria cri) throws Exception;
+
+    public int boardCountSet(Integer boardId) throws Exception;
 
 
 

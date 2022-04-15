@@ -35,13 +35,34 @@ public class BoardServiceImpl implements BoardService {
         boardMapper.boardDelete(boardId,indexId);
     }
 
-    @Override
+
+//    @Override
+//    public List<Board> boardList() throws Exception {
+//        return boardMapper.boardList();
+//    }
+    @Override // 일반검색 리스트
+Develop
     public List<Board> boardList(Criteria cri) throws Exception {
         return boardMapper.getBoardListPaging(cri);
     }
 
-    @Override
+    @Override //지도검색 리스트
+    public List<Board> boardMapSearchList(Criteria cri) throws Exception {
+        return boardMapper.getBoardMapSearchList(cri);
+    }
+
+    @Override //일반검색 총합
     public int listGetTotal(Criteria cri) throws Exception {
         return boardMapper.listGetTotal(cri);
+    }
+
+    @Override //지도검색 총합
+    public int mapSearchlistGetTotal(Criteria cri) throws Exception {
+        return boardMapper.mapSearchlistGetTotal(cri);
+    }
+
+    @Override //조회수
+    public int boardCountSet(Integer boardId) throws Exception {
+        return boardMapper.boardCountSet(boardId);
     }
 }

@@ -20,6 +20,13 @@ public interface BoardService {
 //    public List<Board> boardList() throws Exception;
     public List<Board> boardList(Criteria cri) throws Exception;
 
+    //주소로 검색 기능
+    public List<Board> boardMapSearchList(Criteria cri) throws Exception;
+
     public int listGetTotal(Criteria cri) throws Exception;
+
+    public int mapSearchlistGetTotal(Criteria cri) throws Exception;
+
+    public int boardCountSet(Integer boardId) throws Exception;
 
 }

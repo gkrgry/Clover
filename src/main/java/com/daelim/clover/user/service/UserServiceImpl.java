@@ -3,18 +3,59 @@ package com.daelim.clover.user.service;
 
 import com.daelim.clover.user.domain.User;
 import com.daelim.clover.user.mapper.UserMapper;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+
+
+@Log4j2
 @Service
-public class UserServiceImpl implements UserService {
+@Transactional
+@RequiredArgsConstructor
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Autowired
     UserMapper userMapper;
 
-    @Override
-    public void  userSingUp(User user) throws Exception{
-        userMapper.saveUser(user);
+
+   @Transactional
+    public void  userSingUp(User user) {
+
+       BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+       user.setPwd(passwordEncoder.encode(user.getPassword()));
+
+       userMapper.saveUser(user);
     }
 
+    @Override
+    public User loadUserByUsername(String userId) throws UsernameNotFoundException {
+        //여기서 받은 유저 패스워드와 비교하여 로그인 인증
+
+         User user = userMapper.getUserAccount(userId);
+        log.info(user);
+        if(user == null||user.getPassword()==null){
+            throw new UsernameNotFoundException("User not authorized.");
+        }
+
+        log.info(user);
+        return user;
+    }
+
+
+
+
+    /* 유저 중복확인*/
+    @Override
+    public int idCheck(String userId) throws Exception{
+       return userMapper.idCheck(userId);
+    }
 }

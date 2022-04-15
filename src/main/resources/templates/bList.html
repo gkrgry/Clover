@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+
+<html xmlns:th="http://thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -12,7 +14,9 @@
     $(".readMove").on("click",function (e){
         e.preventDefault();
         actionForm.append("<input type='hidden' name='boardId' value='" +
-        $(this).attr("href")+"'>");
+
+            $(this).attr("href")+"'>");
+
         actionForm.attr("action","/list");
         actionForm.submit();
 
@@ -131,10 +135,8 @@
         function movePage(uri, queryString) {
             console.log(uri);
             console.log(queryString);
-
-            location.href = uri + queryString;
-        }
-        /* ]]*/
-    </script>
+        location.href = uri + queryString;
+    }
+    /* ]]*/
 </body>
 </html>

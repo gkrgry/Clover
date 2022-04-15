@@ -4,10 +4,27 @@
 <mapper namespace="com.daelim.clover.user.mapper.UserMapper">
     <!--        USER SQL           -->
 
-    <insert id="saveUser" >
+    <!-- 로그인-->
+    <select id="getUserAccount" resultType="com.daelim.clover.user.domain.User">
+        SELECT
+            user_id
+             ,  password
+             ,  name
+             ,  nickname
+             ,  email
+             ,  phone
+             ,  sex
+             ,  regdate
+        FROM
+            user_db
+        WHERE
+            user_id = #{userId}
+    </select>
+    <!--회원가입-->
+    <insert id="saveUser" parameterType="com.daelim.clover.user.domain.User" >
         INSERT  INTO user_db
         (
-            user_id
+         user_id
         ,  password
         ,  name
         ,  nickname
@@ -18,7 +35,7 @@
         )
         VALUES
             (
-                #{userId}
+              #{userId}
             ,   #{pwd}
             ,   #{name}
             ,   #{nickname}
@@ -28,4 +45,16 @@
             ,   sysdate()
             )
     </insert>
+
+
+
+    <!--아이디 중복검사-->
+    <select id="idCheck" resultType="int">
+        SELECT
+            count(*)
+        FROM
+            user_db
+        WHERE
+            user_id = #{userId}
+    </select>
 </mapper>

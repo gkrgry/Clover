@@ -8,6 +8,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+
 import java.util.Collections;
 import java.util.Date;
 
@@ -24,25 +25,29 @@ public class User implements UserDetails {
     private String phone;       //연락처
     private int sex;            //성별
         Date regdate;       //가입날짜
+    private boolean tf=false;
 
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         log.info("진입");
-       return null;
-               //Collections.singletonList(new SimpleGrantedAuthority(this.userId));
+            return Collections.singletonList(new SimpleGrantedAuthority("USER"));
+//        return Collections.singletonList(new SimpleGrantedAuthority(this.userId));
+     //   return null;
 
     }
+
     @Builder
     public User(String userId,String pwd){
+            log.info("빌드");
             this.userId=userId;
             this.pwd=pwd;
-
-
     }
     @Override
     public String getPassword() {
+        log.info(pwd+"패스워드 호출");
+
         return this.pwd;
     }
 

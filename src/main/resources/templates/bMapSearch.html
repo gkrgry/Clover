@@ -67,7 +67,7 @@
                     <p th:text="${boardList.tagSmallName}"></p>
                 </div>
             </td>
-            <td th:text="${#dates.format(boardList.updateDate,'yyyy-MM-dd')}"></td>
+            <td th:text="${#dates.format(boardList.updateDate,'yyyy-MM-dd HH:mm')}"></td>
             <td th:text="${boardList.boardCount}"></td>
             </tbody>
         </table>

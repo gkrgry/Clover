@@ -179,8 +179,8 @@
                 ,   #{content}
                 ,   #{genAddress}
                 ,   #{detAddress}
-                ,   sysdate()
-                ,   sysdate()
+                ,   NOW()
+                ,   NOW()
                 ,   #{week}
                 ,   #{tagBigName}
                 ,   #{tagSmallName}
@@ -197,7 +197,7 @@
                 ,   content         =#{content}
                 ,   gen_address     =#{genAddress}
                 ,   det_address     =#{detAddress}
-                ,   update_date     = sysdate()
+                ,   update_date     = NOW()
                 ,   week            =#{week}
                 ,   tag_big_name    =#{tagBigName}
                 ,   tag_small_name  =#{tagSmallName}

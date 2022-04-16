@@ -20,6 +20,7 @@ import javax.servlet.http.HttpSession;
 @Log4j2
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/")
 public class UserController {
 
 

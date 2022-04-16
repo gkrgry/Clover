@@ -64,7 +64,7 @@
                 </div>
             </td>
 
-            <td th:text="${#dates.format(boardList.updateDate,'yyyy-MM-dd')}"></td>
+            <td th:text="${#dates.format(boardList.updateDate,'yyyy-MM-dd HH:mm')}"></td>
             <td th:text="${boardList.boardCount}"></td>
 
         </tbody>
@@ -116,7 +116,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                
+
             </div>
         </div>
     </div>

@@ -4,6 +4,8 @@ import com.daelim.clover.board.domain.Board;
 import com.daelim.clover.board.domain.Criteria;
 import com.daelim.clover.board.mapper.BoardMapper;
 import com.daelim.clover.board.service.BoardService;
+import com.daelim.clover.comment.domain.Comment;
+import com.daelim.clover.comment.mapper.CommentMapper;
 import groovy.util.logging.Log4j2;
 import org.apache.juli.logging.Log;
 import org.junit.jupiter.api.DisplayName;
@@ -84,5 +86,64 @@ class CloverApplicationTests {
 
 
     }
+    @Autowired
+    CommentMapper mapper2;
+    @Test
+    @DisplayName("insert comment test2")
+    public void testInsertC(){
+
+        IntStream.rangeClosed(1,10).forEach(i ->{
+            Comment comment = new Comment();
+
+            comment.setBoardId(227);
+            comment.setIndexId(1000);
+            comment.setContent("테스트 코드 : " +i);
+
+            try{
+                mapper2.insertComment(comment);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+            System.out.println("comment " + i );
+        });
+
+
+    }
+
+    @Test
+    @DisplayName("del comment test2")
+    public void testDelC(){
+
+
+            try{
+                mapper2.deleteComment(1);
+
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+
+
+    }
+
+    @Test
+    @DisplayName("del comment test2")
+    public void testUpdC(){
+        int i = 2;
+
+        try{
+            Comment comment = mapper2.selectComment(i);
+            comment.setContent("수정");
+            int count = mapper2.updateComment(comment);
+
+            System.out.println(count);
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+    }
+
+
 
 }

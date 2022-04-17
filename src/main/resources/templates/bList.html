@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html xmlns:th="http://thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -21,6 +21,11 @@
         actionForm.submit();
 
     })
+    function movePage(uri, queryString) {
+        console.log(uri);
+        console.log(queryString);
+        location.href = uri + queryString;
+    }
 
 </script>
 <body>
@@ -73,30 +78,30 @@
     <!-- 이전 버튼 -->
     <div id="pagingButton">
         <nav aria-label="Page navigation example">
-        <ul class="pagination">
-        <th:block th:if="${pageMaker.prev}">
-        <li class="page-item prev">
-            <a href="javascript:void(0)" class="page-link" th:onclick="movePage( [[ ${#request.requestURI} ]], [[ ${pageMaker.cri.makeQueryString(pageMaker.startPage - 1)} ]])">이전</a>
-        </li>
-        </th:block>
-        <!-- 페이지 번호-->
-        <th:block th:with="pageMaker = ${pageMaker}">
-            <th:block th:each="num : *{#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
-                <li class="page-item" th:classappend="${pageMaker.cri.pageNum == num} ? 'active' : ''">
-                    <a href="javascript:void(0)" class="page-link" th:text="${num}" th:onclick="movePage([[ ${#request.requestURI} ]],[[ ${pageMaker.cri.makeQueryString(num)} ]])"></a>
-                </li>
-            </th:block>
-        </th:block>
-        <th:block th:if="${pageMaker.next}">
-        <li class="page-item next">
-            <a href="javascript:void(0)" class="page-link" th:onclick="movePage( [[ ${#request.requestURI} ]], [[ ${pageMaker.cri.makeQueryString(pageMaker.endPage + 1)} ]])">다음</a>
-        </li>
-        </th:block>
-        </ul>
+            <ul class="pagination">
+                <th:block th:if="${pageMaker.prev}">
+                    <li class="page-item prev">
+                        <a href="javascript:void(0)" class="page-link" th:onclick="movePage( [[ ${#request.requestURI} ]], [[ ${pageMaker.cri.makeQueryString(pageMaker.startPage - 1)} ]])">이전</a>
+                    </li>
+                </th:block>
+                <!-- 페이지 번호-->
+                <th:block th:with="pageMaker = ${pageMaker}">
+                    <th:block th:each="num : *{#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
+                        <li class="page-item" th:classappend="${pageMaker.cri.pageNum == num} ? 'active' : ''">
+                            <a href="javascript:void(0)" class="page-link" th:text="${num}" th:onclick="movePage([[ ${#request.requestURI} ]],[[ ${pageMaker.cri.makeQueryString(num)} ]])"></a>
+                        </li>
+                    </th:block>
+                </th:block>
+                <th:block th:if="${pageMaker.next}">
+                    <li class="page-item next">
+                        <a href="javascript:void(0)" class="page-link" th:onclick="movePage( [[ ${#request.requestURI} ]], [[ ${pageMaker.cri.makeQueryString(pageMaker.endPage + 1)} ]])">다음</a>
+                    </li>
+                </th:block>
+            </ul>
         </nav>
     </div>
     <!-- 페이징 처리에 같이 갈 데이터 -->
-    <form id="actionForm" action="list" method="get">
+    <form id="actionForm" action="mapSearch" method="get">
         <input type="hidden" name="pageNum" th:value="${pageMaker.cri.pageNum}">
         <input type="hidden" name="amount" th:value="${pageMaker.cri.amount}">
     </form>
@@ -132,11 +137,7 @@
             $('#myModal').modal('show')
         }
         /* ![CDATA[ */
-        function movePage(uri, queryString) {
-            console.log(uri);
-            console.log(queryString);
-        location.href = uri + queryString;
-    }
+
     /* ]]*/
 </body>
 </html>

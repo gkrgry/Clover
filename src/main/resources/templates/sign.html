@@ -12,7 +12,7 @@
     <!-- jQuery (부트스트랩의 자바스크립트 플러그인을 위해 필요한) -->
     <script src="http://code.jquery.com/jquery.js"></script>
     <!-- 모든 합쳐진 플러그인을 포함하거나 (아래) 필요한 각각의 파일들을 포함하세요 -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
     <!-- Respond.js 으로 IE8 에서 반응형 기능을 활성화하세요 (https://github.com/scottjehl/Respond) -->
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 
@@ -99,10 +99,14 @@
         <div class="form-group" id="divEmail">
             <label class="col-lg-2 control-label">이메일</label>
             <div class="col-lg-10">
-                <input type="email" name="email" class="form-control" id="email" data-rule-required="true" placeholder="이메일" maxlength="40">
+                <input type="email" name="email" class="emailchk form-control" id="email" data-rule-required="true" placeholder="이메일" maxlength="40">
+               <input type="text" class="elchk" placeholder="인증키 입력"> <input type="button" class="elchk_2" onclick="emailchk();" value="이메일 인증"/><input type="button" onclick="chaking()" class="elchk" value="인증확인">
+                <span class="echeking">이미 사용중인 이메일입니다.</span><span class="echking_2">인증이 완료되었습니다.</span>
             </div>
             <span class="err emailerr">이메일를 입력해주세요</span>
         </div>
+
+
         <div class="form-group" id="divPhoneNumber">
             <label  class="col-lg-2 control-label">휴대폰 번호</label>
             <div class="col-lg-10">
@@ -129,11 +133,10 @@
 
     <script>
         var idchk;
+        var modalContents = $(".modal-contents");
+        var modal = $("#defaultModal");
         $(function(){
             //모달을 전역변수로 선언
-            var modalContents = $(".modal-contents");
-            var modal = $("#defaultModal");
-
             $('.onlyAlphabetAndNumber').keyup(function(event){
                 if (!(event.keyCode >=37 && event.keyCode<=40)) {
                     var inputVal = $(this).val();
@@ -420,6 +423,63 @@
             });
 
         });
+
+        var emailcheking;
+        //이메일 인증
+        function emailchk(){
+            var email = $('.emailchk').val();//이메일 입려된값
+            var data = {email:email}
+            $.ajax({
+                type: "post",
+                url: "/mailchk",
+                data,
+                success : function (result){
+                    console.log(result);
+                    if(result=='success'&& $('.emailchk').val()!=""){
+                        $('.elchk').css("display","inline-block")
+                        $('.elchk_2').css("display","none")
+                        $('.echeking').css("display","none")
+                            $.ajax({
+                                type:"post",
+                                url:"/mail",
+                                data,
+                                success : function (code){
+                                    emailcheking=code;
+                                }
+                            })
+
+                    }else{
+                        $('.elchk_2').css("display","inline-block")
+                        $('.echeking').css("display","inline-block")
+                        $('.elchk').css("display","none")
+
+                    }
+                }
+            })
+        }
+
+        //이메일 코드 체킹
+        function chaking(event) {
+            var code = $('.elchk').val();//인증키 입력란 값
+            console.log("인증확인");
+            console.log(code+"값");
+            console.log(emailcheking+"값");
+            if ($('.elchk').val() == "") {
+                console.log("빈란");
+                modalContents.text("이메일을 입력하여 주시기 바랍니다.");
+                modal.modal('show');
+            } else if ($('.elchk').val() != emailcheking || emailcheking == "") {
+                console.log("코드오류");
+                modalContents.text("잘못된 코드 입니다.");
+                modal.modal('show');
+                return false;
+            } else if($('.elchk').val()==emailcheking){
+                console.log("인증완");
+                $('.elchk').css("display","none");
+                $('.echking_2').css("display","inline-block");
+
+            }
+        }
 
         //아이디 중복검사
         $('.id_input').on("propertychange change keyup paste input", function () {

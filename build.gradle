@@ -25,9 +25,10 @@ dependencies {
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
     // 중복확인 의존성 추가
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-
     //이메일 인증확인
-//    implementation 'org '
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
     implementation 'org.springframework.boot:spring-boot-starter-security'

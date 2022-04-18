@@ -7,6 +7,7 @@ import com.daelim.clover.user.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,9 +24,47 @@ import javax.servlet.http.HttpSession;
 public class UserController {
 
 
-
-
     private final UserService userService;
+    UserServiceImpl service;
+
+
+    @PostMapping("/mailchk")
+    @ResponseBody
+    public String emailchk(String email)throws Exception{
+        int result =0;
+        result = userService.emailCheck(email);
+        System.out.println(result+"이메일 0-1");
+        if(result == 0) {
+            return "success"; //생성가능한 이메일
+        }else  return "fail";
+
+        }
+
+    //이메일 인증키 발행
+    @PostMapping("/mail")
+    @ResponseBody
+    public String emailConfirm(String email)throws Exception{
+            log.info(email);
+//            System.out.println("전달받은 이메일"+email);
+
+                userService.sendSimpleMessage(email);
+//        System.out.println("전달받은 코드"+service.ePw);
+           return service.ePw;
+    }
+
+//    @PostMapping("/verifyCode")
+//    @ResponseBody
+//    public int verifyCode(String code){
+//        int result=0;
+//
+//        if(UserServiceImpl.ePw.equals(code)){
+//
+//            result=1;
+//        }
+//        return result;
+//    }
+
+
     @PostMapping("/sign")
     public String userSign(User user, Model model) throws  Exception{
         log.info("DB데이터 전송");
@@ -79,9 +118,9 @@ public class UserController {
             int result = userService.idCheck(userId);
             log.info("결과값" + result);
             if (result == 0) {
-                return "success"; //중복된 아이디 존재
+                return "success"; //사용가능한 아이디 
             } else if (result==1){
-                return "fail"; //생성가능한 아이디
+                return "fail"; //중복된 아이드 존재
             }
         }
         log.info("테스트");

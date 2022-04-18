@@ -13,4 +13,7 @@ public interface UserMapper {
 
     //아이디 중복 검사
     public int idCheck(String userId);
+
+    //이메일 중복 검사
+    public int emailCheck(String email);
 }

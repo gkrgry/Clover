@@ -14,7 +14,4 @@ public class Comment {
     private String content;
     private Date regDate;
     private Date updateDate;
-    
-    private User user; //join 할 테이블 user_db 의 도메인
-    private Board board;//join 할 테이블 board_db 의 도메인
 }

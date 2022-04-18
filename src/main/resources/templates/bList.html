@@ -54,10 +54,10 @@
             <td colspan="2">
                 <div id="listDivCol">
                     <p>
-                        <a class="readMove" th:href="@{|/read?boardId=${boardList.boardId}|}" th:text="${boardList.title}">
+                        <a class="readMove" th:href="@{|/read?boardId=${boardList.boardId}&pageNum=${pageMaker.cri.pageNum}|}" th:text="${boardList.title}">
                     </p>
                     <p>
-                        <a class="readMove" th:href="@{|/read?boardId=${boardList.boardId}|}" th:text="${boardList.indexId}">
+                        <a class="readMove" th:href="@{|/read?boardId=${boardList.boardId}&pageNum=${pageMaker.cri.pageNum}|}" th:text="${boardList.indexId}">
                     </p><br>
                     <p th:text="${boardList.genAddress}"></p>
                 </div>
@@ -101,7 +101,11 @@
         </nav>
     </div>
     <!-- 페이징 처리에 같이 갈 데이터 -->
-    <form id="actionForm" action="mapSearch" method="get">
+    <form id="actionForm" action="list" method="get">
+        <input type="hidden" name="pageNum" th:value="${pageMaker.cri.pageNum}">
+        <input type="hidden" name="amount" th:value="${pageMaker.cri.amount}">
+    </form>
+    <form action="read" method="get" id="pageNum">
         <input type="hidden" name="pageNum" th:value="${pageMaker.cri.pageNum}">
         <input type="hidden" name="amount" th:value="${pageMaker.cri.amount}">
     </form>

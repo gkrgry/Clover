@@ -1,5 +1,6 @@
 package com.daelim.clover.comment.service;
 
+import com.daelim.clover.board.domain.Criteria;
 import com.daelim.clover.comment.domain.Comment;
 import com.daelim.clover.comment.mapper.CommentMapper;
 import lombok.RequiredArgsConstructor;
@@ -36,9 +37,10 @@ public class CommentServiceImpl implements CommentService{
         return mapper.deleteComment(commentId);
     }
 
+
     @Override
-    public List<Comment> getList(Integer boardId) throws Exception {
-        return mapper.selectCommentList(boardId);
+    public List<Comment> getPagingList(Criteria cri, int boardId) throws Exception {
+        return mapper.commentPagingList(cri,boardId);
     }
 }
 

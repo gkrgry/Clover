@@ -34,9 +34,31 @@
     <link href="/css/form-validation.css" rel="stylesheet">
     <script src="/js/form-validation.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="/js/comment.js"></script>
     <script>
         $(document).ready(function () {
 
+            <!-- 댓글 -->
+            var pageVal = $("#pageNum").val();
+
+            console.log(pageVal)
+            console.log("=========");
+            var boardIdValue = $("#boardId").val();
+
+            commentService.getList({boardId:boardIdValue, pageNum:1}, function (list){
+                for(var i =0, len = list.length||0 ; i<len; i++){
+                    console.log(list[i]);
+                }
+            });
+
+            // commentService.add(
+            //     {content:"js test2",indexId:"1000",  boardId: boardIdValue},
+            //     function (result){
+            //         alert("result :"+ result);
+            //     }
+            // )
+
+            <!-- 게시글 -->
             var formObj = $("#board");
 
             $("#btModify").on("click", function() {
@@ -187,23 +209,9 @@
         <br>
         <hr>
         <br>
-        <!-- 댓글 -->
-        <div>
-            <h5>댓글</h5>
-            <div>
-                <form name="comment-form" action="/comment/write" method="post">
-                    <div>
-                        <input type="hidden" name="commentId" class="form-control">
-                        <textarea name="content" >
+        <th:block th:include="/include/comment">
 
-                        </textarea>
-                        <br>
-                        <button class="btn btn-primary  btn-sm"
-                                type="submit">작성</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+        </th:block>
 
         <footer class="my-5 pt-5 text-muted text-center text-small">
             <p class="mb-1">&copy; 2017-2021 Company Name</p>

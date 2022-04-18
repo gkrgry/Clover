@@ -14,11 +14,13 @@
         WHERE       comment_id = #{commentId}
     </select>
 
-    <select id="selectCommentList"
+
+    <select id="commentPagingList"
             resultType="com.daelim.clover.comment.domain.Comment">
         SELECT      comment_id, board_id, index_id, content, update_date
         FROM        comment_db
         WHERE       board_id = #{boardId}
+        ORDER BY    comment_id  asc
     </select>
 
     <update id="updateComment">

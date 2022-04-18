@@ -143,7 +143,22 @@ class CloverApplicationTests {
 
 
     }
+    @Test
+    @DisplayName("paging comment test2")
+    public void testPaingingC(){
 
+        Criteria cri = new Criteria();
+            try{
+                List<Comment> comments = mapper2.commentPagingList(cri,227);
+                System.out.println("comment " + comments );
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+
+
+
+
+    }
 
 
 }

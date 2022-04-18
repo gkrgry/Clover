@@ -1,5 +1,7 @@
 <!DOCTYPE html>
+
 <html xmlns:th="http://thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -9,7 +11,9 @@
     $(".readMove").on("click",function (e){
         e.preventDefault();
         actionForm.append("<input type='hidden' name='boardId' value='" +
+
             $(this).attr("href")+"'>");
+
         actionForm.attr("action","/list");
         actionForm.submit();
 
@@ -48,6 +52,7 @@
             </li>
         </th:block>
     </th:block>
+
     <th:block th:if="${pageMaker.next}">
         <li class="pageMaker_btn next">
             <a href="javascript:void(0)" th:onclick="movePage( [[ ${#request.requestURI} ]], [[ ${pageMaker.cri.makeQueryString(pageMaker.endPage + 1)} ]])">다음</a>
@@ -68,6 +73,5 @@
         location.href = uri + queryString;
     }
     /* ]]*/
-</script>
 </body>
 </html>

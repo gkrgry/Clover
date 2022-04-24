@@ -23,9 +23,6 @@ var commentService = (function (){
     function getList (param, callback, error){
         var boardId = param.boardId;
         var pageNum = param.pageNum || 1;
-        console.log("type " + typeof boardId);
-        console.log("type " + typeof pageNum);
-        console.log("type " + typeof pageNum);
 
         $.getJSON(`/comments/pages/${boardId}/${pageNum}`,
             function (data){

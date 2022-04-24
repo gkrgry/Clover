@@ -54,7 +54,7 @@
                     }
                     for(var i =0, len = list.length||0 ; i<len; i++){
 
-                        str +="<li class='left list-group-item col-md-12' data-commnetId='"+list[i].commentId+"'>";
+                        str +="<li class='left list-group-item col-md-12' data-id='"+list[i].commentId+"'>";
                         str +="    <div><div class='header'><strong class='primary-font'>"+list[i].indexId+"</strong>";
                         str +="         <small class='float-right text-muted'>"+
                             commentService.displayTime(list[i].updateDate) +"</small></div>";
@@ -80,6 +80,59 @@
 
                 $('.modal').modal('show');
             });
+            $("#modalRegisterBtn").on("click", function (){
+                var content = {
+                    content: modalInputContent.val(),
+                    indexId: "1000" , //modalInputWriter.val()
+                    boardId: boardIdValue
+                };
+                commentService.add(content, function (result){
+                    alert (result);
+
+                    modal.find("input").val("");
+                    modal.modal("hide");
+
+                    showList(1);
+                })
+            });
+
+            //여기에 아이디 값이랑때 조건 들어가야함 /*
+            $(".chat").on("click", "li" ,function (e){
+                var commentId = $(this).data("id");
+                console.log(commentId);
+                commentService.get(commentId, function (comment){
+                    modalInputContent.val(comment.content);
+                    modalInputWriter.val(comment.indexId);
+                    modal.data("id",comment.commentId);
+                    //모달 data-id = commentId
+                    modal.find("button[id !='modalCloseBtn']").hide();
+                    modalModBtn.show();
+                    modalRemoveBtn.show();
+
+                    $(".modal").modal("show");
+                })
+            });
+            modalModBtn.on("click",function (e){
+
+                var comment = {commentId:modal.data("id"), content: modalInputContent.val()};
+                commentService.update(comment,function(result){
+                    alert(result);
+                    modal.modal("hide");
+                    showList(1);
+                    }
+                )
+            });
+            modalRemoveBtn.on("click",function (e){
+                var commentId = modal.data("id");
+                commentService.remove(commentId,function(result){
+                        alert(result);
+                        modal.modal("hide");
+                        showList(1);
+                    }
+                )
+            });
+            // */
+
             // commentService.add(
             //     {content:"js test2",indexId:"1000",  boardId: boardIdValue},
             //     function (result){
@@ -310,7 +363,7 @@
                 <div class="panel-body">
                     <ul class="chat list-group list-group-flush col-md-12" >
                         <!-- comment start -->
-                        <li class="left list-group-item col-md-12" data-commnetId="12">
+                        <li class="left list-group-item col-md-12" data-commentId="12">
                             <div>
                                 <div class="header">
                                     <strong class="primary-font">user00</strong>

@@ -52,8 +52,8 @@ public class CommentController {
     @GetMapping(value = "/{commentId}",
                 produces = {MediaType.APPLICATION_XML_VALUE,
                             MediaType.APPLICATION_JSON_UTF8_VALUE})
-    public ResponseEntity<Comment> update(@PathVariable("commentId") int commentId, @RequestBody Comment comment) throws Exception {
-
+    public ResponseEntity<Comment> get(@PathVariable("commentId") int commentId) throws Exception {
+        log.info("get : " + commentId);
 
 
        return new ResponseEntity<>(commentService.readComment(commentId), HttpStatus.OK);

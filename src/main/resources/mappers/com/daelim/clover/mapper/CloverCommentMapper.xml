@@ -20,7 +20,7 @@
         SELECT      comment_id, board_id, index_id, content, update_date
         FROM        comment_db
         WHERE       board_id = #{boardId}
-        ORDER BY    comment_id  asc
+        ORDER BY    update_date  desc
     </select>
 
     <update id="updateComment">

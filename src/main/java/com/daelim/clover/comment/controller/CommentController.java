@@ -2,6 +2,7 @@ package com.daelim.clover.comment.controller;
 
 import com.daelim.clover.board.domain.Criteria;
 import com.daelim.clover.comment.domain.Comment;
+import com.daelim.clover.comment.domain.CommentDTO;
 import com.daelim.clover.comment.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -41,11 +42,11 @@ public class CommentController {
     //댓글 리스트 이게 지금 문제
         @GetMapping(value = "/pages/{boardId}/{pageNum}",
                 produces = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_UTF8_VALUE})
-    public ResponseEntity<List<Comment>> list(@PathVariable("pageNum") int pageNum, @PathVariable("boardId") int boardId) throws Exception {
+    public ResponseEntity<CommentDTO> list(@PathVariable("pageNum") int pageNum, @PathVariable("boardId") int boardId) throws Exception {
         log.info("getList.........");
-        Criteria  cri = new Criteria(pageNum,10);
+        Criteria  cri = new Criteria(pageNum-1,10);
         log.info("cri " + cri);
-        return new ResponseEntity<>(commentService.getPagingList(cri,boardId),HttpStatus.OK);
+        return new ResponseEntity<>(commentService.getListPage(cri,boardId),HttpStatus.OK);
     }
 
     //댓글 읽기

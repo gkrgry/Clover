@@ -46,7 +46,13 @@
             showList(1);
 
             function showList(pageNum){
-                commentService.getList({boardId:boardIdValue, pageNum: pageNum || 1}, function (list){
+                commentService.getList({boardId:boardIdValue, pageNum: pageNum || 1}, function (commentCnt,list){
+                    if(pageNum == -1){
+                        page = Math.ceil(commentCnt/10.0);
+                        showList(page);
+                        return;
+                    }
+
                     var str = "";
                     if(list == null || list.length == 0){
                         commentUL.html("");
@@ -92,7 +98,8 @@
                     modal.find("input").val("");
                     modal.modal("hide");
 
-                    showList(1);
+                    // showList(1);
+                    showList(-1);
                 })
             });
 
@@ -159,9 +166,6 @@
             //     }}, function (err){
             //         alert("error");
             // })
-
-
-
 
 
             <!-- 게시글 -->
@@ -376,6 +380,9 @@
                     </ul>
                 </div>
             </div>
+        </div>
+        <div class="panel-footer">
+
         </div>
 
         <footer class="my-5 pt-5 text-muted text-center text-small">

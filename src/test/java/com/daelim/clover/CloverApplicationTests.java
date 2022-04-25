@@ -160,5 +160,20 @@ class CloverApplicationTests {
 
     }
 
+    @Test
+    public void testList2(){
+        Criteria cri = new Criteria(2,10);
+        try {
+            List<Comment> comment = mapper2.commentPagingList(cri, 227);
+            IntStream.rangeClosed(1,20).forEach(i ->{
+                System.out.println(i + " " + comment.get(i));
+            });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+    }
+
 
 }

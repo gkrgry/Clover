@@ -27,7 +27,8 @@ var commentService = (function (){
         $.getJSON(`/comments/pages/${boardId}/${pageNum}`,
             function (data){
             if(callback){
-                callback(data);
+                // callback(data);
+                callback(data.commentCnt, data.list)
             }
             }).fail(function (xhr, status, err){
                 if(error){
@@ -106,6 +107,7 @@ var commentService = (function (){
             return [yy,'/',(mm>9?'':'0') + mm,'/',(dd>9?'':'0')+dd].join('');
         }
     }
+
 
 
     return {

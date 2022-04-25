@@ -21,6 +21,12 @@
         FROM        comment_db
         WHERE       board_id = #{boardId}
         ORDER BY    update_date  desc
+        LIMIT      #{cri.pageNum} , #{cri.amount}
+
+    </select>
+
+    <select id="getCountByBoardId" resultType="int">
+        select count(board_id) from comment_db where board_id = #{boardId}
     </select>
 
     <update id="updateComment">

@@ -19,5 +19,7 @@ public interface CommentMapper {
 
     public List<Comment> commentPagingList(@Param("cri") Criteria cri, @Param("boardId") int boardId) throws Exception;
 
+    public int getCountByBoardId(int boardId) throws Exception;
+
     public int selectCommentTotal(Comment comment) throws Exception;
 }

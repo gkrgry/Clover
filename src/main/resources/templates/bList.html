@@ -54,10 +54,10 @@
             <td colspan="2">
                 <div id="listDivCol">
                     <p>
-                        <a class="readMove" th:href="@{|/read?boardId=${boardList.boardId}&pageNum=${pageMaker.cri.pageNum}|}" th:text="${boardList.title}">
+                        <a class="readMove" th:href="@{|/read?boardId=${boardList.boardId}|}" th:text="${boardList.title}">
                     </p>
                     <p>
-                        <a class="readMove" th:href="@{|/read?boardId=${boardList.boardId}&pageNum=${pageMaker.cri.pageNum}|}" th:text="${boardList.indexId}">
+                        <a class="readMove" th:href="@{|/read?boardId=${boardList.boardId}|}" th:text="${boardList.indexId}">
                     </p><br>
                     <p th:text="${boardList.genAddress}"></p>
                 </div>

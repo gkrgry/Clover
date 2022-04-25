@@ -34,9 +34,9 @@
     <!-- Custom styles for this template -->
     <link href="/css/form-validation.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="/js/bootstrap.js"></script>
     <script src="/js/form-validation.js"></script>
     <script src="/js/comment.js"></script>
+    <script src="/js/bootstrap.js"></script>
     <script>
         $(document).ready(function () {
 
@@ -67,6 +67,7 @@
                         str +="         <p>"+list[i].content+"</p></div></li>"
                     }
                     commentUL.html(str);
+                    showCommentPage(commentCnt);
                 });
             };
 
@@ -138,34 +139,55 @@
                     }
                 )
             });
-            // */
+            <!-- 댓글 페이징 -->
+            var page = 1;
+            var commentPageFooter = $(".panel-footer");
 
-            // commentService.add(
-            //     {content:"js test2",indexId:"1000",  boardId: boardIdValue},
-            //     function (result){
-            //         alert("result :"+ result);
-            //     }
-            // )
+            function showCommentPage(commentCnt){
+                var endNum = Math.ceil(page/10.0) * 10;
+                console.log(endNum)
+                console.log("cnt : " + commentCnt);
+                var startNum = (endNum - 9);
 
-            // commentService.get(10, function (data){
-            //     console.log(data)
-            // });
+                var prev = startNum != 1;
+                var next = false;
 
-            // commentService.update({
-            //     commentId : 12,
-            //     boardId : boardIdValue,
-            //     content : "Modify comment"
-            //     }), function (result){
-            //     alert("수정완료")
-            // }
+                if(endNum * 10 >= commentCnt){
+                    endNum = Math.ceil(commentCnt/10.0);
+                }
+                if(endNum * 10 < commentCnt){
+                    next = true;
+                }
 
-            // commentService.remove(13, function (count){
-            //     console.log(count);
-            //     if( count === "success"){
-            //         alert("REMOVE");
-            //     }}, function (err){
-            //         alert("error");
-            // })
+                var str = "<nav aria-label='...'>";
+                str += '<ul clsee="pagination">';
+                if (prev){
+                    str += "<li class='page-item'><a class='page-link' href='" +(startNum -1)+ "'>Previous</a></li>";
+                }
+                for(var i = startNum ; i <= endNum; i++){
+                    var active = page == i ? "active":"";
+                    str += "<li class='page-item "+ active + "'><a class='page-link' href='" + i + "'>" + i +"</a></li>";
+                }
+                if(next){
+                    str += "<li class='page-item'><a class='page-link' href='" +(endNum +1)+ "'>Next</a></li>";
+                }
+
+                console.log(str);
+
+                commentPageFooter.html(str);
+            };
+            commentPageFooter.on("click","li a", function (e){
+                e.preventDefault();
+                console.log("page click");
+
+                var targetPageNum = $(this).attr("href");
+
+                console.log("targetPageNum : " + targetPageNum );
+
+                page = targetPageNum;
+
+                showList(page);
+            });
 
 
             <!-- 게시글 -->
@@ -381,18 +403,28 @@
                 </div>
             </div>
         </div>
+        <!-- 댓글 페이징 -->
+        <nav aria-label="...">
+            <ul class="pagination">
+                <li class="page-item disabled">
+                    <a class="page-link">Previous</a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item active" aria-current="page">
+                    <a class="page-link" href="#">2</a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#">Next</a>
+                </li>
+            </ul>
+        </nav>
+
         <div class="panel-footer">
 
         </div>
 
-        <footer class="my-5 pt-5 text-muted text-center text-small">
-            <p class="mb-1">&copy; 2017-2021 Company Name</p>
-            <ul class="list-inline">
-                <li class="list-inline-item"><a href="#">Privacy</a></li>
-                <li class="list-inline-item"><a href="#">Terms</a></li>
-                <li class="list-inline-item"><a href="#">Support</a></li>
-            </ul>
-        </footer>
+        <th:block th:include="/include/footer"> </th:block>
     </div>
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=36bff8b96636a6127542c2c517175d6f&libraries=services"></script>
     <script>

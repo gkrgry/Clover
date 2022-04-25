@@ -44,7 +44,7 @@ public class CommentController {
                 produces = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_UTF8_VALUE})
     public ResponseEntity<CommentDTO> list(@PathVariable("pageNum") int pageNum, @PathVariable("boardId") int boardId) throws Exception {
         log.info("getList.........");
-        Criteria  cri = new Criteria(pageNum-1,10);
+        Criteria  cri = new Criteria((pageNum-1)*10,10);
         log.info("cri " + cri);
         return new ResponseEntity<>(commentService.getListPage(cri,boardId),HttpStatus.OK);
     }

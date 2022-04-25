@@ -127,6 +127,7 @@
                     alert(result);
                     modal.modal("hide");
                     showList(1);
+                    // showList(page);
                     }
                 )
             });
@@ -136,6 +137,7 @@
                         alert(result);
                         modal.modal("hide");
                         showList(1);
+                        // showList(page);
                     }
                 )
             });
@@ -160,7 +162,7 @@
                 }
 
                 var str = "<nav aria-label='...'>";
-                str += '<ul clsee="pagination">';
+                str += '<ul class="pagination justify-content-center">';
                 if (prev){
                     str += "<li class='page-item'><a class='page-link' href='" +(startNum -1)+ "'>Previous</a></li>";
                 }
@@ -404,22 +406,6 @@
             </div>
         </div>
         <!-- 댓글 페이징 -->
-        <nav aria-label="...">
-            <ul class="pagination">
-                <li class="page-item disabled">
-                    <a class="page-link">Previous</a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item active" aria-current="page">
-                    <a class="page-link" href="#">2</a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
-                </li>
-            </ul>
-        </nav>
-
         <div class="panel-footer">
 
         </div>

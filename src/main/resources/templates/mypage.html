@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- Bootstrap -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+
+</head>
+<body>
+
+<h3>MyPage</h3>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<div class="d-flex align-start" style="width: 100%">
+    <div  style='margin: 20px; margin-top:50px; '>
+        <div>
+            <a href="#MyInfo" data-toggle="tab">내정보</a>
+        </div>
+        <div>
+            <a href="#boardList" data-toggle="tab">내 게시판</a>
+        </div>
+        <div>
+            <a href="#tabmenu_03" data-toggle="tab">회원탈퇴</a>
+        </div>
+    </div>
+    <div class="tab-content" style='margin-top: 30px;'>
+        <div class="tab-pane fade in active" id="MyInfo">
+
+        <h3>기본정보</h3>
+             <div id="profile">
+
+                 <div>프로필
+                 </div>
+                 <a>닉네임:</a><a th:text="${session.userNickname}"></a>
+                 <br>
+                 <a>이름:</a><a th:text="${session.userName}"></a></p>
+
+             </div>
+            <hr/>
+            <p>
+                닉네임  &nbsp &nbsp <input onclick="userUpdate()" id="nickname" type="button" value="수정">
+            </p>
+            <p>
+                비밀번호  <input type="button" value="수정">
+            </p>
+            <p>
+                이메일 &nbsp  &nbsp <input type="button" value="수정">
+            </p>
+        </div>
+        <div class="tab-pane fade" id="boardList"><p>탭메뉴2 내용</p></div>
+        <div class="tab-pane fade" id="tabmenu_03"><p>탭메뉴3 내용</p></div>
+    </div>
+</div>
+<script>
+    function userUpdate(e){
+        console.log("클릭")
+        let popUrl = "update_popup";
+        let popOption = "width = 650px, height=550px, top=300px, left=300px, scrollbars=yes";
+
+        window.open(popUrl,"수정",popOption);
+    }
+
+
+
+</script>
+</body>
+</html>

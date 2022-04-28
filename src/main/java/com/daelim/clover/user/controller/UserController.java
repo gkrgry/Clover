@@ -27,6 +27,37 @@ public class UserController {
     private final UserService userService;
     UserServiceImpl service;
 
+    User user;
+
+
+    @GetMapping("/update_popup")
+    public String userUpdate() throws Exception{
+        log.info("유저 업뎃");
+
+        return "update_popup";
+    }
+
+    @PostMapping("/mypage")
+    public String userPage() throws  Exception{
+
+        //session.setAttribute("sUserId",userId);
+
+        return "mainpage";
+    }
+
+    @GetMapping("/mypage")
+    public String myPage(HttpServletRequest request)throws Exception{
+        HttpSession session = request.getSession();
+        String userId = (String) session.getAttribute("sUserId");
+        System.out.println("저장된변수"+userId);
+      user=userService.myPage(userId);
+        String userName=user.getName();
+        String userNickname=user.getNickname();
+        session.setAttribute("userName",userName);
+        session.setAttribute("userNickname",userNickname);
+        return "mypage";
+    }
+
 
     @PostMapping("/mailchk")
     @ResponseBody
@@ -52,17 +83,6 @@ public class UserController {
            return service.ePw;
     }
 
-//    @PostMapping("/verifyCode")
-//    @ResponseBody
-//    public int verifyCode(String code){
-//        int result=0;
-//
-//        if(UserServiceImpl.ePw.equals(code)){
-//
-//            result=1;
-//        }
-//        return result;
-//    }
 
 
     @PostMapping("/sign")

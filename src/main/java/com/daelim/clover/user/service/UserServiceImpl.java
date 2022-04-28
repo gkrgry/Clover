@@ -47,6 +47,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Value("${AdminMail.password}")
     private String password;
 
+
+    public User myPage(String userId) throws Exception{
+
+        User user=userMapper.selectionUser(userId);
+
+        return user;
+    }
+
+
+
     private MimeMessage createMessage(String to)throws  Exception{
 //        System.out.println("보내는 대상"+id);
 //        System.out.println("보내는 대상"+password);
@@ -125,6 +135,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
        userMapper.saveUser(user);
     }
+
 
 
     @Override

@@ -82,12 +82,16 @@
             var modalRegisterBtn = $("#modalRegisterBtn");
 
             $("#addCommentBtn").on("click",function (e){
-                modal.find("input").val("");
-                modal.find("button[id !='modalCloseBtn']").hide();
+                if(userId === null){
+                    alert("로그인을 해주세요");
+                }else{
+                    modal.find("input").val("");
+                    modal.find("button[id !='modalCloseBtn']").hide();
 
-                modalRegisterBtn.show();
+                    modalRegisterBtn.show();
 
-                $('.modal').modal('show');
+                    $('.modal').modal('show');
+                }
             });
             $("#modalRegisterBtn").on("click", function (){
                 var content = {
@@ -101,8 +105,8 @@
                     modal.find("input").val("");
                     modal.modal("hide");
 
-                    // showList(1);
-                    showList(-1);
+                    showList(1);
+                    // showList(-1);
                 })
             });
 

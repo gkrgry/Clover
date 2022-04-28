@@ -83,10 +83,19 @@ public class BoardController {
 
     @PostMapping("/register")
     public String boardRegister(Board board, Model model) throws Exception{
-        log.info("post 입력 입니다.");
-        boardService.boardRegister(board);
+        //유효성 검사
+        if(board.getUserId() == "" || board.getUserId() == null ){
+            log.info("null");
+            return "redirect:/login";
+        }else{
+            log.info("post 입력 입니다.");
+            boardService.boardRegister(board);
+            return "redirect:/list";
+        }
 
-        return "redirect:/list";
+
+
+
     }
     @GetMapping("/read")
     public String boardRead(@RequestParam("boardId") int boardId, Model model, HttpServletRequest request,
@@ -135,7 +144,7 @@ public class BoardController {
 
     @GetMapping("/modify")
     public String boardModify(@RequestParam("boardId") int boardId, Model model) throws Exception{
-        log.info("modify get");
+
 
         Board board = boardService.boardRead(boardId);
 
@@ -146,13 +155,20 @@ public class BoardController {
     }
 
     @PostMapping("/modify")
-    public String boardModifyForm(Board board, Model model) throws Exception{
-        log.info("modify post 입력 입니다.");
+    public String boardModifyForm(Board board, Model model,HttpSession session) throws Exception{
+        //유효성 검사
+        if(board.getUserId() == session.getAttribute("sUserId")){
 
-        boardService.boardModify(board);
+            boardService.boardModify(board);
+            return "redirect:/read";
+        }else{
+
+            return "redirect:/login";
+        }
 
 
-        return "redirect:/read";
+
+
     }
 
 

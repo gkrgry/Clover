@@ -101,7 +101,7 @@ var commentService = (function (){
             return[ (hh>9 ? '' : '0') + hh, ':', (mi > 9 ? '' : '0') + mi, ':',(ss>9 ? '' : '0') + ss].join('');
         }else{
             var yy = dataObj.getFullYear();
-            var mm = dataObj.getMonth();
+            var mm = dataObj.getMonth() + 1;
             var dd = dataObj.getDate();
 
             return [yy,'/',(mm>9?'':'0') + mm,'/',(dd>9?'':'0')+dd].join('');

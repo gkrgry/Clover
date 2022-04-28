@@ -56,7 +56,7 @@
             <h3 class="mb-3">수정</h3>
             <form class="needs-validation" id="board" action="success.html" th:action="@{/modify}" th:object="${board}" method="post" novalidate>
                 <input type="hidden" name="boardId" th:value="*{boardId}"/>
-                <input type="hidden" name="indexId" th:value="${session.sUserId}"/>
+                <input type="hidden" name="userId" th:value="*{userId}"/>
                 <div class="row">
                     <div class="col-md-12">
                         <label for="title">제목</label>

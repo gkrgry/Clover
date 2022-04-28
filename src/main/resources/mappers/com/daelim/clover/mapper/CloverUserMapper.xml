@@ -46,7 +46,16 @@
             )
     </insert>
 
-
+    <!--유저 정보불러오기-->
+    <select id="selectionUser" resultType="com.daelim.clover.user.domain.User">
+        SELECT
+            name
+            , nickname
+        FROM
+            user_db
+        WHERE
+            user_id=#{userId}
+    </select>
 
     <!--아이디 중복검사-->
     <select id="idCheck" resultType="int">

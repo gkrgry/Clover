@@ -19,4 +19,7 @@ public interface UserService {
 
     //이메일 중복확인
     public int emailCheck(String email)throws Exception;
+
+    //내정보 불러오기
+    public User myPage(String userId)throws Exception;
 }

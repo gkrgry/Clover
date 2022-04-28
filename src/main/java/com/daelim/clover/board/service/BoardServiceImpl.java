@@ -31,8 +31,8 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void boardRemove(Integer boardId, Integer indexId) throws Exception {
-        boardMapper.boardDelete(boardId,indexId);
+    public void boardRemove(Integer boardId, String userId) throws Exception {
+        boardMapper.boardDelete(boardId,userId);
     }
 
 

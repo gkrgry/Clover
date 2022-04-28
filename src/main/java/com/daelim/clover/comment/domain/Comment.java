@@ -10,7 +10,7 @@ import java.util.Date;
 public class Comment {
     private int commentId;
     private int boardId;
-    private int indexId;
+    private String userId;
     private String content;
     private Date regDate;
     private Date updateDate;

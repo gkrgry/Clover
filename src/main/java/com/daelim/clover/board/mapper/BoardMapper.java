@@ -14,7 +14,7 @@ public interface BoardMapper {
 
     public void boardUpdate(Board board) throws Exception;
 
-    public void boardDelete(Integer boardId, Integer indexId) throws Exception;
+    public void boardDelete(Integer boardId, String userId) throws Exception;
 
     public List<Board> boardList() throws Exception;
 

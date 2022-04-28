@@ -9,7 +9,8 @@ import java.util.Date;
 @Data
 public class Board {
     private int boardId; //기본키
-    private int indexId; //유저 테이블 기본키
+//    private int indexId; //유저 테이블 기본키
+    private String userId; //유저 아이디
     private String title; //글 제목
     private String image; //글 이미지 파일 이름
     private String content; //글 내용

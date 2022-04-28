@@ -85,9 +85,8 @@ public class BoardController {
     public String boardRegister(Board board, Model model) throws Exception{
         log.info("post 입력 입니다.");
         boardService.boardRegister(board);
-        model.addAttribute("msg", "입력 성공했스니다.");
 
-        return "main";
+        return "redirect:/list";
     }
     @GetMapping("/read")
     public String boardRead(@RequestParam("boardId") int boardId, Model model, HttpServletRequest request,
@@ -152,23 +151,21 @@ public class BoardController {
 
         boardService.boardModify(board);
 
-        model.addAttribute("msg","수정 성공");
 
-        return "main";
+        return "redirect:/read";
     }
 
 
 
     @PostMapping("/remove")
     public String boardRemove(@RequestParam("boardId") int boardId
-                              ,@RequestParam("indexId") int indexId
+                              ,@RequestParam("userId") String userId
                               ,Model model) throws Exception{
         log.info("remove.....");
 
-        boardService.boardRemove(boardId,indexId);
+        boardService.boardRemove(boardId,userId);
 
-        model.addAttribute("msg","삭제 성공");
-        return "main";
+        return "redirect:/main";
     }
 
 

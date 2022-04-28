@@ -40,6 +40,8 @@
     <script>
         $(document).ready(function () {
 
+            <!-- -->
+            var userId = $("#userId").val();
             <!-- 댓글 -->
             var commentUL = $(".chat");
             var boardIdValue = $("#boardId").val();
@@ -61,7 +63,7 @@
                     for(var i =0, len = list.length||0 ; i<len; i++){
 
                         str +="<li class='left list-group-item col-md-12' data-id='"+list[i].commentId+"'>";
-                        str +="    <div><div class='header'><strong class='primary-font'>"+list[i].indexId+"</strong>";
+                        str +="    <div><div class='header'><strong class='primary-font'>"+list[i].userId+"</strong>";
                         str +="         <small class='float-right text-muted'>"+
                             commentService.displayTime(list[i].updateDate) +"</small></div>";
                         str +="         <p>"+list[i].content+"</p></div></li>"
@@ -90,7 +92,7 @@
             $("#modalRegisterBtn").on("click", function (){
                 var content = {
                     content: modalInputContent.val(),
-                    indexId: "1000" , //modalInputWriter.val()
+                    userId: userId , //modalInputWriter.val()
                     boardId: boardIdValue
                 };
                 commentService.add(content, function (result){
@@ -110,7 +112,7 @@
                 console.log(commentId);
                 commentService.get(commentId, function (comment){
                     modalInputContent.val(comment.content);
-                    modalInputWriter.val(comment.indexId);
+                    modalInputWriter.val(comment.userId);
                     modal.data("id",comment.commentId);
                     //모달 data-id = commentId
                     modal.find("button[id !='modalCloseBtn']").hide();
@@ -223,7 +225,7 @@
                     <h6>조회수</h6>
                     <p th:text="*{boardCount}"></p>
                     <input type="hidden" id="boardId" name="boardId" th:value="*{boardId}"/>
-                    <input type="hidden" name="indexId" th:value="*{indexId}"/>
+                    <input type="hidden" name="userId" id="userId" th:value="${session.sUserId}"/>
                     <div class="row">
                         <div class="col-md-12">
                             <label for="title">제목</label>

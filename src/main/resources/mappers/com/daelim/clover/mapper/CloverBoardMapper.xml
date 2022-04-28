@@ -16,7 +16,7 @@
         <select id="boardList"
         resultType="com.daelim.clover.board.domain.Board">
             SELECT      board_id        as boardId
-                        , index_id      as indexId
+                        , user_id      as userId
                         , title
                         , image
                         , content
@@ -31,8 +31,7 @@
                         , lon           as lon
             from        board_db as boardDB
             WHERE       board_id > 0
-            ORDER BY    board_id desc
-                        , update_date DESC
+            ORDER BY    update_date DESC, board_id desc
         </select>
 
     <!-- 검색 페이징 -->
@@ -40,7 +39,7 @@
             resultType="com.daelim.clover.board.domain.Board">
         <![CDATA[
         SELECT      board_id        as boardId
-             , index_id      as indexId
+             , user_id      as userId
              , title
              , content
              , gen_address   as genAddress
@@ -64,8 +63,7 @@
             </if>
         <![CDATA[
         ORDER BY
-            board_id
-            asc
+            updateDate desc
             LIMIT #{skip}, #{amount}
             ]]>
     </select>
@@ -75,7 +73,7 @@
         <![CDATA[
         SELECT
                board_id        as boardId
-             , index_id      as indexId
+             , user_id      as userId
              , title
              , content
              , gen_address   as genAddress
@@ -141,7 +139,7 @@
     <select id="boardRead"
                 resultType="com.daelim.clover.board.domain.Board">
             SELECT      board_id        as boardId
-                 , index_id      as indexId
+                 , user_id      as userId
                  , title
                  , image
                  , content
@@ -159,7 +157,7 @@
         <insert id="boardCreate">
             INSERT INTO board_db
             (
-                index_id
+                user_id
                 ,   title
                 ,   content
                 ,   gen_address
@@ -174,7 +172,7 @@
             )
             VALUES
             (
-                "1000"
+                #{userId}
                 ,   #{title}
                 ,   #{content}
                 ,   #{genAddress}
@@ -204,13 +202,13 @@
                 ,   lat             =#{lat}
                 ,   lon             =#{lon}
             WHERE board_id = #{boardId}
-            AND   index_id = #{indexId}
+            AND   user_id = #{userId}
         </update>
     <!-- 게시글 기능 -->
         <delete id="boardDelete">
             DELETE FROM board_db
             WHERE board_id = #{boardId}
-            AND   index_id = #{indexId}
+            AND   user_id = #{userId}
         </delete>
 
 </mapper>

@@ -42,6 +42,7 @@
 
             <!-- -->
             var userId = $("#userId").val();
+            var CommentUserId;
             <!-- 댓글 -->
             var commentUL = $(".chat");
             var boardIdValue = $("#boardId").val();
@@ -61,9 +62,8 @@
                         return;
                     }
                     for(var i =0, len = list.length||0 ; i<len; i++){
-
                         str +="<li class='left list-group-item col-md-12' data-id='"+list[i].commentId+"'>";
-                        str +="    <div><div class='header'><strong class='primary-font'>"+list[i].userId+"</strong>";
+                        str +="    <div><div class='header'><strong class='primary-font' data-cuid='"+ list[i].userId +"'>"+list[i].userId+"</strong>";
                         str +="         <small class='float-right text-muted'>"+
                             commentService.displayTime(list[i].updateDate) +"</small></div>";
                         str +="         <p>"+list[i].content+"</p></div></li>"
@@ -80,10 +80,11 @@
             var modalModBtn = $("#modalModBtn");
             var modalRemoveBtn = $("#modalRemoveBtn");
             var modalRegisterBtn = $("#modalRegisterBtn");
-
+            var seUserId = "[[${session.sUserId}]]";
             $("#addCommentBtn").on("click",function (e){
-                if(userId === null){
+                if(seUserId === null || seUserId === ""){
                     alert("로그인을 해주세요");
+                    window.location.href="login"
                 }else{
                     modal.find("input").val("");
                     modal.find("button[id !='modalCloseBtn']").hide();
@@ -96,7 +97,7 @@
             $("#modalRegisterBtn").on("click", function (){
                 var content = {
                     content: modalInputContent.val(),
-                    userId: userId , //modalInputWriter.val()
+                    userId: seUserId , //modalInputWriter.val()
                     boardId: boardIdValue
                 };
                 commentService.add(content, function (result){
@@ -110,21 +111,31 @@
                 })
             });
 
+            console.log("seuserID = " + seUserId)
             //여기에 아이디 값이랑때 조건 들어가야함 /*
             $(".chat").on("click", "li" ,function (e){
                 var commentId = $(this).data("id");
+                var commentUserId = $('strong').data('cuid');
                 console.log(commentId);
-                commentService.get(commentId, function (comment){
-                    modalInputContent.val(comment.content);
-                    modalInputWriter.val(comment.userId);
-                    modal.data("id",comment.commentId);
-                    //모달 data-id = commentId
-                    modal.find("button[id !='modalCloseBtn']").hide();
-                    modalModBtn.show();
-                    modalRemoveBtn.show();
+                console.log(commentUserId);
+                if(seUserId === commentUserId){
 
-                    $(".modal").modal("show");
-                })
+                    commentService.get(commentId, function (comment){
+                        modalInputContent.val(comment.content);
+                        modalInputWriter.val(comment.userId);
+                        modal.data("id",comment.commentId);
+                        //모달 data-id = commentId
+                        modal.find("button[id !='modalCloseBtn']").hide();
+                        modalModBtn.show();
+                        modalRemoveBtn.show();
+
+                        $(".modal").modal("show");
+                    })
+                } else if(seUserId === "" || seUserId === null){
+                    alert("로그인을 해주세요");
+                } else {
+                    alert("본인이 아닙니다.");
+                }
             });
             modalModBtn.on("click",function (e){
 
@@ -229,7 +240,7 @@
                     <h6>조회수</h6>
                     <p th:text="*{boardCount}"></p>
                     <input type="hidden" id="boardId" name="boardId" th:value="*{boardId}"/>
-                    <input type="hidden" name="userId" id="userId" th:value="${session.sUserId}"/>
+                    <input type="hidden" name="userId" id="userId" th:value="*{userId}"/>
                     <div class="row">
                         <div class="col-md-12">
                             <label for="title">제목</label>
@@ -335,14 +346,18 @@
                            class="form-control" id="updateDate"/>
                     </div>
 
-                    <hr class="mb-4">
+
 
                 </form>
-                <div>
-                    <button class="btn btn-primary btn-lg btn-block"
-                            type="submit" id="btModify">수정</button>
-                    <button class="btn btn-primary btn-lg btn-block"
-                            type="submit" id="btRemove">삭제</button>
+                <div th:if="${session.sUserId} == ${board.userId}">
+                    <hr class="mb-4">
+                        <button class="btn btn-primary btn-lg btn-block"
+                                type="submit" id="btModify">수정</button>
+                        <button class="btn btn-primary btn-lg btn-block"
+                                type="submit" id="btRemove">삭제</button>
+                </div>
+                <div th:unless="${session.sUserId} == ${board.userId}">
+
                 </div>
             </div>
         </div>
@@ -373,10 +388,6 @@
                         <div class="form-group">
                             <label>content</label>
                             <input class="form-control" name="content" value="New Comment">
-                        </div>
-                        <div class="form-group">
-                            <label>writer</label>
-                            <input class="form-control" name="writer" value="New writer">
                         </div>
                     </div>
                     <div class="modal-footer">

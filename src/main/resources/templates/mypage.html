@@ -6,8 +6,56 @@
     <!-- Bootstrap -->
     <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
 
+    <link rel="stylesheet" type="text/css" href="/css/join.css">
+    <!-- jQuery (부트스트랩의 자바스크립트 플러그인을 위해 필요한) -->
+
 </head>
 <body>
+
+<!-- 모달창 -->
+<div class="modal fade" id="defaultModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">알림</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-contents">
+
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button id="modalSubmit" type="button" class="btn btn-success" data-dismiss="modal">수정</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!--// 모달창 -->
+
+<!-- 모달창 -->
+<div class="modal fade" id="ck">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">알림</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-contents">
+
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!--// 모달창 -->
+
+
 
 <h3>MyPage</h3>
 
@@ -35,34 +83,292 @@
 
                  <div>프로필
                  </div>
-                 <a>닉네임:</a><a th:text="${session.userNickname}"></a>
+                 <a>닉네임:</a><a   th:text="${session.userNickname}"></a>
+                 <input id="nickname" type="hidden" th:value="${session.userNickname}">
                  <br>
-                 <a>이름:</a><a th:text="${session.userName}"></a></p>
-
+                 <a>이름:</a><a  th:text="${session.userName}"></a></p>
+                 <input  id="username" type="hidden" th:value="${session.userName}">
              </div>
             <hr/>
             <p>
-                닉네임  &nbsp &nbsp <input onclick="userUpdate()" id="nickname" type="button" value="수정">
+                닉네임  &nbsp &nbsp <input onclick="userNicknameUpdate()" type="button" value="수정">
             </p>
             <p>
-                비밀번호  <input type="button" value="수정">
+                이름  &nbsp &nbsp &nbsp &nbsp <input onclick="userNameUpdate()" type="button" value="수정">
             </p>
             <p>
-                이메일 &nbsp  &nbsp <input type="button" value="수정">
+                비밀번호  <input type="button" onclick="userpwdUpdate()" value="수정">
+                <input id="pwd" type="hidden" th:value="${session.userPwd}">
+            </p>
+            <p>
+                이메일 &nbsp  &nbsp <input  type="button" value="수정">
+                <input id="email" type="hidden" th:value="${session.userEmail}">
             </p>
         </div>
         <div class="tab-pane fade" id="boardList"><p>탭메뉴2 내용</p></div>
         <div class="tab-pane fade" id="tabmenu_03"><p>탭메뉴3 내용</p></div>
     </div>
 </div>
-<script>
-    function userUpdate(e){
-        console.log("클릭")
-        let popUrl = "update_popup";
-        let popOption = "width = 650px, height=550px, top=300px, left=300px, scrollbars=yes";
 
-        window.open(popUrl,"수정",popOption);
+
+<script>
+
+    var modalContents = $(".modal-contents");
+    var modal = $("#defaultModal");
+    var modalck = $('#ck');
+    var modalContent=$('.modal-contents');
+
+//초기설정
+    var modifyname=$('#username').val();
+    var modifynickname=$('#nickname').val();
+    var modifyemail=$('#email').val();
+    var modifypwd=$('#pwd').val();
+
+    //닉네임 수정 js
+    function userNicknameUpdate(event) {
+        modalContents.html(" <div class='form-group' id='divNickname'>"+
+        "<label  class='col-lg-2 control-label'>닉네임</label>"+
+        "<div class='col-lg-10'>"+
+            "<input type='text' name='modifynickname' class='form-control' id='modifynickname' data-rule-required='true' placeholder='별명' maxlength='15'>"+
+        "</div>"+
+        "<span class='err nicknameerr'>수정할 닉네임을 입력해주세요</span>"+
+    "</div>");
+
+        modal.modal('show');
+
+
+        $('#modifynickname').keyup(function(event){
+
+            var divNickname = $('#divNickname');
+
+            if($.trim($('#modifynickname').val())==""){
+                divNickname.removeClass("has-success");
+                divNickname.addClass("has-error");
+                $("#modifynickname").css("border-color", "#ff4d78");
+                $(".nicknameerr").show();
+            }else{
+                divNickname.removeClass("has-error");
+                divNickname.addClass("has-success");
+                $("#modifynickname").css("border-color", "#dddddd");
+                $(".nicknameerr").hide();
+            }
+        });
+
+
+        $('#modalSubmit').click(function (){
+            modifynickname=$('#modifynickname').val();
+            // console.log(name);
+            // console.log(nickname);
+            if(!$('#modifynickname').val()){
+                console.log("트루")
+                modalContent.text("닉네임을 입력해주세요");
+                modalck.modal('show');
+            }else {
+                console.log("펄스");
+                console.log(modifyname);
+                var data = {
+                    "name"    : modifyname,
+                    "nickname": modifynickname,
+                    "pwd"     : modifypwd,
+                    "email"   : modifyemail
+                };
+                $.ajax({
+                    type:"post",
+                    data : data,
+                    url : "/update_popup",
+                    success:function (result){
+                            // console.log("수정완료");
+                        console.log(result);
+                            if(result=="success"){
+                                console.log("새로고침");
+                                window.location.reload();
+                            }
+                    }
+                })
+            }
+        });
     }
+// 이름 변경
+    function userNameUpdate(event){
+    modalContents.html("<div class='form-group' id='divName'>" +
+        "            <label class='col-lg-2 control-label'>이름</label>" +
+        "            <div class='col-lg-10'>" +
+        "                <input type='text' name='modifyname' class='form-control onlyHangul' id='modifyname' data-rule-required='true' placeholder='한글만 입력 가능합니다.' maxlength='15'>" +
+        "            </div>" +
+        "            <span class='err nameerr'>변경할 이름를 입력해주세요</span>" +
+        "        </div>");
+        modal.modal('show');
+
+
+        $('#modalSubmit').click(function (){
+            modifyname=$('#modifyname').val();
+             console.log(modifyname);
+            console.log(!$('#modifyname').val());
+            // console.log(nickname);
+            if(!$('#modifyname').val()){
+                console.log("트루");
+                modalContent.text("이름을 입력해주세요");
+                modalck.modal('show');
+            }else {
+                console.log("펄스");
+                var data = {
+                    "name"    : modifyname,
+                    "nickname": modifynickname,
+                    "pwd"     : modifypwd,
+                    "email"   : modifyemail
+                };
+                $.ajax({
+                    type:"post",
+                    data : data,
+                    url : "/update_popup",
+                    success:function (result){
+                         console.log("수정완료");
+                        console.log(result);
+                        if(result=="success"){
+                            console.log("새로고침");
+                            window.location.reload();
+                        }
+                    }
+                })
+            }
+
+        });
+
+        $('#modifyname').keyup(function(event){
+
+            var divName = $('#divName');
+
+            if($.trim($('#modifyname').val())==""){
+                divName.removeClass("has-success");
+                divName.addClass("has-error");
+                $("#modifyname").css("border-color", "#ff4d78");
+                $(".nameerr").show();
+            }else{
+                divName.removeClass("has-error");
+                divName.addClass("has-success");
+                $("#modifyname").css("border-color", "#dddddd");
+                $(".nameerr").hide();
+            }
+        });
+
+        $(".onlyHangul").keyup(function(event){
+            if (!(event.keyCode >=37 && event.keyCode<=40)) {
+                var inputVal = $(this).val();
+                $(this).val(inputVal.replace(/[a-z0-9]/gi,''));
+            }
+        });
+    }
+
+
+
+
+
+
+// 비밀번호 변경
+    function userpwdUpdate(event){
+        var passwordCheck = $('#modifypwdCheck').val();
+        var password = $('#modifypwd').val();
+        var divPasswordCheck = $('#divPasswordCheck');
+        var divPassword = $('#divPassword');
+
+
+        modalContents.html("<div class='form-group' id='divPassword'>"+
+        "<label  class='col-lg-2 control-label'>패스워드</label>"+
+        "<div class='col-lg-10'>"+
+            "<input type='password' name='pwd' class='form-control' id='modifypwd'  data-rule-required='true' placeholder='패스워드' maxlength='30'>"+
+        "</div>"+
+        "<span class='err pwerr'>비밀번호를 입력해주세요</span>"+
+    "</div>"+
+
+        "<div class='form-group' id='divPasswordCheck'>"+
+            "<label  class='col-lg-2 control-label'>패스워드 확인</label>"+
+            "<div class='col-lg-10'>"+
+                "<input type='password' class='form-control' id='modifypwdCheck' data-rule-required='true' placeholder='패스워드 확인' maxlength='30'>"+
+            "</div>"+
+            "<span class='err chkerr'>비밀번호가 일치하지 않습니다.</span>"+
+        "</div>");
+        modal.modal('show');
+
+
+        $('#modalSubmit').click(function (){
+            modifypwd=$('#modifypwd').val();
+            console.log(modifypwd);
+            console.log(!$('#modifypwd').val());
+            // console.log(nickname);
+            if(!$('#modifypwd').val() && !$('#modifypwdCheck').val()){
+                //패스워드 검사
+                if($('#modifypwd').val()==""){
+                    modalContent.text("패스워드를 입력하여 주시기 바랍니다.");
+                    modalck.modal('show');
+                }else{
+                    divPassword.removeClass("has-error");
+                    divPassword.addClass("has-success");
+                }
+
+            }else if($('#modifypwd').val()!=$('#modifypwdCheck').val() || $('#modifypwdCheck').val()=="") {
+                modalContent.text("패스워드가 일치하지 않습니다.");
+                modalck.modal('show');
+            }else{
+                console.log("펄스");
+                var data = {
+                    "name"    : modifyname,
+                    "nickname": modifynickname,
+                    "pwd"     : modifypwd,
+                    "email"   : modifyemail
+                };
+                $.ajax({
+                    type:"post",
+                    data : data,
+                    url : "/update_popup",
+                    success:function (result){
+                        console.log("수정완료");
+                        console.log(result);
+                        if(result=="success"){
+                            console.log("새로고침");
+                            //window.location.reload();
+                        }else if(result=="faild"){
+                            console.log("실패");
+                            modalContent.text("기존 패스워드랑 동일합니다.");
+                            modalck.modal('show');
+                        }
+                    }
+                })
+            }
+
+        });
+
+        $('#modifypwd').keyup(function(event){
+
+
+            if($('#modifypwd').val()==""){
+                divPassword.removeClass("has-success");
+                divPassword.addClass("has-error");
+                $("#modifypwd").css("border-color","#ff4d78");
+                $(".pwerr").show();
+            }else{
+                divPassword.removeClass("has-error");
+                divPassword.addClass("has-success");
+                $("#modifypwd").css("border-color","#dddddd");
+                $(".pwerr").hide();
+            }
+        });
+
+        $('#modifypwdCheck').keyup(function(event){
+
+            if((passwordCheck=="") || (password!=passwordCheck)){
+                divPasswordCheck.removeClass("has-success");
+                divPasswordCheck.addClass("has-error");
+                $("#passwordCheck").css("border-color","#ff4d78");
+                $(".chkerr").show();
+            }else{
+                divPasswordCheck.removeClass("has-error");
+                divPasswordCheck.addClass("has-success");
+                $("#passwordCheck").css("border-color","#dddddd");
+                $(".chkerr").hide();
+            }
+        });
+    }
+
 
 
 

@@ -5,6 +5,7 @@ import java.util.Random;
 
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
@@ -39,7 +40,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Autowired
     JavaMailSender emailSender;
 
-
     public   static  final  String ePw = createKey();
 
     @Value("${AdminMail.id}")
@@ -48,7 +48,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private String password;
 
 
+    //닉네임 수정
+    public int userUpdate(User user) throws Exception{
+
+        System.out.println(user.getNickname()+"테스트");
+        System.out.println(user.getPwd()+"테스트2");
+        userMapper.UpdateUser(user);
+        return 0;
+    }
+    // 이름 수정
+
+    //내정보 페이지
     public User myPage(String userId) throws Exception{
+
 
         User user=userMapper.selectionUser(userId);
 

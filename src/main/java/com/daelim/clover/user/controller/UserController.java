@@ -9,6 +9,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -30,11 +31,36 @@ public class UserController {
     User user;
 
 
-    @GetMapping("/update_popup")
-    public String userUpdate() throws Exception{
-        log.info("유저 업뎃");
+    @PostMapping("/update_popup")
+    @ResponseBody
+    public String userUpdate(HttpServletRequest request,User user) throws Exception{
+//        log.info("유저 업뎃");
+        log.info(user.getNickname());
+//        log.info(name);
+        HttpSession session = request.getSession();
 
-        return "update_popup";
+
+        String pwd = (String) session.getAttribute("pwd");
+        String userId = (String) session.getAttribute("sUserId");
+
+
+        user.setUserId(userId);
+        if(pwd==user.getPwd()){
+            user.setPwd(pwd);
+            return "faild";
+        }else{
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            user.setPwd(passwordEncoder.encode(user.getPassword()));
+            System.out.println(user.getPwd());
+        }
+
+//       System.out.println(pwd);
+
+       // System.out.println(this.user.getNickname()+"현재닉네임");
+       // System.out.println(user.getNickname()+"바꿀 닉네임");
+        userService.userUpdate(user);
+
+        return "success";
     }
 
     @PostMapping("/mypage")
@@ -49,13 +75,25 @@ public class UserController {
     public String myPage(HttpServletRequest request)throws Exception{
         HttpSession session = request.getSession();
         String userId = (String) session.getAttribute("sUserId");
+//        String Pwd = (String) session.getAttribute("pwd");
         System.out.println("저장된변수"+userId);
       user=userService.myPage(userId);
+
         String userName=user.getName();
         String userNickname=user.getNickname();
+        String userPwd = user.getPwd();
+        String email = user.getEmail();
         session.setAttribute("userName",userName);
         session.setAttribute("userNickname",userNickname);
+        session.setAttribute("userPwd",userPwd);
+        session.setAttribute("userEmail",email);
+//        System.out.println(email);
+//        System.out.println(userPwd);
+//        System.out.println(userName);
+//        System.out.println(userNickname);
+
         return "mypage";
+
     }
 
 
@@ -122,11 +160,16 @@ public class UserController {
         User user = (User)  authentication.getPrincipal(); //userDetail 객체를 가져옴
         HttpSession session= request.getSession();
         String sUserId = user.getUserId();
+        String pwd = user.getPwd();
+        log.info(""+pwd);
         log.info(""+sUserId);
+        session.setAttribute("pwd",pwd);
         session.setAttribute("sUserId",sUserId);
         model.addAttribute("info", user.getUserId()+"의 "+user.getName());//유저 아이디
+
         return  "mainpage";
     }
+
 
     //아이디 중복 검사
     @RequestMapping(value ="/memberIdChk",method = RequestMethod.POST)

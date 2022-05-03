@@ -19,4 +19,7 @@ public interface UserMapper {
 
     //내정보 가져오기
     public User selectionUser(String userId);
+
+    //정보수정
+    public int UpdateUser(User user);
 }

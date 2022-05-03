@@ -22,4 +22,10 @@ public interface UserService {
 
     //내정보 불러오기
     public User myPage(String userId)throws Exception;
+
+    //내정보 변경
+    public int userUpdate(User user) throws Exception;
+
+
+
 }

@@ -45,12 +45,26 @@
             ,   sysdate()
             )
     </insert>
+    
+    <update id="UpdateUser"
+            parameterType="com.daelim.clover.user.domain.User" >
+        UPDATE user_db
+        SET user_id     = #{userId}
+        ,   password    =#{pwd}
+        ,   nickname    =#{nickname}
+        ,   name        =#{name}
+        ,   email       =#{email}
+        WHERE user_id   =#{userId}
+
+    </update>
 
     <!--유저 정보불러오기-->
     <select id="selectionUser" resultType="com.daelim.clover.user.domain.User">
         SELECT
             name
+             ,password
             , nickname
+            ,email
         FROM
             user_db
         WHERE

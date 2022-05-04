@@ -45,7 +45,12 @@
             ,   sysdate()
             )
     </insert>
-    
+    <delete id="UserDrop">
+        DELETE FROM user_db
+        WHERE user_id =#{userId}
+
+    </delete>
+<!--    유저업데이트-->
     <update id="UpdateUser"
             parameterType="com.daelim.clover.user.domain.User" >
         UPDATE user_db
@@ -61,8 +66,9 @@
     <!--유저 정보불러오기-->
     <select id="selectionUser" resultType="com.daelim.clover.user.domain.User">
         SELECT
-            name
-             ,password
+               user_id
+            ,  name
+            , password
             , nickname
             ,email
         FROM

@@ -22,4 +22,7 @@ public interface UserMapper {
 
     //정보수정
     public int UpdateUser(User user);
+
+    //유저 삭제
+    public void UserDrop(String userId);
 }

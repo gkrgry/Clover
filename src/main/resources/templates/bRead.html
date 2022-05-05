@@ -264,14 +264,14 @@
                         <label for="image">image</label>
                         <div class="input-group">
                             <div class="input-group-prepend">
-                            </div>
-                            <!-- 고칠거-->
-                            <input type="text" id="image" required>
+
+                            <img id="image" src="uploadImg/700da537-bf66-4f38-ac2f-1ad37584d950_1.PNG" alt="image" required/>
                             <!-- class="form-control"-->
+                            </div>
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label>도로명주소<span class="text-muted">(Optional)</span></label>
+                        <label>도로명주소</label>
                         <input type="hidden" name="genAddress" id="address_kakao" th:field="*{genAddress}" readonly="readonly"
                                class="form-control"/>
                         <div id="map" style="width:100%;height:350px;">

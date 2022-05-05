@@ -39,7 +39,7 @@ public class CommentController {
                 : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    //댓글 리스트 이게 지금 문제
+    //댓글 리스트
         @GetMapping(value = "/pages/{boardId}/{pageNum}",
                 produces = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_UTF8_VALUE})
     public ResponseEntity<CommentDTO> list(@PathVariable("pageNum") int pageNum, @PathVariable("boardId") int boardId) throws Exception {

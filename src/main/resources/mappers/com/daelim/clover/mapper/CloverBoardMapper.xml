@@ -159,6 +159,7 @@
             (
                 user_id
                 ,   title
+                ,   image
                 ,   content
                 ,   gen_address
                 ,   det_address
@@ -174,6 +175,7 @@
             (
                 #{userId}
                 ,   #{title}
+                ,   #{image}
                 ,   #{content}
                 ,   #{genAddress}
                 ,   #{detAddress}

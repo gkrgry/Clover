@@ -49,7 +49,7 @@ class CloverApplicationTests {
 
         IntStream.rangeClosed(51,200).forEach(i ->{
             Board board = new Board();
-            board.setIndexId(1000);
+//            board.setIndexId(1000);
             board.setTitle("제목 " + i);
             board.setContent("컨텐츠 " + i);
             board.setGenAddress("경기 안양시 동안구 임곡로 ");
@@ -58,7 +58,7 @@ class CloverApplicationTests {
             board.setTagBigName("큰태그 " + i);
             board.setTagSmallName("작은태그 " + i);
             try{
-                service.boardRegister(board);
+//                service.boardRegister(board);
             } catch (Exception e){
                 e.printStackTrace();
             }
@@ -96,7 +96,7 @@ class CloverApplicationTests {
             Comment comment = new Comment();
 
             comment.setBoardId(227);
-            comment.setIndexId(1000);
+//            comment.setIndexId(1000);
             comment.setContent("테스트 코드 : " +i);
 
             try{

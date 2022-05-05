@@ -2,6 +2,7 @@ package com.daelim.clover.board.controller;
 
 import com.daelim.clover.board.domain.Board;
 import com.daelim.clover.board.domain.Criteria;
+import com.daelim.clover.board.domain.FileDTO;
 import com.daelim.clover.board.domain.PageDTO;
 import com.daelim.clover.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -10,12 +11,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.FileFilter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.logging.FileHandler;
 
 @Log4j2
 @Controller
@@ -82,19 +90,28 @@ public class BoardController {
     }
 
     @PostMapping("/register")
-    public String boardRegister(Board board, Model model) throws Exception{
+    public String boardRegister(Board board, Model model , @RequestParam MultipartFile[] uploadfile) throws Exception{
+
         //유효성 검사
-        if(board.getUserId() == "" || board.getUserId() == null ){
+        if(board.getUserId().equals("") || board.getUserId() == null ){
             log.info("null");
             return "redirect:/login";
         }else{
+            //파일 업로드
+            for(MultipartFile multipartFile : uploadfile){
+                //UUID를 이용하요 이름이 겹치지 않게 랜덤하게 이름 저장
+                FileDTO dto = new FileDTO(UUID.randomUUID().toString(),
+                        multipartFile.getOriginalFilename(),
+                        multipartFile.getContentType());
+                String fileName = dto.getFileId()+"_"+dto.getFileName();
+                File file = new File(fileName);
+                multipartFile.transferTo(file);
+                board.setImage(fileName);
+            }
             log.info("post 입력 입니다.");
             boardService.boardRegister(board);
             return "redirect:/list";
         }
-
-
-
 
     }
     @GetMapping("/read")

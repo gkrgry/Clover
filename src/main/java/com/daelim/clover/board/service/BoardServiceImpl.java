@@ -31,8 +31,8 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void boardRemove(Integer boardId, Integer indexId) throws Exception {
-        boardMapper.boardDelete(boardId,indexId);
+    public void boardRemove(Integer boardId, String userId) throws Exception {
+        boardMapper.boardDelete(boardId,userId);
     }
 
 
@@ -41,7 +41,6 @@ public class BoardServiceImpl implements BoardService {
 //        return boardMapper.boardList();
 //    }
     @Override // 일반검색 리스트
-Develop
     public List<Board> boardList(Criteria cri) throws Exception {
         return boardMapper.getBoardListPaging(cri);
     }

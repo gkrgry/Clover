@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daelim.clover.comment.mapper.CommentMapper">
+    <insert id="insertComment">
+        INSERT INTO comment_db (board_id, user_id, content, regdate, update_date)
+        VALUES (#{boardId}, #{userId}, #{content}, NOW(), NOW())
+    </insert>
+
+    <select id="selectComment"
+            resultType="com.daelim.clover.comment.domain.Comment">
+        SELECT      comment_id, board_id, user_id, content, update_date
+        FROM        comment_db
+        WHERE       comment_id = #{commentId}
+    </select>
+
+
+    <select id="commentPagingList"
+            resultType="com.daelim.clover.comment.domain.Comment">
+        SELECT      comment_id, board_id, user_id, content, update_date
+        FROM        comment_db
+        WHERE       board_id = #{boardId}
+        ORDER BY    update_date  desc
+        LIMIT      #{cri.pageNum} , #{cri.amount}
+
+    </select>
+
+    <select id="getCountByBoardId" resultType="int">
+        select count(board_id) from comment_db where board_id = #{boardId}
+    </select>
+
+    <update id="updateComment">
+        UPDATE  comment_db
+        SET     content = #{content}, update_date = NOW()
+        WHERE   comment_id = #{commentId}
+    </update>
+
+    <delete id="deleteComment">
+        DELETE FROM     comment_db
+        WHERE           comment_id = #{commentId}
+    </delete>
+</mapper>

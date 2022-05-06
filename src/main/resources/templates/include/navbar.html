@@ -1,7 +1,12 @@
-
+<html xmlns:th="http://www.thymeleaf.org">
 <header>
+    <div class="col text-right">
+        <div th:if="${#strings.isEmpty(session.sUserId)}"><a href="login">Login</a> &nbsp <a>Sign</a></div>
+        <div th:unless="${#strings.isEmpty(session.sUserId)}"><a href="#">마이페이지</a></div>
+    </div>
+
 <nav class="navbar navbar-light" >
-    <a class="navbar-brand" href="main"><h2>Clover</h2></a>
+    <a class="navbar-brand" href="main"><h2 style="color: #2E8B57;">Clover</h2></a>
     <form class="form-inline" action="list">
         <!-- keyword  -->
         <input class="form-control mr-sm-2" type="search" name="keyword" placeholder="Search" aria-label="Search">
@@ -9,7 +14,7 @@
     </form>
 </nav>
 <!-- nav bar -->
-<nav id="navbar" class="navbar navbar-expand-lg" style="background-color: lightgreen;">
+<nav id="navbar" class="navbar navbar-expand-lg navbar-dark " style="background-color: #2E8B57 ;" >
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -28,3 +33,4 @@
     </div>
 </nav>
 </header>
+</html>

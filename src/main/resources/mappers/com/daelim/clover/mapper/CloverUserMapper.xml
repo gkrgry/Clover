@@ -45,8 +45,37 @@
             ,   sysdate()
             )
     </insert>
+    <delete id="UserDrop">
+        DELETE FROM user_db
+        WHERE user_id =#{userId}
 
+    </delete>
+<!--    유저업데이트-->
+    <update id="UpdateUser"
+            parameterType="com.daelim.clover.user.domain.User" >
+        UPDATE user_db
+        SET user_id     = #{userId}
+        ,   password    =#{pwd}
+        ,   nickname    =#{nickname}
+        ,   name        =#{name}
+        ,   email       =#{email}
+        WHERE user_id   =#{userId}
 
+    </update>
+
+    <!--유저 정보불러오기-->
+    <select id="selectionUser" resultType="com.daelim.clover.user.domain.User">
+        SELECT
+               user_id
+            ,  name
+            , password
+            , nickname
+            ,email
+        FROM
+            user_db
+        WHERE
+            user_id=#{userId}
+    </select>
 
     <!--아이디 중복검사-->
     <select id="idCheck" resultType="int">
@@ -56,5 +85,15 @@
             user_db
         WHERE
             user_id = #{userId}
+    </select>
+
+<!--    이메일 중복검사-->
+    <select id="emailCheck" resultType="int">
+        SELECT
+            count(*)
+        FROM
+            user_db
+        WHERE
+            email = #{email}
     </select>
 </mapper>

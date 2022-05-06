@@ -25,7 +25,6 @@ public class User implements UserDetails {
     private String phone;       //연락처
     private int sex;            //성별
         Date regdate;       //가입날짜
-    private boolean tf=false;
 
 
 

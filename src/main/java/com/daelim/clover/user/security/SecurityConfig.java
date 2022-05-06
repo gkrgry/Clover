@@ -46,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureUrl("/access_denied")  //인증에 실패했을 떄 보여주는 화면
                 .and()
                 .logout()
-                .logoutSuccessUrl("/sign")// 로그아웃 성공시 리다이렉트 주소
+                .logoutSuccessUrl("/mainpage")// 로그아웃 성공시 리다이렉트 주소
                 .invalidateHttpSession(true)//세션날리기
                 .and()
                 .csrf().disable(); //로그인창

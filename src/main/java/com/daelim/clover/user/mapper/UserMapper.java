@@ -13,4 +13,16 @@ public interface UserMapper {
 
     //아이디 중복 검사
     public int idCheck(String userId);
+
+    //이메일 중복 검사
+    public int emailCheck(String email);
+
+    //내정보 가져오기
+    public User selectionUser(String userId);
+
+    //정보수정
+    public int UpdateUser(User user);
+
+    //유저 삭제
+    public void UserDrop(String userId);
 }

@@ -2,6 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.daelim.clover.board.mapper.BoardMapper">
+
+
+    <!-- 조회수 -->
+        <update id="boardCountSet">
+            UPDATE      board_db
+            SET         board_count = board_count + 1
+            WHERE       board_id    = #{boardId}
+        </update>
+
+
+    <!-- 일반 검색 리스트 -->
         <select id="boardList"
         resultType="com.daelim.clover.board.domain.Board">
             SELECT      board_id        as boardId
@@ -16,12 +27,15 @@
                         , tag_big_name  as tagBigName
                         , tag_small_name as tagSmallName
                         , board_count   as boardCount
+                        , lat           as lat
+                        , lon           as lon
             from        board_db as boardDB
             WHERE       board_id > 0
             ORDER BY    board_id desc
                         , update_date DESC
         </select>
 
+    <!-- 검색 페이징 -->
     <select id="getBoardListPaging"
             resultType="com.daelim.clover.board.domain.Board">
         <![CDATA[
@@ -34,12 +48,16 @@
              , week
              , tag_big_name  as tagBigName
              , board_count   as boardCount
+
         FROM        board_db
         ]]>
             <if test="keyword != null">
         <![CDATA[
         WHERE
             title
+            LIKE
+            concat('%', #{keyword}, '%')
+            or  content
             LIKE
             concat('%', #{keyword}, '%')
                 ]]>
@@ -51,6 +69,43 @@
             LIMIT #{skip}, #{amount}
             ]]>
     </select>
+<!-- 지도 검색 리스트 -->
+    <select id="getBoardMapSearchList"
+            resultType="com.daelim.clover.board.domain.Board">
+        <![CDATA[
+        SELECT
+               board_id        as boardId
+             , index_id      as indexId
+             , title
+             , content
+             , gen_address   as genAddress
+             , det_address   as detAddress
+             , update_date    as updateDate
+             , week
+             , tag_big_name  as tagBigName
+             , board_count   as boardCount
+             , lat
+             , lon
+        ]]>
+        FROM   board_db
+            <if test="keyword != null">
+            <![CDATA[
+        WHERE
+            gen_address
+            LIKE
+            concat('%', #{keyword}, '%')
+            or  det_address
+            LIKE
+            concat('%', #{keyword}, '%')
+                ]]>
+            </if>
+        <![CDATA[
+        ORDER BY
+            updateDate desc , board_id
+            LIMIT #{skip}, #{amount}
+            ]]>
+    </select>
+ <!-- 일반 검색 리스트 총 개수 -->
     <select id="listGetTotal" resultType="int">
         SELECT
         count(*)
@@ -61,8 +116,28 @@
             title
             LIKE
             concat('%', #{keyword}, '%')
+            or  content
+            LIKE
+            concat('%', #{keyword}, '%')
         </if>
     </select>
+<!-- 지도 검색 리스트 총 개수 -->
+    <select id="mapSearchlistGetTotal" resultType="int">
+        SELECT
+        count(*)
+        FROM
+        board_db
+        <if test="keyword != null">
+            WHERE
+            gen_address
+            LIKE
+            concat('%', #{keyword}, '%')
+            or  content
+            LIKE
+            concat('%', #{keyword}, '%')
+        </if>
+    </select>
+    <!-- 게시글 읽기 -->
     <select id="boardRead"
                 resultType="com.daelim.clover.board.domain.Board">
             SELECT      board_id        as boardId
@@ -80,7 +155,7 @@
             from        board_db as boardDB
             WHERE   board_id = #{boardId}
         </select>
-
+        <!-- 게시글 입력 -->
         <insert id="boardCreate">
             INSERT INTO board_db
             (
@@ -94,6 +169,8 @@
                 ,   week
                 ,   tag_big_name
                 ,   tag_small_name
+                ,   lat
+                ,   lon
             )
             VALUES
             (
@@ -107,9 +184,12 @@
                 ,   #{week}
                 ,   #{tagBigName}
                 ,   #{tagSmallName}
+                ,   #{lat}
+                ,   #{lon}
 
             )
         </insert>
+    <!-- 게시글 수정 -->
         <update id="boardUpdate"
             parameterType="com.daelim.clover.board.domain.Board">
             UPDATE board_db
@@ -121,10 +201,12 @@
                 ,   week            =#{week}
                 ,   tag_big_name    =#{tagBigName}
                 ,   tag_small_name  =#{tagSmallName}
+                ,   lat             =#{lat}
+                ,   lon             =#{lon}
             WHERE board_id = #{boardId}
             AND   index_id = #{indexId}
         </update>
-
+    <!-- 게시글 기능 -->
         <delete id="boardDelete">
             DELETE FROM board_db
             WHERE board_id = #{boardId}

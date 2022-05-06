@@ -1,5 +1,6 @@
 package com.daelim.clover.board.domain;
 
+import com.daelim.clover.user.domain.User;
 import lombok.Data;
 
 
@@ -19,6 +20,10 @@ public class Board {
     private String week;        //활동할 요일
     private String tagBigName;  //큰 태그
     private String tagSmallName; //작은 태그
-    private int board_count;    //글 조회수
+    private int boardCount;    //글 조회수
+    private double lat;          //위도
+    private double lon;          // 경도
+
+    private User user;          //유저 db
 
 }

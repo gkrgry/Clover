@@ -4,10 +4,16 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <!-- Bootstrap -->
-    <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<!--    <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>-->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/sidebar/css/style.css">
 
     <link rel="stylesheet" type="text/css" href="/css/join.css">
+
     <!-- jQuery (부트스트랩의 자바스크립트 플러그인을 위해 필요한) -->
+
 
 </head>
 <body>
@@ -55,40 +61,85 @@
 </div><!-- /.modal -->
 <!--// 모달창 -->
 
+<!-- 모달창 -->
+<div class="modal fade" id="secession">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">알림</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-contents">
 
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button id="secessionbtn" type="button" class="btn btn-success" data-dismiss="modal">탈퇴</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!--// 모달창 -->
+<th:block th:include="/include/navbar"> </th:block>
+<div class="wrapper d-flex align-items-stretch">
+    <nav id="sidebar">
+        <div class="p-4 pt-5">
+            <a href=# class="img logo rounded-circle mb-5" style="background-image: url('/sidebar/images/logo.jpg');"></a>
+            <ul class="list-unstyled components mb-5">
+                <li class="active">
+                    <a href="#MyInfo" data-toggle="collapse" aria-expanded="false" >내정보</a>
 
-<h3>MyPage</h3>
+                </li>
+                <li>
+                    <a href="#boardList" data-toggle="collapse" aria-expanded="false">내 게시판</a>
+                </li>
+                <li>
+                    <a href="#">Portfolio</a>
+                </li>
+                <li>
+                    <a href="#secession"  onclick="secession()">회원탈퇴</a>
+                </li>
+            </ul>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+            <div class="footer">
 
-<div class="d-flex align-start" style="width: 100%">
-    <div  style='margin: 20px; margin-top:50px; '>
-        <div>
-            <a href="#MyInfo" data-toggle="tab">내정보</a>
+            </div>
+
         </div>
-        <div>
-            <a href="#boardList" data-toggle="tab">내 게시판</a>
-        </div>
-        <div>
-            <a href="#tabmenu_03" data-toggle="tab">회원탈퇴</a>
-        </div>
-    </div>
-    <div class="tab-content" style='margin-top: 30px;'>
-        <div class="tab-pane fade in active" id="MyInfo">
+    </nav>
 
-        <h3>기본정보</h3>
-             <div id="profile">
+    <!-- Page Content  -->
+    <div id="content" class="p-4 p-md-5">
 
-                 <div>프로필
-                 </div>
-                 <a>닉네임:</a><a   th:text="${session.userNickname}"></a>
-                 <input id="nickname" type="hidden" th:value="${session.userNickname}">
-                 <br>
-                 <a>이름:</a><a  th:text="${session.userName}"></a></p>
-                 <input  id="username" type="hidden" th:value="${session.userName}">
-             </div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+
+                <button type="button" id="sidebarCollapse" class="btn btn-primary">
+                    <i class="fa fa-bars"></i>
+                    <span class="sr-only">Toggle Menu</span>
+                </button>
+
+            </div>
+        </nav>
+
+        <h2 class="mb-4">마이페이지</h2>
+
+        <div class="tab-pane fade in active show" id="MyInfo" >
+
+            <h3>기본정보</h3>
+            <div id="profile">
+
+                <div>프로필
+                </div>
+                <a>닉네임: <a th:text="${session.userNickname}"></a></a>
+                <br>
+                <input id="nickname" type="hidden" th:value="${session.userNickname}">
+                <br>
+                <a>이름: <a th:text="${session.userName}"></a></a>
+                <input  id="username" type="hidden" th:value="${session.userName}">
+            </div>
             <hr/>
             <p>
                 닉네임  &nbsp &nbsp <input onclick="userNicknameUpdate()" type="button" value="수정">
@@ -101,31 +152,71 @@
                 <input id="pwd" type="hidden" th:value="${session.userPwd}">
             </p>
             <p>
-                이메일 &nbsp  &nbsp <input  type="button" value="수정">
+                이메일 &nbsp  &nbsp <input onclick="useremailUpdate()" type="button" value="수정">
                 <input id="email" type="hidden" th:value="${session.userEmail}">
             </p>
         </div>
-        <div class="tab-pane fade" id="boardList"><p>탭메뉴2 내용</p></div>
-        <div class="tab-pane fade" id="tabmenu_03"><p>탭메뉴3 내용</p></div>
+        <div class="tab-pane fade "  id="boardList"><h1>탭메뉴2 내용</h1></div>
     </div>
-</div>
 
+
+</div>
+<script src="/sidebar/js/jquery.min.js"></script>
+<script src="/sidebar/js/popper.js"></script>
+<script src="/sidebar/js/main.js"></script>
+<script src="/sidebar/js/bootstrap.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+
+<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
+
+</script>
 
 <script>
-
+    var jb = jQuery.noConflict();
     var modalContents = $(".modal-contents");
     var modal = $("#defaultModal");
     var modalck = $('#ck');
     var modalContent=$('.modal-contents');
+    var secessionContent = $('.modal-contents');
+    var modalSecession = $('#secession');
 
 //초기설정
     var modifyname=$('#username').val();
     var modifynickname=$('#nickname').val();
     var modifyemail=$('#email').val();
     var modifypwd=$('#pwd').val();
+    var emailcheking;
 
+    //회원 탈퇴
+    function secession(event){
+console.log("회원탈퇴");
+        secessionContent.text("정말 탈퇴 하시겠습니까?");
+        modalSecession.modal('show');
+        $('#secessionbtn').click(function (){
+            jb.ajax({
+                type:"post",
+                url :"/dropUser",
+                success:function (result){
+                    if(result="success"){
+                        modalContent.text("정상적으로 탈퇴 되었습니다.");
+                        modalck.modal('show');
+                        jb.ajax({
+                            type:get,
+                            url:"/mainpage"
+                        })
+                    }
+
+                }
+            })
+        })
+    }
     //닉네임 수정 js
     function userNicknameUpdate(event) {
+        console.log("닉네임입력해줘");
         modalContents.html(" <div class='form-group' id='divNickname'>"+
         "<label  class='col-lg-2 control-label'>닉네임</label>"+
         "<div class='col-lg-10'>"+
@@ -133,7 +224,6 @@
         "</div>"+
         "<span class='err nicknameerr'>수정할 닉네임을 입력해주세요</span>"+
     "</div>");
-
         modal.modal('show');
 
 
@@ -165,19 +255,19 @@
                 modalck.modal('show');
             }else {
                 console.log("펄스");
-                console.log(modifyname);
+                console.log(modifynickname);
                 var data = {
                     "name"    : modifyname,
                     "nickname": modifynickname,
                     "pwd"     : modifypwd,
                     "email"   : modifyemail
                 };
-                $.ajax({
+                jb.ajax({
                     type:"post",
                     data : data,
                     url : "/update_popup",
                     success:function (result){
-                            // console.log("수정완료");
+                             console.log("수정완료");
                         console.log(result);
                             if(result=="success"){
                                 console.log("새로고침");
@@ -217,7 +307,7 @@
                     "pwd"     : modifypwd,
                     "email"   : modifyemail
                 };
-                $.ajax({
+                jb.ajax({
                     type:"post",
                     data : data,
                     url : "/update_popup",
@@ -316,7 +406,7 @@
                     "pwd"     : modifypwd,
                     "email"   : modifyemail
                 };
-                $.ajax({
+                jb.ajax({
                     type:"post",
                     data : data,
                     url : "/update_popup",
@@ -369,7 +459,128 @@
         });
     }
 
+    // 이메일 변경
+    function useremailUpdate(event){
 
+        modalContents.html("<div class='form-group' id='divEmail'>"+
+       " <label class='col-lg-2 control-label'>이메일</label>"+
+        "<div class='col-lg-10'>"+
+           " <input type='email' name='email' class='emailchk form-control' id='modifyemail' data-rule-required='true' placeholder='이메일' maxlength='40'>"+
+                "<input type='text'  class='elchk' placeholder='인증키 입력'> <input type='button' class='elchk_2' onclick='emailchk()' value='이메일 인증'/><input type='button' onclick='chaking()' class='elchk' value='인증확인'>"+
+                   " <span class='echeking'>이미 사용중인 이메일입니다.</span><span class='echking_2'>인증이 완료되었습니다.</span>"+
+        "</div>"+
+       " <span class='err emailerr'>이메일를 입력해주세요</span>"+
+    "</div>");
+        modal.modal('show');
+
+
+        $('#modalSubmit').click(function (){
+            modifyemail=$('#modifyemail').val();
+            console.log(modifyemail);
+            console.log(!$('#modifyemail').val());
+            // console.log(nickname);
+            if(!$('#modifyemail').val()){
+                console.log("트루")
+                modalContent.text("이메일을 입력해주세요");
+                modalck.modal('show');
+
+            }else{
+                console.log("펄스");
+                var data = {
+                    "name"    : modifyname,
+                    "nickname": modifynickname,
+                    "pwd"     : modifypwd,
+                    "email"   : modifyemail
+                };
+                jb.ajax({
+                    type:"post",
+                    data : data,
+                    url : "/update_popup",
+                    success:function (result){
+                        console.log("수정완료");
+                        console.log(result);
+                        if(result=="success"){
+                            console.log("새로고침");
+                            //window.location.reload();
+                        }
+                    }
+                })
+            }
+
+        });
+
+        $('#email').keyup(function(event){
+
+            var divEmail = $('#divEmail');
+
+            if($.trim($('#email').val())==""){
+                divEmail.removeClass("has-success");
+                divEmail.addClass("has-error");
+                $("#email").css("border-color","#ff4d78");
+                $(".emailerr").show();
+            }else{
+                divEmail.removeClass("has-error");
+                divEmail.addClass("has-success");
+                $("#email").css("border-color","#dddddd");
+                $(".emailerr").hide();
+            }
+        });
+    }
+    //이메일 인증
+    function emailchk(){
+        var email = $('.emailchk').val();//이메일 입려된값
+        var data = {email:email}
+        jb.ajax({
+            type: "post",
+            url: "/mailchk",
+            data,
+            success : function (result){
+                console.log(result);
+                if(result=='success'&& $('.emailchk').val()!=""){
+                    $('.elchk').css("display","inline-block")
+                    $('.elchk_2').css("display","none")
+                    $('.echeking').css("display","none")
+                    jb.ajax({
+                        type:"post",
+                        url:"/mail",
+                        data,
+                        success : function (code){
+                            emailcheking=code;
+                        }
+                    })
+
+                }else{
+                    $('.elchk_2').css("display","inline-block")
+                    $('.echeking').css("display","inline-block")
+                    $('.elchk').css("display","none")
+
+                }
+            }
+        })
+
+    }
+    //이메일 코드 체킹
+    function chaking(event) {
+        var code = $('.elchk').val();//인증키 입력란 값
+        console.log("인증확인");
+        console.log(code+"값");
+        console.log(emailcheking+"값");
+        if ($('.elchk').val() == "") {
+            console.log("빈란");
+            modalContents.text("이메일을 입력하여 주시기 바랍니다.");
+            modal.modal('show');
+        } else if ($('.elchk').val() != emailcheking || emailcheking == "") {
+            console.log("코드오류");
+            modalContents.text("잘못된 코드 입니다.");
+            modal.modal('show');
+            return false;
+        } else if($('.elchk').val()==emailcheking){
+            console.log("인증완");
+            $('.elchk').css("display","none");
+            $('.echking_2').css("display","inline-block");
+
+        }
+    }
 
 
 </script>

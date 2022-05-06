@@ -9,25 +9,31 @@
     <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
 
     <link rel="stylesheet" type="text/css" href="/css/join.css">
+
     <!-- jQuery (부트스트랩의 자바스크립트 플러그인을 위해 필요한) -->
     <script src="http://code.jquery.com/jquery.js"></script>
     <!-- 모든 합쳐진 플러그인을 포함하거나 (아래) 필요한 각각의 파일들을 포함하세요 -->
     <script src="/js/bootstrap.min.js"></script>
     <!-- Respond.js 으로 IE8 에서 반응형 기능을 활성화하세요 (https://github.com/scottjehl/Respond) -->
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
 </head>
 <body>
+<th:block th:include="/include/navbar"> </th:block>
 <div class="container"><!-- 좌우측의 공간 확보 -->
     <!-- 헤더 들어가는 부분 -->
 
-    <div class="row">
-        <p></p>
-        <div class="col-md-12">
-            <small>
-                <a href="#">로그인</a> | <a href="#">회원가입</a>
-            </small>
-        </div>
-    </div>
+<!--    <div class="row">-->
+<!--        <p></p>-->
+<!--        <div class="col-md-12">-->
+<!--            <small>-->
+<!--                <a href="#">로그인</a> | <a href="#">회원가입</a>-->
+<!--            </small>-->
+<!--        </div>-->
+<!--    </div>-->
     <!--// 헤더 들어가는 부분 -->
     <!-- 모달창 -->
     <div class="modal fade" id="defaultModal">

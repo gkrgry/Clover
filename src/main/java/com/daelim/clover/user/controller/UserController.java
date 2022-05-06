@@ -30,6 +30,15 @@ public class UserController {
 
     User user;
 
+    @PostMapping("/dropUser")
+    @ResponseBody
+    public String userDrop()throws Exception{
+        log.info("유저삭제@@");
+        log.info(user.getUserId());
+        String userId=user.getUserId();
+        userService.userDrop(userId);
+        return "success";
+    }
 
     @PostMapping("/update_popup")
     @ResponseBody
@@ -48,7 +57,7 @@ public class UserController {
         if(pwd==user.getPwd()){
             user.setPwd(pwd);
             return "faild";
-        }else{
+        }else if(user.getPwd()!=null){
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             user.setPwd(passwordEncoder.encode(user.getPassword()));
             System.out.println(user.getPwd());
@@ -87,7 +96,7 @@ public class UserController {
         session.setAttribute("userNickname",userNickname);
         session.setAttribute("userPwd",userPwd);
         session.setAttribute("userEmail",email);
-//        System.out.println(email);
+        System.out.println(email);
 //        System.out.println(userPwd);
 //        System.out.println(userName);
 //        System.out.println(userNickname);

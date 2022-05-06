@@ -26,6 +26,9 @@ public interface UserService {
     //내정보 변경
     public int userUpdate(User user) throws Exception;
 
+    //유저 삭제
+    public void userDrop(String userId) throws Exception;
+
 
 
 }

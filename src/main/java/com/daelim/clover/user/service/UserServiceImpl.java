@@ -48,6 +48,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private String password;
 
 
+    // 유저 삭제
+    public void userDrop(String userId)throws Exception{
+        System.out.println(userId);
+        userMapper.UserDrop(userId);
+    }
+
     //닉네임 수정
     public int userUpdate(User user) throws Exception{
 
@@ -87,7 +93,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         msgg+= "<p>아래 코드를 회원가입 창으로 돌아가 입력해주세요<p>";
         msgg+= "<br>";
         msgg+= "<div align='center' style='border:1px solid black; font-family:verdana';>";
-        msgg+= "<h3 style='color:blue;'>회원가입 인증 코드입니다,</h3>";
+        msgg+= "<h3 style='color:blue;'>Clover 인증 코드입니다,</h3>";
         msgg+= "<div style='font-size:130%'>";
         msgg+= "CODE : <strong>";
         msgg+= ePw+"</strong><div><br/>";

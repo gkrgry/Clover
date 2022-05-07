@@ -33,7 +33,9 @@
     <!-- Custom styles for this template -->
     <link href="/css/form-validation.css" rel="stylesheet">
     <script src="/js/form-validation.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=36bff8b96636a6127542c2c517175d6f&libraries=services"></script>
 </head>
 <body>
 
@@ -56,7 +58,7 @@
                         <div class="col-md-12">
                             <label for="content">내용</label>
                             <textarea type="text" name="content" rows="8" cols="100"
-                                      class="form-control" id="content"></textarea>
+                                      class="form-control" id="content" required></textarea>
                             <div class="invalid-feedback">
                                 내용을 입력해 주세요
                             </div>
@@ -78,9 +80,9 @@
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label>도로명주소<span class="text-muted">(Optional)</span></label>
+                        <label>도로명주소<span class="text-muted"></span></label>
                         <input type="text" name="genAddress" id="address_kakao" readonly="readonly"
-                               class="form-control genAddress"/>
+                               class="form-control genAddress" required/>
                         <div class="invalid-feedback">
                             도로명주소를 입력해 주세요
                         </div>
@@ -177,19 +179,8 @@
         </div>
     </div>
 </body>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=36bff8b96636a6127542c2c517175d6f&libraries=services"></script>
-<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
 <script th:inline="javascript">
-
-    $("input[name=uploadfile]").change(function () {
-        var fileExtension = ['jpeg', 'jpg', 'png', 'gif', 'bmp'];
-        if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
-        alert("이미지 파일만 업로드 가능합니다. (" + fileExtension.join(", ") + ")");
-        $("input[name=uploadfile]").val("");
-    }
-    });
-
-
     window.onload = function(){
         document.getElementById("address_kakao").addEventListener("click", function(){ //주소입력칸을 클릭하면
             //카카오 지도 발생
@@ -205,13 +196,21 @@
                             document.getElementById("lon").value = result[0].address.x
                         }
                     };
-
                     geocoder.addressSearch(data.address, callback);
-
-
                 }
             }).open();
         });
     }
+
+
+
+    $("input[name=uploadfile]").change(function () {
+        var fileExtension = ['jpeg', 'jpg', 'png', 'gif', 'bmp'];
+        if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+            alert("이미지 파일만 업로드 가능합니다. (" + fileExtension.join(", ") + ")");
+            $("input[name=uploadfile]").val("");
+        }
+    });
+
 </script>
 </html>

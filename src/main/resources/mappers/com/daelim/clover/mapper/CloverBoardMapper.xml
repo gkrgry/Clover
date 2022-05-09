@@ -213,5 +213,39 @@
             AND   user_id = #{userId}
         </delete>
 
+
+    <!-- 마이페이지 페이징 -->
+    <select id="mypageListPaging"
+            resultType="com.daelim.clover.board.domain.Board">
+
+        SELECT      board_id        as boardId
+             , user_id      as userId
+             , title
+             , content
+             , gen_address   as genAddress
+             , update_date    as updateDate
+             , week
+             , tag_big_name  as tagBigName
+             , board_count   as boardCount
+
+        FROM        board_db
+        WHERE
+        user_id = #{userId}
+
+        ORDER BY
+            updateDate desc
+            LIMIT #{skip}, #{amount}
+
+    </select>
+    <!-- 마이페이지 리스트 총 개수 -->
+    <select id="mypageGetTotal" resultType="int">
+        SELECT
+        count(*)
+        FROM
+        board_db
+        WHERE
+        user_id = #{userId}
+
+    </select>
 </mapper>
 

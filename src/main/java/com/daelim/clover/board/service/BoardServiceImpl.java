@@ -64,4 +64,15 @@ public class BoardServiceImpl implements BoardService {
     public int boardCountSet(Integer boardId) throws Exception {
         return boardMapper.boardCountSet(boardId);
     }
+
+
+    @Override
+    public List<Board> mypageListPaging(Integer skip,Integer amount,String userId) throws Exception {
+        return boardMapper.mypageListPaging(skip,amount,userId);
+    }
+
+    @Override
+    public int mypageGetTotal(String userId) throws Exception {
+        return boardMapper.mypageGetTotal(userId);
+    }
 }

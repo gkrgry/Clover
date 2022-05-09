@@ -29,6 +29,10 @@ public interface BoardMapper {
     public int boardCountSet(Integer boardId) throws Exception;
 
 
+    public List<Board> mypageListPaging(Integer skip,Integer amount,String userId) throws Exception;
+
+    public int mypageGetTotal(String userId) throws Exception;
+
 
 
 

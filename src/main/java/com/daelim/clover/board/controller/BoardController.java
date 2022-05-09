@@ -9,10 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -51,7 +48,7 @@ public class BoardController {
 //
 //        return "bList";
 //    }
-    @GetMapping("/main")
+    @GetMapping({"/main","/"})
     public String main(Model model) throws Exception{
 
 
@@ -60,8 +57,6 @@ public class BoardController {
     @GetMapping("/mapSearch")
     public String mapSearch(Criteria cri, Model model) throws Exception{
         log.info("map search");
-
-        //boardlist - > boardMaplist
         List<Board> boardMapSearchList = boardService.boardMapSearchList(cri);
         int total = boardService.mapSearchlistGetTotal(cri);
         total = total + 10;
@@ -86,7 +81,25 @@ public class BoardController {
         return "bList";
     }
 
+    @GetMapping("/mypagelist")
+    public String mypage(Criteria cri, Model model, HttpSession session) throws Exception{
 
+        String userId = (String)session.getAttribute("sUserId");
+        if(userId.toString().equals("") || userId == null){
+
+            return "login";
+        }else{
+            List<Board> boardList = boardService.mypageListPaging(cri.getSkip(),cri.getAmount(),userId);
+            int total = boardService.mypageGetTotal(userId);
+            total = total + 10;
+            model.addAttribute("total",total);
+            model.addAttribute("boardList", boardList);
+            model.addAttribute("pageMaker",new PageDTO(cri,total));
+            return "bMypageList";
+        }
+
+
+    }
 
     @GetMapping("/register")
     public String boardRegisterForm(Board board, Model model) throws Exception{

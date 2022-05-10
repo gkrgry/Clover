@@ -81,25 +81,22 @@ public class BoardController {
         return "bList";
     }
 
-    @GetMapping("/mypagelist")
-    public String mypage(Criteria cri, Model model, HttpSession session) throws Exception{
-
-        String userId = (String)session.getAttribute("sUserId");
-        if(userId.toString().equals("") || userId == null){
-
-            return "login";
-        }else{
-            List<Board> boardList = boardService.mypageListPaging(cri.getSkip(),cri.getAmount(),userId);
-            int total = boardService.mypageGetTotal(userId);
-            total = total + 10;
-            model.addAttribute("total",total);
-            model.addAttribute("boardList", boardList);
-            model.addAttribute("pageMaker",new PageDTO(cri,total));
-            return "bMypageList";
-        }
-
-
-    }
+    // 마이 페이지 리스트
+//    @GetMapping("/mypagelist")
+//    public String mypage(Criteria cri, Model model, HttpSession session) throws Exception{
+//        String userId = (String)session.getAttribute("sUserId");
+//        if(userId.toString().equals("") || userId == null){
+//            return "login";
+//        }else{
+//            List<Board> boardList = boardService.mypageListPaging(cri.getSkip(),cri.getAmount(),userId);
+//            int total = boardService.mypageGetTotal(userId);
+//            total = total + 10;
+//            model.addAttribute("total",total);
+//            model.addAttribute("boardList", boardList);
+//            model.addAttribute("pageMaker",new PageDTO(cri,total));
+//            return "bMypageList";
+//        }
+//    }
 
     @GetMapping("/register")
     public String boardRegisterForm(Board board, Model model) throws Exception{

@@ -1,6 +1,10 @@
 package com.daelim.clover.user.controller;
 
 
+import com.daelim.clover.board.domain.Board;
+import com.daelim.clover.board.domain.Criteria;
+import com.daelim.clover.board.domain.PageDTO;
+import com.daelim.clover.board.service.BoardService;
 import com.daelim.clover.user.domain.User;
 import com.daelim.clover.user.service.UserService;
 import com.daelim.clover.user.service.UserServiceImpl;
@@ -17,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 
 @Log4j2
@@ -27,6 +32,7 @@ public class UserController {
 
 
     private final UserService userService;
+    private final BoardService boardService;
     UserServiceImpl service;
 
     User user;
@@ -82,7 +88,7 @@ public class UserController {
     }
 
     @GetMapping("/mypage")
-    public String myPage(HttpServletRequest request)throws Exception{
+    public String myPage(HttpServletRequest request, Model model, Criteria cri)throws Exception{
         HttpSession session = request.getSession();
         String userId = (String) session.getAttribute("sUserId");
 //        String Pwd = (String) session.getAttribute("pwd");
@@ -101,6 +107,12 @@ public class UserController {
 //        System.out.println(userPwd);
 //        System.out.println(userName);
 //        System.out.println(userNickname);
+        List<Board> boardList = boardService.mypageListPaging(cri.getSkip(),cri.getAmount(),userId);
+        int total = boardService.mypageGetTotal(userId);
+        total = total + 10;
+        model.addAttribute("total",total);
+        model.addAttribute("boardList", boardList);
+        model.addAttribute("pageMaker",new PageDTO(cri,total));
 
         return "mypage";
 

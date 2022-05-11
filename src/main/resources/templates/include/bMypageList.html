@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<link rel="stylesheet" href="/css/bootstrap.css">
+<link rel="stylesheet" href="/css/list.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.js"></script>
+<script type="text/javascript">
+    $(".readMove").on("click",function (e){
+        e.preventDefault();
+        actionForm.append("<input type='hidden' name='boardId' value='" +
+
+            $(this).attr("href")+"'>");
+
+        actionForm.attr("action","/list");
+        actionForm.submit();
+
+    })
+    function movePage(uri, queryString) {
+        console.log(uri);
+        console.log(queryString);
+        location.href = uri + queryString;
+    }
+
+</script>
+<body>
+
+
+<div id="totalList">
+    <table>
+        <thead>
+        <tr id="theadTh">
+            <th >요일</th>
+            <th >이미지</th>
+            <th  colspan="3">설명</th>
+            <th>등록일</th>
+            <th>조회수</th>
+        </tr>
+        </thead>
+        <tbody th:each="boardList : ${boardList}">
+        <td align="center" th:text="${boardList.week}"></td>
+        <td align="center" th:text="${boardList.image}"></td>
+        <td colspan="2">
+            <div id="listDivCol">
+                <p>
+                    <a class="readMove" th:href="@{|/read?boardId=${boardList.boardId}|}" th:text="${boardList.title}">
+                </p>
+                <p>
+                    <a class="readMove" th:href="@{|/read?boardId=${boardList.boardId}|}" th:text="${boardList.userId}">
+                </p><br>
+                <p th:text="${boardList.genAddress}"></p>
+            </div>
+        </td>
+        <td>
+            <div id="listDivCol">
+                <p th:text="${boardList.tagBigName}"></p><br>
+                <p th:text="${boardList.tagSmallName}"></p>
+            </div>
+        </td>
+
+        <td th:text="${#dates.format(boardList.updateDate,'yyyy-MM-dd HH:mm')}"></td>
+        <td th:text="${boardList.boardCount}"></td>
+
+        </tbody>
+    </table>
+    <!-- 페이징처리 -->
+    <!-- 이전 버튼 -->
+    <div id="pagingButton">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <th:block th:if="${pageMaker.prev}">
+                    <li class="page-item prev">
+                        <a href="javascript:void(0)" class="page-link" th:onclick="movePage( [[ ${#request.requestURI} ]], [[ ${pageMaker.cri.makeQueryString(pageMaker.startPage - 1)} ]])">이전</a>
+                    </li>
+                </th:block>
+                <!-- 페이지 번호-->
+                <th:block th:with="pageMaker = ${pageMaker}">
+                    <th:block th:each="num : *{#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
+                        <li class="page-item" th:classappend="${pageMaker.cri.pageNum == num} ? 'active' : ''">
+                            <a href="javascript:void(0)" class="page-link" th:text="${num}" th:onclick="movePage([[ ${#request.requestURI} ]],[[ ${pageMaker.cri.makeQueryString(num)} ]])"></a>
+                        </li>
+                    </th:block>
+                </th:block>
+                <th:block th:if="${pageMaker.next}">
+                    <li class="page-item next">
+                        <a href="javascript:void(0)" class="page-link" th:onclick="movePage( [[ ${#request.requestURI} ]], [[ ${pageMaker.cri.makeQueryString(pageMaker.endPage + 1)} ]])">다음</a>
+                    </li>
+                </th:block>
+            </ul>
+        </nav>
+    </div>
+    <!-- 페이징 처리에 같이 갈 데이터 -->
+    <form id="actionForm" action="list" method="get">
+        <input type="hidden" name="pageNum" th:value="${pageMaker.cri.pageNum}">
+        <input type="hidden" name="amount" th:value="${pageMaker.cri.amount}">
+    </form>
+    <form action="read" method="get" id="pageNum">
+        <input type="hidden" name="pageNum" th:value="${pageMaker.cri.pageNum}">
+        <input type="hidden" name="amount" th:value="${pageMaker.cri.amount}">
+    </form>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">검색</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="modalText">검색 결과가 없습니다.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:javascript>
+
+    listTotal = [[${total}]]
+
+
+    if(listTotal === 10){
+
+
+        $('#myModal').modal('show')
+    }
+    /* ![CDATA[ */
+
+    /* ]]*/
+</script>
+</body>
+</html>

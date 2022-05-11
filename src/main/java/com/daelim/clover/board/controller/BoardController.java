@@ -9,12 +9,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -36,6 +38,7 @@ import java.util.logging.FileHandler;
 public class BoardController {
 
 
+
     private final BoardService boardService;
 
 //    @GetMapping("/list")
@@ -51,7 +54,8 @@ public class BoardController {
     @GetMapping({"/main","/"})
     public String main(Model model) throws Exception{
 
-
+        List<Board> mainList = boardService.mainList();
+        model.addAttribute("boardList", mainList);
     return "mainpage";
 }
     @GetMapping("/mapSearch")
@@ -108,12 +112,12 @@ public class BoardController {
 
     @PostMapping("/register")
     public String boardRegister(Board board, Model model , @RequestParam MultipartFile[] uploadfile) throws Exception{
-
         //유효성 검사
         if(board.getUserId().equals("") || board.getUserId() == null ){
             log.info("null");
             return "redirect:/login";
         }else{
+
             //파일 업로드
             for(MultipartFile multipartFile : uploadfile){
                 //UUID를 이용하요 이름이 겹치지 않게 랜덤하게 이름 저장
@@ -122,8 +126,14 @@ public class BoardController {
                         multipartFile.getContentType());
                 String fileName = dto.getFileId()+"_"+dto.getFileName();
                 File file = new File(fileName);
+                log.info(file.getPath());
                 multipartFile.transferTo(file);
-                board.setImage(fileName);
+
+                if(multipartFile.getOriginalFilename() == null || multipartFile.getOriginalFilename().toString().equals("")){
+                    board.setImage("NotImg.png");
+                }else{
+                    board.setImage(fileName);
+                }
             }
             log.info("post 입력 입니다.");
             boardService.boardRegister(board);
@@ -221,10 +231,15 @@ public class BoardController {
     @GetMapping(value = "/uploadImg/{filename}",produces = MediaType.IMAGE_PNG_VALUE)
     @ResponseBody
     public ResponseEntity<byte[]> showImage(@PathVariable String filename) throws Exception {
+        log.info(filename);
+        if(filename.toString().equals("") || filename == null){
+            filename = "NotImg";
+        }
+        log.info(filename);
         HttpHeaders header = new HttpHeaders();
         header.setContentType(MediaType.IMAGE_JPEG);
         return new ResponseEntity<byte[]>(IOUtils.toByteArray(new FileInputStream(
-                new File("C:\\University\\2022-1\\Graduated\\clover\\src\\main\\resources\\static\\uploadImg/"+ filename))), header, HttpStatus.CREATED);
+                new File("C:\\uploadImg/"+ filename))), header, HttpStatus.CREATED);
     }//바꿔야 할것
 
 

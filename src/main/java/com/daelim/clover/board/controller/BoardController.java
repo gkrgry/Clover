@@ -109,6 +109,7 @@ public class BoardController {
     @PostMapping("/register")
     public String boardRegister(Board board, Model model , @RequestParam MultipartFile[] uploadfile) throws Exception{
 
+        System.out.println(board.getGenAddress());
         //유효성 검사
         if(board.getUserId().equals("") || board.getUserId() == null ){
             log.info("null");
@@ -224,7 +225,7 @@ public class BoardController {
         HttpHeaders header = new HttpHeaders();
         header.setContentType(MediaType.IMAGE_JPEG);
         return new ResponseEntity<byte[]>(IOUtils.toByteArray(new FileInputStream(
-                new File("C:\\University\\2022-1\\Graduated\\clover\\src\\main\\resources\\static\\uploadImg/"+ filename))), header, HttpStatus.CREATED);
+                new File("/resources/uploadImg"+ filename))), header, HttpStatus.CREATED);
     }//바꿔야 할것
 
 

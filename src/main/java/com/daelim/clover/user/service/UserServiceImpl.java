@@ -40,13 +40,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Autowired
     JavaMailSender emailSender;
 
-    public   static  final  String ePw = createKey();
+    public   static   String ePw = createKey();
 
     @Value("${AdminMail.id}")
     private String id;
     @Value("${AdminMail.password}")
     private String password;
 
+
+    //유저 아이디 찾기
+    public String searchUser(String email)throws Exception{
+
+        System.out.println(userMapper.SearchUser(email)+"이메일로 아이디찾기");
+        return userMapper.SearchUser(email);
+    }
 
     // 유저 삭제
     public void userDrop(String userId)throws Exception{
@@ -82,7 +89,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 //        System.out.println("인증 번호 :"+ePw);
 
        MimeMessage message = emailSender.createMimeMessage();
-
+        ePw=createKey();
         message.addRecipients(MimeMessage.RecipientType.TO,to);//보내는 대상
         message.setSubject("Clover 이메일 인증");//제목
 

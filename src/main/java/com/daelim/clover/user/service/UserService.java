@@ -29,6 +29,7 @@ public interface UserService {
     //유저 삭제
     public void userDrop(String userId) throws Exception;
 
-
+    //유저 아이디 찾기
+    public String searchUser(String email)throws Exception;
 
 }

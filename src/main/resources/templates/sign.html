@@ -433,7 +433,8 @@
         //이메일 인증
         function emailchk(){
             var email = $('.emailchk').val();//이메일 입려된값
-            var data = {email:email}
+            var data = {email:email,
+                        bool:false}
             $.ajax({
                 type: "post",
                 url: "/mailchk",

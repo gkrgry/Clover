@@ -89,11 +89,11 @@
             <a href=# class="img logo rounded-circle mb-5" style="background-image: url('/sidebar/images/logo.jpg');"></a>
             <ul class="list-unstyled components mb-5">
                 <li class="active">
-                    <a href="#MyInfo" data-toggle="collapse" aria-expanded="false" >내정보</a>
+                    <a href="#MyInfo" onclick="onChangedata('root')" data-toggle="collapse" aria-expanded="false" >내정보</a>
 
                 </li>
                 <li>
-                    <a href="#boardList" data-toggle="collapse" aria-expanded="false">내 게시판</a>
+                    <a href="#boardList" onclick="onChangedata('board')"  data-toggle="collapse" aria-expanded="false">내 게시판</a>
                 </li>
                 <li>
                     <a href="#">Portfolio</a>
@@ -124,11 +124,8 @@
             </div>
         </nav>
 
-        <h2 class="mb-4">마이페이지</h2>
 
         <div class="tab-pane fade in active show" id="MyInfo" >
-
-            <h3>기본정보</h3>
             <div id="profile">
 
                 <div>프로필
@@ -142,38 +139,40 @@
             </div>
             <hr/>
             <p>
-                닉네임  &nbsp &nbsp <input onclick="userNicknameUpdate()" type="button" value="수정">
+                닉네임  &nbsp &nbsp <input  class="btn btn-outline-success" onclick="userNicknameUpdate()" type="button" value="수정">
             </p>
             <p>
-                이름  &nbsp &nbsp &nbsp &nbsp <input onclick="userNameUpdate()" type="button" value="수정">
+                이름  &nbsp &nbsp &nbsp &nbsp <input  class="btn btn-outline-success" onclick="userNameUpdate()" type="button" value="수정">
             </p>
             <p>
-                비밀번호  <input type="button" onclick="userpwdUpdate()" value="수정">
+                비밀번호  <input  class="btn btn-outline-success" type="button" onclick="userpwdUpdate()" value="수정">
                 <input id="pwd" type="hidden" th:value="${session.userPwd}">
             </p>
             <p>
-                이메일 &nbsp  &nbsp <input onclick="useremailUpdate()" type="button" value="수정">
+                이메일 &nbsp  &nbsp <input  class="btn btn-outline-success" onclick="useremailUpdate()" type="button" value="수정">
                 <input id="email" type="hidden" th:value="${session.userEmail}">
             </p>
         </div>
+
         <div class="tab-pane fade "  id="boardList"><th:block th:include="/include/bMypageList"></th:block></div>
     </div>
 
 
+        <div class="tab-pane fade "  id="boardList">
+            <h2 class="mb-4">내 게시판</h2>
+            <th:block th:include="bMypageList"></th:block>
+         </div>
+
+    </div>
 </div>
-<script src="/sidebar/js/jquery.min.js"></script>
+<!--<script src="/sidebar/js/jquery.min.js"></script>-->
 <script src="/sidebar/js/popper.js"></script>
 <script src="/sidebar/js/main.js"></script>
 <script src="/sidebar/js/bootstrap.min.js"></script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-
-
-<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
-
-</script>
 
 <script>
     var jb = jQuery.noConflict();
@@ -218,7 +217,7 @@ console.log("회원탈퇴");
     function userNicknameUpdate(event) {
         console.log("닉네임입력해줘");
         modalContents.html(" <div class='form-group' id='divNickname'>"+
-        "<label  class='col-lg-2 control-label'>닉네임</label>"+
+        "<label style='max-width: 30%'  class='col-lg-2 control-label'>닉네임</label>"+
         "<div class='col-lg-10'>"+
             "<input type='text' name='modifynickname' class='form-control' id='modifynickname' data-rule-required='true' placeholder='별명' maxlength='15'>"+
         "</div>"+
@@ -363,7 +362,7 @@ console.log("회원탈퇴");
 
 
         modalContents.html("<div class='form-group' id='divPassword'>"+
-        "<label  class='col-lg-2 control-label'>패스워드</label>"+
+        "<label   style='max-width: 30%' class='col-lg-2 control-label'>패스워드</label>"+
         "<div class='col-lg-10'>"+
             "<input type='password' name='pwd' class='form-control' id='modifypwd'  data-rule-required='true' placeholder='패스워드' maxlength='30'>"+
         "</div>"+
@@ -371,9 +370,9 @@ console.log("회원탈퇴");
     "</div>"+
 
         "<div class='form-group' id='divPasswordCheck'>"+
-            "<label  class='col-lg-2 control-label'>패스워드 확인</label>"+
+            "<label style='max-width: 30%'  class='col-lg-2 control-label'>패스워드 확인</label>"+
             "<div class='col-lg-10'>"+
-                "<input type='password' class='form-control' id='modifypwdCheck' data-rule-required='true' placeholder='패스워드 확인' maxlength='30'>"+
+                "<input type='password'    class='form-control' id='modifypwdCheck' data-rule-required='true' placeholder='패스워드 확인' maxlength='30'>"+
             "</div>"+
             "<span class='err chkerr'>비밀번호가 일치하지 않습니다.</span>"+
         "</div>");
@@ -463,10 +462,10 @@ console.log("회원탈퇴");
     function useremailUpdate(event){
 
         modalContents.html("<div class='form-group' id='divEmail'>"+
-       " <label class='col-lg-2 control-label'>이메일</label>"+
+       " <label style='max-width: 30%'  class='col-lg-2 control-label'>이메일</label>"+
         "<div class='col-lg-10'>"+
            " <input type='email' name='email' class='emailchk form-control' id='modifyemail' data-rule-required='true' placeholder='이메일' maxlength='40'>"+
-                "<input type='text'  class='elchk' placeholder='인증키 입력'> <input type='button' class='elchk_2' onclick='emailchk()' value='이메일 인증'/><input type='button' onclick='chaking()' class='elchk' value='인증확인'>"+
+                "<input type='text'   class='elchk' placeholder='인증키 입력'> <input type='button' style='margin-top: 20px' class='elchk_2' onclick='emailchk()' value='이메일 인증'/><input type='button' onclick='chaking()' class='elchk' value='인증확인'>"+
                    " <span class='echeking'>이미 사용중인 이메일입니다.</span><span class='echking_2'>인증이 완료되었습니다.</span>"+
         "</div>"+
        " <span class='err emailerr'>이메일를 입력해주세요</span>"+
@@ -529,7 +528,8 @@ console.log("회원탈퇴");
     //이메일 인증
     function emailchk(){
         var email = $('.emailchk').val();//이메일 입려된값
-        var data = {email:email}
+        var data = {email:email,
+                    bool:false}
         jb.ajax({
             type: "post",
             url: "/mailchk",
@@ -581,6 +581,16 @@ console.log("회원탈퇴");
 
         }
     }
+    //
+    // function onChangedata(data){
+    //     if(data=='root'){
+    //         document.getElementById('board').className='tab-pane fade ';
+    //         document.getElementById('root').className="tab-pane fade active collapse show in"
+    //     }else if(data='board'){
+    //         document.getElementById('board').className='tab-pane fade collapse ';
+    //         document.getElementById('root').className=''
+    //     }
+    // }
 
 
 </script>

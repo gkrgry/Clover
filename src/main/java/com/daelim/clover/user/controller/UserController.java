@@ -37,6 +37,20 @@ public class UserController {
 
     User user;
 
+
+    @RequestMapping("/searchId")
+    public void searchId()  {
+
+    }
+    @PostMapping("/search")
+    @ResponseBody
+    public String search(String email)throws Exception{
+        System.out.println("이메일로 아이디찾는중");
+        String str=userService.searchUser(email);
+
+        return str;
+    }
+
     @PostMapping("/dropUser")
     @ResponseBody
     public String userDrop()throws Exception{
@@ -121,10 +135,16 @@ public class UserController {
 
     @PostMapping("/mailchk")
     @ResponseBody
-    public String emailchk(String email)throws Exception{
+    public String emailchk(String email,boolean bool)throws Exception{
         int result =0;
-        result = userService.emailCheck(email);
-        System.out.println(result+"이메일 0-1");
+        if(bool){
+            result=0;
+
+        }else{
+            result = userService.emailCheck(email);
+            System.out.println(result+"이메일 0-1");
+        }
+
         if(result == 0) {
             return "success"; //생성가능한 이메일
         }else  return "fail";

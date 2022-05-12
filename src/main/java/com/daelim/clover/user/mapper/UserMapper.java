@@ -25,4 +25,6 @@ public interface UserMapper {
 
     //유저 삭제
     public void UserDrop(String userId);
+
+    public String SearchUser(String email);
 }

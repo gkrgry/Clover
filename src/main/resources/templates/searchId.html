@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" id="bootstrap-css">
+
+    <link rel="stylesheet" type="text/css" href="/css/join.css">
+
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+
+    <script type="application/octet-stream" src="/static/js/bootstrap.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+</head>
+<body>
+<!-- 모달창 -->
+<div class="modal fade" id="defaultModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">알림</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-contents"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!--// 모달창 -->
+
+
+
+    <div class="container">
+        <h1>아이디 찾기</h1>
+
+                <div class="form-group" id="divEmail">
+                    <label class="col-lg-2 control-label">이메일</label>
+                    <div class="col-lg-10">
+                        <input type="email" name="email" class="emailchk form-control" id="email" data-rule-required="true" placeholder="이메일" maxlength="40">
+                        <input type="text" class="elchk" placeholder="인증키 입력"> <input type="button" class="elchk_2" onclick="emailchk();" value="이메일 인증"/><input type="button" onclick="chaking()" class="elchk" value="인증확인">
+                     <span class="echking_2">인증이 완료되었습니다.</span>
+                    </div>
+                    <span class="err emailerr">이메일를 입력해주세요</span>
+                </div>
+                <input type="button" onclick="searchId()"  value="찾기">
+
+
+        </form>
+    </div>
+<script>
+    var modalContents = $(".modal-contents");
+    var modal = $("#defaultModal");
+    var boolck= false;
+
+
+    $('#email').keyup(function(event){
+
+        var divEmail = $('#divEmail');
+
+        if($.trim($('#email').val())==""){
+            divEmail.removeClass("has-success");
+            divEmail.addClass("has-error");
+            $("#email").css("border-color","#ff4d78");
+            $(".emailerr").show();
+        }else{
+            divEmail.removeClass("has-error");
+            divEmail.addClass("has-success");
+            $("#email").css("border-color","#dddddd");
+            $(".emailerr").hide();
+        }
+    });
+
+
+
+    var emailcheking;
+    //이메일 인증
+    function emailchk(){
+
+
+        var email = $('.emailchk').val();//이메일 입려된값
+        var data = {email:email,
+                    bool:true}
+        document.getElementById('email').readOnly=true;
+        $.ajax({
+            type: "post",
+            url: "/mailchk",
+            data,
+            success : function (result){
+                console.log(result);
+                if(result=='success'&& $('.emailchk').val()!=""){
+                    $('.elchk').css("display","inline-block")
+                    $('.elchk_2').css("display","none")
+                    $('.echeking').css("display","none")
+                    $.ajax({
+                        type:"post",
+                        url:"/mail",
+                        data,
+                        success : function (code){
+
+                            emailcheking=code;
+                        }
+                    })
+
+                }else{
+                    $('.elchk_2').css("display","inline-block")
+                    $('.elchk').css("display","none")
+
+                }
+            }
+        })
+    }
+
+    //이메일 코드 체킹
+    function chaking(event) {
+        var code = $('.elchk').val();//인증키 입력란 값
+        console.log("인증확인");
+        console.log(code+"값");
+        console.log(emailcheking+"값");
+        if ($('.elchk').val() == "") {
+            console.log("빈란");
+            modalContents.text("이메일을 입력하여 주시기 바랍니다.");
+            modal.modal('show');
+        } else if ($('.elchk').val() != emailcheking || emailcheking == "") {
+            console.log("코드오류");
+            modalContents.text("잘못된 코드 입니다.");
+            modal.modal('show');
+            return false;
+        } else if($('.elchk').val()==emailcheking){
+            console.log("인증완");
+            boolck=true;
+            $('.elchk').css("display","none");
+            $('.echking_2').css("display","inline-block");
+
+        }
+    }
+    function searchId(event){
+        var divEmail = $('#divEmail');
+        var email = $('.emailchk').val();//이메일 입려된값
+        //이메일
+        if($('#email').val()==""){
+            modalContents.text("이메일을 입력하여 주시기 바랍니다.");
+            modal.modal('show');
+
+            divEmail.removeClass("has-success");
+            divEmail.addClass("has-error");
+            $('#email').focus();
+            return false;
+        }else{
+            divEmail.removeClass("has-error");
+            divEmail.addClass("has-success");
+        }
+        var data = {email:email}
+        $.ajax({
+            type: "post",
+            url: "/search",
+            data,
+            success : function (str){
+                if(str=='') {
+                    modalContents.text("가입되어있지않거나 잘못된 이메일입니다.");
+                    modal.modal('show');
+                }else{
+                    modalContents.text("아이디는"+str+"입니다.");
+                    modal.modal('show');
+                }
+            }
+        })
+    }
+
+</script>
+
+
+
+</body>
+</html>

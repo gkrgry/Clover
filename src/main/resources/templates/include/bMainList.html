@@ -6,9 +6,6 @@
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
-<link rel="stylesheet" href="/css/bootstrap.css">
-<link rel="stylesheet" href="/css/list.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script type="text/javascript">
     $(".readMove").on("click",function (e){
         e.preventDefault();
@@ -27,7 +24,7 @@
         <div class="row text-center" >
         <div th:each="boardList : ${boardList}" style="margin:0 auto">
         <div class="card col-10 align-content-center" style="width: 30rem; margin: 0 auto" >
-            <img th:src="|/static/uploadImg/${boardList.image}|" class="card-img-top" alt="...">
+            <img th:src="|uploadImg/${boardList.image}|" height="250px" class="card-img-top " alt="...">
             <div class="card-body">
                 <h5 class="card-title" th:text="${boardList.title}"></h5>
                 <p class="card-text" th:text="${boardList.content}"></p>

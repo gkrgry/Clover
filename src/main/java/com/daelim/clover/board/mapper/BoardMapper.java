@@ -33,7 +33,7 @@ public interface BoardMapper {
 
     public int mypageGetTotal(String userId) throws Exception;
 
-
+    public List<Board> mainList() throws Exception;
 
 
 }

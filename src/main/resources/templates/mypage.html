@@ -9,7 +9,6 @@
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/sidebar/css/style.css">
-
     <link rel="stylesheet" type="text/css" href="/css/join.css">
 
     <!-- jQuery (부트스트랩의 자바스크립트 플러그인을 위해 필요한) -->
@@ -153,6 +152,10 @@
                 <input id="email" type="hidden" th:value="${session.userEmail}">
             </p>
         </div>
+
+        <div class="tab-pane fade "  id="boardList"><th:block th:include="/include/bMypageList"></th:block></div>
+    </div>
+
 
         <div class="tab-pane fade "  id="boardList">
             <h2 class="mb-4">내 게시판</h2>

@@ -81,12 +81,19 @@
     var emailcheking;
     //이메일 인증
     function emailchk(){
-
-
         var email = $('.emailchk').val();//이메일 입려된값
         var data = {email:email,
-                    bool:true}
-        document.getElementById('email').readOnly=true;
+            bool:true}
+        if($('.emailchk').val()==''){
+            modalContents.text("이메일을 입력하여 주시기 바랍니다.");
+            modal.modal('show');
+        }else{
+            document.getElementById('email').readOnly=true;
+        }
+
+
+
+
         $.ajax({
             type: "post",
             url: "/mailchk",
@@ -124,7 +131,7 @@
         console.log(emailcheking+"값");
         if ($('.elchk').val() == "") {
             console.log("빈란");
-            modalContents.text("이메일을 입력하여 주시기 바랍니다.");
+            modalContents.text(" 인증 코드를 입력하여 주시기 바랍니다.");
             modal.modal('show');
         } else if ($('.elchk').val() != emailcheking || emailcheking == "") {
             console.log("코드오류");

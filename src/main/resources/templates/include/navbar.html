@@ -2,7 +2,7 @@
 <header>
     <div class="col text-right">
         <div th:if="${#strings.isEmpty(session.sUserId)}"><a href="login">Login</a> &nbsp <a href="sign">Sign</a></div>
-        <div th:unless="${#strings.isEmpty(session.sUserId)}"><a href="mypage">마이페이지</a> &nbsp <a href="#">Logout</a><</div>
+        <div th:unless="${#strings.isEmpty(session.sUserId)}"><a href="mypage">마이페이지</a> &nbsp <a href="#">Logout</a></div>
     </div>
 
 <nav class="navbar navbar-light" >
@@ -23,10 +23,7 @@
             <li class="nav-item active">
                 <a class="nav-link" href="mapSearch">지도검색<span class="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">상세검색</a>
-            </li>
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link" href="register">동호회 등록</a>
             </li>
         </ul>

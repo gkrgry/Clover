@@ -247,5 +247,25 @@
         user_id = #{userId}
 
     </select>
+    <!-- 마이페이지 페이징 -->
+    <select id="mainList"
+            resultType="com.daelim.clover.board.domain.Board">
+
+        SELECT      board_id        as boardId
+             , user_id      as userId
+             , title
+             , content
+             , gen_address   as genAddress
+             , update_date    as updateDate
+             , week
+             , board_count   as boardCount
+
+        FROM        board_db
+
+        ORDER BY
+            boardCount desc
+            LIMIT 0, 6
+
+    </select>
 </mapper>
 

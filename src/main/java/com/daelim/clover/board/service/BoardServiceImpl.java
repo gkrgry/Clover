@@ -75,4 +75,9 @@ public class BoardServiceImpl implements BoardService {
     public int mypageGetTotal(String userId) throws Exception {
         return boardMapper.mypageGetTotal(userId);
     }
+
+    @Override
+    public List<Board> mainList() throws Exception {
+        return boardMapper.mainList();
+    }
 }

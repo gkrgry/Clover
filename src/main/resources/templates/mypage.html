@@ -92,7 +92,8 @@
 
                 </li>
                 <li>
-                    <a href="#boardList"   data-toggle="collapse" aria-expanded="false">내 게시판</a>
+                    <a href=""  onclick="mypageList()"  data-toggle="collapse" aria-expanded="false">내 게시판</a>
+
                 </li>
                 <li>
                     <a href="#">Portfolio</a>
@@ -183,6 +184,9 @@
     var modifypwd=$('#pwd').val();
     var emailcheking;
 
+    function mypageList(){
+        window.open("/mypageList")
+    }
     //회원 탈퇴
     function secession(event){
 console.log("회원탈퇴");

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -12,8 +12,6 @@
     <link rel="stylesheet" type="text/css" href="/css/join.css">
 
     <!-- jQuery (부트스트랩의 자바스크립트 플러그인을 위해 필요한) -->
-
-
 </head>
 <body>
 
@@ -83,9 +81,9 @@
 <!--// 모달창 -->
 <th:block th:include="/include/navbar"> </th:block>
 <div class="wrapper d-flex align-items-stretch">
-    <nav id="sidebar">
+    <nav id="sidebar" class="active">
         <div class="p-4 pt-5">
-            <a href=# class="img logo rounded-circle mb-5" style="background-image: url('/sidebar/images/logo.jpg');"></a>
+            <a href="#" onclick="UploadImage()" class="img logo rounded-circle mb-5" th:style="'background-image:url(/upload/'+${session.userImage}+');'"></a>
             <ul class="list-unstyled components mb-5">
                 <li class="active">
                     <a href="#MyInfo" data-toggle="collapse" aria-expanded="false" >내정보</a>
@@ -156,11 +154,6 @@
         <div class="tab-pane fade "  id="boardList"><th:block th:include="/include/bMypageList"></th:block></div>
     </div>
 
-
-        <div class="tab-pane fade "  id="boardList">
-            <h2 class="mb-4">내 게시판</h2>
-            <th:block th:include="bMypageList"></th:block>
-         </div>
 
     </div>
 </div>
@@ -581,7 +574,57 @@ console.log("회원탈퇴");
         }
     }
 
+function UploadImage(){
 
+
+    modalContents.html("<div className='form-group' id='divfile'>"+
+        "<label className='col-lg-2 control-label'>프로필</label>"+
+        "<div className='col-lg-10'>"+
+            "<input type='file' name='profileImgUrl' class='input_update' id='profileImgUrl'>"+
+        "</div>"+
+    "</div>");
+    modal.modal('show');
+    $('#modalSubmit').click(function (){
+        var file = $('#profileImgUrl');
+        console.log(file[0].files[0]);
+        console.log( $('#profileImgUrl').val());
+        var data = new FormData();
+        data.append('profileImgUrl',file[0].files[0]);
+        console.log(data)
+        jb.ajax({
+            type: "post",
+            enctype: "multipart/form-data",
+            url:"imageupload",
+            data:data,
+            dataType : 'text',
+            processData: false,
+            contentType: false,
+            success:function (result){
+                console.log(result)
+                if(result=='success'){
+                    console.log("새로고침");
+                    window.location.reload();
+                }else if(result=='failed'){
+                    modalContent.text("잘못된 요청입니다.!");
+                    modalck.modal('show');
+                }
+
+            },
+            error:function (jqXHR,result) {
+                console.log(result)
+                console.log("오류")
+                alert(jqXHR.status);
+                alert(jqXHR.statusText);
+                alert(jqXHR.responseText);
+                alert(jqXHR.readyState);
+
+            }
+
+
+        })
+    });
+
+}
 
 </script>
 </body>

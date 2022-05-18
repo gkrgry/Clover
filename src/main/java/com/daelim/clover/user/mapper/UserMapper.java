@@ -2,6 +2,7 @@ package com.daelim.clover.user.mapper;
 
 import com.daelim.clover.user.domain.User;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.web.multipart.MultipartFile;
 
 @Mapper
 public interface UserMapper {
@@ -26,5 +27,14 @@ public interface UserMapper {
     //유저 삭제
     public void UserDrop(String userId);
 
+    //유저 아이디 찾기
     public String SearchUser(String email);
+
+    //유저 비번찾기
+    public int SearchPwd(String email,String userId);
+
+    //유저 이미지 설정
+    public int ImageUpdate(String userId, String image);
+
+
 }

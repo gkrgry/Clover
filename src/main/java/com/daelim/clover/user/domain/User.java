@@ -24,8 +24,8 @@ public class User implements UserDetails {
     private String email;       //이메일
     private String phone;       //연락처
     private int sex;            //성별
-        Date regdate;       //가입날짜
-
+    Date regdate;       //가입날짜
+    private String image; //이미지 Url
 
 
     @Override
@@ -40,6 +40,10 @@ public class User implements UserDetails {
     @Builder
     public User(String userId,String pwd){
             log.info("빌드");
+            log.info(indexId);
+            log.info(userId);
+            log.info(pwd);
+            log.info(name);
             this.userId=userId;
             this.pwd=pwd;
     }
@@ -73,4 +77,6 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
 }

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Clover</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
@@ -312,12 +312,12 @@
                         </div>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="image">image</label>
+                    <div class="col-md-12">
+                        <label for="image">image(선택)</label>
                         <div class="input-group">
                             <div class="input-group-prepend">
 
-                            <img id="image" th:src="|uploadImg/*{image}|" alt="image" required/>
+                            <img class="col-md-12" id="image" th:src="|uploadImg/*{image}|" alt="image" required/>
                             <!-- class="form-control"-->
                             </div>
                         </div>
@@ -342,7 +342,7 @@
                     </div>
                     <div class="mb-3">
                         <label >요일</label>
-                        <input type="text" name="week" th:field="*{week}"
+                        <input type="text" name="week" th:field="*{week}" readonly
                                class="form-control">
                         <div class="invalid-feedback">
                             요일을 입력해 주세요

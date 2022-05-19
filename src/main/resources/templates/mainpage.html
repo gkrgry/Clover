@@ -2,19 +2,90 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" href="/css/bootstrap.css">
+    <title>Clover</title>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <!-- build:css -->
+    <link rel="stylesheet" href="/css/jd-slider.css">
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/jquery.jdSlider.css">
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <!---->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css"
+          integrity="sha384-v2Tw72dyUXeU3y4aM2Y0tBJQkGfplr39mxZqlTBDUZAb9BGoC40+rdFCG0m10lXk" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/fontawesome.css"
+          integrity="sha384-q3jl8XQu1OpdLgGFvNRnPdj5VIlCvgsDQTQB6owSOHWlAurxul7f+JpUOVdAiJ5P" crossorigin="anonymous">
+    <script src="/js/jquery.js"></script>
+    <script src="/js/jquery.jdSlider-latest.min.js"></script>
+
 </head>
 <body>
 <!-- header -->
  <th:block th:include="/include/navbar"> </th:block>
 
+<!--슬라이더 -->
+<section class="jd-slider main-slider main-visual">
+    <div class="slide-inner">
+        <ul class="slide-area">
+            <li>
+                <a href="#"><img src="img/1.jpg" alt="image1">
+                </a>
+            </li>
+            <li>
+                <a href="#"><img src="img/2.jpg" alt="image2">
+                </a>
+            </li>
+            <li>
+                <a href="#"><img src="img/4.jpg" alt="image3">
+                </a>
+            </li>
+        </ul>
+        <a class="prev" href="#">
+            <i class="fas fa-angle-left fa-2x"></i>
+        </a>
+        <a class="next" href="#">
+            <i class="fas fa-angle-right fa-2x"></i>
+        </a>
+    </div>
+    <div class="controller">
+        <a class="auto" href="#">
+            <i class="fas fa-play fa-xs"></i>
+            <i class="fas fa-pause fa-xs"></i>
+        </a>
+        <div class="indicate-area"></div>
+    </div>
+</section>
+<br>
 
+<br>
 <!-- card -->
 <th:block th:include="/include/bMainList"></th:block>
  <!-- footer -->
  <th:block th:include="/include/footer"> </th:block>
+
+
+<!-- Slider Script -->
+<script>
+    window.onload = function () {
+        $('.main-slider').jdSlider({
+            wrap: '.slide-inner',
+            isAuto: true,
+            isLoop: true
+        });
+        $('.slider').jdSlider({
+            wrap: '.slide-inner',
+            slideShow: 4,
+            slideToScroll: 1,
+            isLoop: true,
+            responsive: [{
+                viewSize: 768,
+                settings: {
+                    slideShow: 1
+                }
+            }]
+        });
+    };
+</script>
 </body>
 </html>

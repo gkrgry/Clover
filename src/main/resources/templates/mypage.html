@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Clover</title>
     <!-- Bootstrap -->
 <!--    <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>-->
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
@@ -90,7 +90,8 @@
 
                 </li>
                 <li>
-                    <a href="#boardList"   data-toggle="collapse" aria-expanded="false">내 게시판</a>
+                    <a href=""  onclick="mypageList()"  data-toggle="collapse" aria-expanded="false">내 게시판</a>
+
                 </li>
                 <li>
                     <a href="#">Portfolio</a>
@@ -154,7 +155,6 @@
         <div class="tab-pane fade "  id="boardList"><th:block th:include="/include/bMypageList"></th:block></div>
     </div>
 
-
     </div>
 </div>
 <!--<script src="/sidebar/js/jquery.min.js"></script>-->
@@ -182,6 +182,9 @@
     var modifypwd=$('#pwd').val();
     var emailcheking;
 
+    function mypageList(){
+        window.open("/mypageList")
+    }
     //회원 탈퇴
     function secession(event){
 console.log("회원탈퇴");

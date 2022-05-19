@@ -1,35 +1,24 @@
 package com.daelim.clover.board.controller;
 
-import com.daelim.clover.board.domain.Board;
-import com.daelim.clover.board.domain.Criteria;
-import com.daelim.clover.board.domain.FileDTO;
-import com.daelim.clover.board.domain.PageDTO;
+import com.daelim.clover.board.domain.*;
 import com.daelim.clover.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.IOUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.FileHandler;
 
 @Log4j2
 @Controller
@@ -85,21 +74,29 @@ public class BoardController {
         return "bList";
     }
 
-    // 마이 페이지 리스트
-//    @GetMapping("/mypagelist")
-//    public String mypage(Criteria cri, Model model, HttpSession session) throws Exception{
-//        String userId = (String)session.getAttribute("sUserId");
-//        if(userId.toString().equals("") || userId == null){
-//            return "login";
-//        }else{
-//            List<Board> boardList = boardService.mypageListPaging(cri.getSkip(),cri.getAmount(),userId);
-//            int total = boardService.mypageGetTotal(userId);
-//            total = total + 10;
-//            model.addAttribute("total",total);
-//            model.addAttribute("boardList", boardList);
-//            model.addAttribute("pageMaker",new PageDTO(cri,total));
-//            return "bMypageList";
-//        }
+    @GetMapping("/mypageList")
+    public String mypageList(Criteria cri,Model model,HttpServletRequest request) throws Exception{
+        log.info("cri +List 입니다");
+        HttpSession session = request.getSession();
+        String userId = (String) session.getAttribute("sUserId");
+        List<Board> boardList = boardService.mypageListPaging(cri.getSkip(),cri.getAmount(),userId);
+        int total = boardService.mypageGetTotal(userId);
+        total = total + 10;
+        model.addAttribute("total",total);
+        model.addAttribute("boardList", boardList);
+        model.addAttribute("pageMaker",new PageDTO(cri,total));
+        return "include/bMypageList";
+    }
+
+//    //마이페이지 리스트 ajax
+//    @ResponseBody
+//    @GetMapping(value = "/mypage/pages/{userId}/{pageNum}",
+//            produces = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_UTF8_VALUE})
+//    public List<Board> mypageList(@PathVariable("pageNum") int pageNum, @PathVariable("userId") String userId,Criteria  cri) throws Exception {
+//        log.info("getList.........");
+//        List<Board> board = boardService.mypageListPaging(cri.getSkip(),cri.getAmount(),userId);
+//        log.info("cri " + cri);
+//        return board;
 //    }
 
     @GetMapping("/register")

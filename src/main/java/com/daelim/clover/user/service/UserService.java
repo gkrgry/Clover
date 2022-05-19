@@ -2,6 +2,9 @@ package com.daelim.clover.user.service;
 
 
 import com.daelim.clover.user.domain.User;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.HashMap;
 
 
 public interface UserService {
@@ -32,4 +35,12 @@ public interface UserService {
     //유저 아이디 찾기
     public String searchUser(String email)throws Exception;
 
+    //유저 비번찾기
+    public int searchUser(String email,String userId)throws Exception;
+    //프로필 설정
+    public String uploadFile(String userId,MultipartFile multipartFile) throws Exception;
+    //카카오 유저 토큰
+    public String getAccessToken(String code) ;
+    //카카오 유저 정보가져오기
+    public HashMap<String, Object> getUserInfo(String access_Token);
 }

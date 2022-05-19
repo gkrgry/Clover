@@ -12,6 +12,16 @@
             email = #{email}
 
     </select>
+    <select id="SearchPwd" resultType="int">
+        SELECT
+            count (password)
+        FROM user_db
+        WHERE
+            email = #{email}
+            and
+            user_id =#{userId}
+
+    </select>
     <!-- 로그인-->
     <select id="getUserAccount" resultType="com.daelim.clover.user.domain.User">
         SELECT
@@ -23,6 +33,7 @@
              ,  phone
              ,  sex
              ,  regdate
+
         FROM
             user_db
         WHERE
@@ -58,6 +69,13 @@
         WHERE user_id =#{userId}
 
     </delete>
+<!--    이미지 수정-->
+    <update id="ImageUpdate" parameterType="String">
+        UPDATE
+                user_db
+        SET image =#{image}
+        WHERE user_id =#{userId}
+    </update>
 <!--    유저업데이트-->
     <update id="UpdateUser"
             parameterType="com.daelim.clover.user.domain.User" >
@@ -79,6 +97,7 @@
             , password
             , nickname
             ,email
+            ,image
         FROM
             user_db
         WHERE

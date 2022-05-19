@@ -7,6 +7,7 @@
     <script type="application/octet-stream" src="/static/js/bootstrap.min.js"></script>
 </head>
 <body>
+<th:block th:include="/include/navbar"> </th:block>
         <div class="container">
             <h1>로그인</h1>
             <form th:action="@{/login_proc}" method="post">
@@ -18,6 +19,9 @@
                     <label th:for>비밀번호</label>
                     <input type="password" name="password" placeholder="비밀번호 입력해주세요."/>
                 </div>
+                <a class="p-2" href="https://kauth.kakao.com/oauth/authorize?client_id=28dfc81f8b3f5be575c5372c08509296&redirect_uri=http://localhost:8080/kakaologin&response_type=code">
+                    <img src="/images/kakao_login_medium_wide.png">
+                </a>
                 <div>
                     <button type="submit">로그인</button>
                     <button type="button" onclick="location.href='sign'">회원가입</button>

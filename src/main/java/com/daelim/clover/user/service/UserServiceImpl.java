@@ -1,31 +1,35 @@
 package com.daelim.clover.user.service;
 
 //이메일
-import java.util.Random;
 
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import javax.servlet.http.HttpSession;
-
+import com.daelim.clover.user.domain.User;
+import com.daelim.clover.user.mapper.UserMapper;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
-
-
-import org.springframework.beans.factory.annotation.Autowired;
-import com.daelim.clover.user.domain.User;
-import com.daelim.clover.user.mapper.UserMapper;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
-
-
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
-
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Random;
 
 
 @Log4j2
@@ -46,7 +50,168 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private String id;
     @Value("${AdminMail.password}")
     private String password;
+    @Value("${profileImg.path}")
+    private String uploadFolder;
 
+
+    //카카오 유저 정보
+    public HashMap<String, Object> getUserInfo(String access_Token){
+
+        //요청하는 클라이언트마다 가진 정보가 다를 수 있기에 HashMap타입으로 선언
+        HashMap<String, Object> userInfo = new HashMap<String, Object>();
+        String reqURL = "https://kapi.kakao.com/v2/user/me";
+        try {
+            URL url = new URL(reqURL);
+            HttpURLConnection conn = (HttpURLConnection)  url.openConnection();
+            conn.setRequestMethod("GET");
+
+            //요청에 필요한 Header에 포함될 내용
+            conn.setRequestProperty("Authorization", "Bearer "+access_Token);
+
+            int responseCode = conn.getResponseCode();
+            System.out.println("responseCode :" +responseCode);
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+            String line ="";
+            String result ="";
+
+            while ((line = br.readLine()) != null){
+                result +=line;
+            }
+            System.out.println("response body :" +result);
+            JsonParser parser = new JsonParser();
+            JsonElement element = parser.parse(result);
+            System.out.println(element);
+            JsonObject properties = element.getAsJsonObject().get("properties").getAsJsonObject();
+            JsonObject kakao_account = element.getAsJsonObject().get("kakao_account").getAsJsonObject();
+
+            String nickname =properties.getAsJsonObject().get("nickname").getAsString();
+            String email = kakao_account.getAsJsonObject().get("email").getAsString();
+
+            userInfo.put("nickname",nickname);
+            userInfo.put("email",email);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+
+    //카카오 유저 토큰
+    public String getAccessToken(String authorize_code){
+        String access_Token ="";
+        String refresh_Token = "";
+        String reqURL = "https://kauth.kakao.com/oauth/token";
+
+        try {
+            URL url = new URL(reqURL);
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            //POST 요청을 위해 기본값이 false인 setDoOutput을 true로
+
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+            //POST 요청에 필요로 요구하는 파라미터 스트림을 통해 전송
+
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
+            StringBuilder sb = new StringBuilder();
+            sb.append("grant_type=authorization_code");
+
+            sb.append("&client_id=28dfc81f8b3f5be575c5372c08509296"); //본인 발급받은 key
+            sb.append("&redirect_url=http://localhost:8080/kakaologin"); //본인 설정한 주소
+
+            sb.append("&code="+authorize_code);
+            bw.write(sb.toString());
+            bw.flush();
+            
+            //결과 코드가 200이면 성공
+            int responseCode = conn.getResponseCode();
+            System.out.println("responseCode :"+responseCode);
+            
+            //요청을 통해 얻은 JSON 타입의 Response 메세지 읽어오기
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String line ="";
+            String result = "";
+
+            while ((line = br.readLine())!=null){
+                result +=line;
+            }
+            System.out.println("response body :"+result);
+
+            // Gson 라이브러리에 포함된 클래스로 JSON 파싱 객체 생성
+            JsonParser parser = new JsonParser();
+            JsonElement element = parser.parse(result);
+
+            access_Token = element.getAsJsonObject().get("access_token").getAsString();
+            refresh_Token = element.getAsJsonObject().get("refresh_token").getAsString();
+
+            System.out.println("access_token :"+access_Token);
+            System.out.println("refresh_token :"+refresh_Token);
+
+            br.close();
+            bw.close();
+
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return access_Token;
+    }
+
+    //유저 프로필 설정
+    @Transactional
+    public String uploadFile (String userId, MultipartFile multipartFile)throws Exception{
+    User user= userMapper.selectionUser(userId);
+    System.out.println("파일 살제");
+    System.out.println(multipartFile);
+        System.out.println(multipartFile.getOriginalFilename());
+    String imageFileName = userId+"_"+multipartFile.getOriginalFilename();
+        System.out.println("파일 살제222");
+    Path imageFilePath = Paths.get(uploadFolder+imageFileName);
+        System.out.println("파일 살제333");
+        System.out.println(user.getImage());
+        System.out.println(user.getImage() !=null);
+
+    if(multipartFile.getSize()!=0){//파일이 업로드 되었는지 확인
+        try{
+            if(user.getImage() !=null){
+                System.out.println("파일 삭제");
+                File file = new File(uploadFolder+ user.getImage());
+                System.out.println(file);
+                System.out.println(file.exists());
+                System.out.println(file.delete());
+                System.gc();
+                file.delete();//원래파일 삭제
+            }
+
+            Files.write(imageFilePath,multipartFile.getBytes());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        System.out.println(imageFileName);
+        user.setImage(imageFileName);
+        userMapper.ImageUpdate(userId,imageFileName);
+        return "success";
+    }
+
+
+        return "failed";
+    }
+
+
+
+    //유저 비번찾기
+    public int searchUser(String email,String userId)throws Exception{
+        int result=0;
+        System.out.println(result+"전");
+        result=userMapper.SearchPwd(email,userId);
+        System.out.println(result+"후");
+        return result;
+    }
 
     //유저 아이디 찾기
     public String searchUser(String email)throws Exception{
@@ -69,7 +234,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         userMapper.UpdateUser(user);
         return 0;
     }
-    // 이름 수정
 
     //내정보 페이지
     public User myPage(String userId) throws Exception{
@@ -151,14 +315,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             return ePw;
 
     }
-
    @Transactional
     public void  userSingUp(User user) {
 
        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
        user.setPwd(passwordEncoder.encode(user.getPassword()));
 
-       userMapper.saveUser(user);
+        userMapper.saveUser(user);
     }
 
 

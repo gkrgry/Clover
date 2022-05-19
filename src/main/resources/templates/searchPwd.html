@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <title>Title</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" id="bootstrap-css">
+
+    <link rel="stylesheet" type="text/css" href="/css/join.css">
+
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+
+    <script type="application/octet-stream" src="/static/js/bootstrap.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+</head>
+<body>
+<th:block th:include="/include/navbar"> </th:block>
+<!-- 모달창 -->
+<div class="modal fade" id="defaultModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">알림</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-contents"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!--// 모달창 -->
+
+
+<!-- 모달창 -->
+<div class="modal fade" id="modify">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">알림</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-contentspwd">
+
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button id="modalSubmit" type="button" class="btn btn-success" data-dismiss="modal">재설정</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!--// 모달창 -->
+<div class="container">
+    <h1>비밀번호 찾기</h1>
+
+    <div class="form-group" id="divId">
+        <label  class="col-lg-2 control-label">아이디</label>
+        <div class="col-lg-10">
+            <input type="text" name="userId" class="id_input form-control onlyAlphabetAndNumber" id="id" data-rule-required="true" placeholder="30자이내의 알파벳, 언더스코어(_), 숫자만 입력 가능합니다." maxlength="30">
+        </div>
+        <span class="err iderr">아이디를 입력해주세요</span>
+    </div>
+    <div class="form-group" id="divEmail">
+        <label class="col-lg-2 control-label">이메일</label>
+        <div class="col-lg-10">
+            <input type="email" name="email" class="emailchk form-control" id="email" data-rule-required="true" placeholder="이메일" maxlength="40">
+            <input type="text" class="elchk" placeholder="인증키 입력"> <input type="button" class="elchk_2" onclick="emailchk();" value="이메일 인증"/><input type="button" onclick="chaking()" class="elchk" value="인증확인">
+            <span class="echking_2">인증이 완료되었습니다.</span>
+        </div>
+        <span class="err emailerr">이메일를 입력해주세요</span>
+    </div>
+    <input type="button" onclick="searchPwd()"  value="찾기">
+</div>
+
+<script>
+    var modalContents = $(".modal-contents");
+    var modal = $("#defaultModal");
+    var modalPwdContent =$('.modal-contentspwd');
+    var modalpwd = $('#modify');
+    var boolck= false;
+
+    $('#email').keyup(function(event){
+
+        var divEmail = $('#divEmail');
+
+        if($.trim($('#email').val())==""){
+            divEmail.removeClass("has-success");
+            divEmail.addClass("has-error");
+            $("#email").css("border-color","#ff4d78");
+            $(".emailerr").show();
+        }else{
+            divEmail.removeClass("has-error");
+            divEmail.addClass("has-success");
+            $("#email").css("border-color","#dddddd");
+            $(".emailerr").hide();
+        }
+    });
+
+
+    $('.onlyAlphabetAndNumber').keyup(function(event){
+        if (!(event.keyCode >=37 && event.keyCode<=40)) {
+            var inputVal = $(this).val();
+            $(this).val($(this).val().replace(/[^_a-z0-9]/gi,'')); //_(underscore), 영어, 숫자만 가능
+        }
+    });
+    var emailcheking;
+    //이메일 인증
+    function emailchk(){
+        var email = $('.emailchk').val();//이메일 입려된값
+        var data = {email:email,
+            bool:true}
+        if($('.emailchk').val()==''){
+            modalContents.text("이메일을 입력하여 주시기 바랍니다.");
+            modal.modal('show');
+        }else{
+            document.getElementById('email').readOnly=true;
+        }
+
+
+
+
+        $.ajax({
+            type: "post",
+            url: "/mailchk",
+            data,
+            success : function (result){
+                // console.log(result);
+                if(result=='success'&& $('.emailchk').val()!=""){
+                    $('.elchk').css("display","inline-block")
+                    $('.elchk_2').css("display","none")
+                    $('.echeking').css("display","none")
+                    $.ajax({
+                        type:"post",
+                        url:"/mail",
+                        data,
+                        success : function (code){
+
+                            emailcheking=code;
+                        }
+                    })
+
+                }else{
+                    $('.elchk_2').css("display","inline-block")
+                    $('.elchk').css("display","none")
+
+                }
+            }
+        })
+    }
+
+    //이메일 코드 체킹
+    function chaking(event) {
+        var code = $('.elchk').val();//인증키 입력란 값
+        // console.log("인증확인");
+        // console.log(code+"값");
+        // console.log(emailcheking+"값");
+        if ($('.elchk').val() == "") {
+            console.log("빈란");
+            modalContents.text(" 인증 코드를 입력하여 주시기 바랍니다.");
+            modal.modal('show');
+        } else if ($('.elchk').val() != emailcheking || emailcheking == "") {
+            // console.log("코드오류");
+            modalContents.text("잘못된 코드 입니다.");
+            modal.modal('show');
+            return false;
+        } else if($('.elchk').val()==emailcheking){
+            // console.log("인증완");
+            boolck=true;
+            $('.elchk').css("display","none");
+            $('.echking_2').css("display","inline-block");
+
+        }
+    }
+
+
+    function searchPwd(event){
+        var divEmail = $('#divEmail');
+        var divId = $('#divId');
+        var email = $('.emailchk').val();//이메일 입려된값
+        var id = $('#id').val();
+        // console.log("찾기")
+        //이메일
+        if($('#email').val()=="" ||$('#id').val()=="" ){
+            modalContents.text("이메일 또는 아이디 입력하여 주시기 바랍니다.");
+            modal.modal('show');
+
+            divEmail.removeClass("has-success");
+            divEmail.addClass("has-error");
+            $('#email').focus();
+
+            divId.removeClass("has-success");
+            divId.addClass("has-error");
+            $('#id').focus();
+            return false;
+        }else{
+            divId.removeClass("has-error");
+            divId.addClass("has-success");
+            divEmail.removeClass("has-error");
+            divEmail.addClass("has-success");
+        }
+
+        var passwordCheck = $('#modifypwdCheck').val();
+        var password = $('#modifypwd').val();
+        var divPasswordCheck = $('#divPasswordCheck');
+        var divPassword = $('#divPassword');
+        var data = {email:email
+                    ,userId:id}
+        $.ajax({
+            type: "post",
+            url: "/search",
+            data,
+            success : function (str){
+                if(str=='success') {
+                    // console.log("success호출");
+                    modalPwdContent.html("<div class='form-group' id='divPassword'>"+
+                        "<label   style='max-width: 30%' class='col-lg-2 control-label'>패스워드</label>"+
+                        "<div class='col-lg-10'>"+
+                        "<input type='password' name='pwd' class='form-control' id='modifypwd'  data-rule-required='true' placeholder='패스워드' maxlength='30'>"+
+                        "</div>"+
+                        "<span class='err pwerr'>비밀번호를 입력해주세요</span>"+
+                        "</div>"+
+
+                        "<div class='form-group' id='divPasswordCheck'>"+
+                        "<label style='max-width: 30%'  class='col-lg-2 control-label'>패스워드 확인</label>"+
+                        "<div class='col-lg-10'>"+
+                        "<input type='password'    class='form-control' id='modifypwdCheck' data-rule-required='true' placeholder='패스워드 확인' maxlength='30'>"+
+                        "</div>"+
+                        "<span class='err chkerr'>비밀번호가 일치하지 않습니다.</span>"+
+                        "</div>");
+                    modalpwd.modal('show');
+                    $('#modalSubmit').click(function (){
+                        modifypwd=$('#modifypwd').val();
+                        // console.log(modifypwd);
+                        // console.log(!$('#modifypwd').val());
+                        // console.log(nickname);
+                        if(!$('#modifypwd').val() && !$('#modifypwdCheck').val()){
+                            //패스워드 검사
+                            if($('#modifypwd').val()==""){
+                                modalContents.text("패스워드를 입력하여 주시기 바랍니다.");
+                                modal.modal('show');
+                            }else{
+                                divPassword.removeClass("has-error");
+                                divPassword.addClass("has-success");
+                            }
+
+                        }else if($('#modifypwd').val()!=$('#modifypwdCheck').val() || $('#modifypwdCheck').val()=="") {
+                            modalContents.text("패스워드가 일치하지 않습니다.");
+                            modal.modal('show');
+                        }else{
+                            // console.log("펄스");
+                            var data = {
+                                "name"    : '',
+                                "nickname": '',
+                                "pwd"     : modifypwd,
+                                "email"   : '',
+                                "userId"  : id
+                            };
+                            $.ajax({
+                                type:"post",
+                                data : data,
+                                url : "/update_popup",
+                                success:function (result){
+                                    // console.log("수정완료");
+                                    // console.log(result);
+                                    if(result=="success"){
+                                        console.log("새로고침");
+                                        modalContents.text("성공적으로 변경되었습니다.");
+                                        modal.modal('show');
+                                        //window.location.reload();
+                                    }else if(result=="faild"){
+                                        // console.log("실패");
+                                        modalContents.text("기존 패스워드랑 동일합니다.");
+                                        modal.modal('show');
+                                    }else if(result=='notId'){
+                                        modalContents.text("아이디가 정보가 입력되지않았습니다.");
+                                        modal.modal('show');
+                                    }
+
+                                }
+                            })
+                        }
+
+                    });
+                }else {
+                    modalContents.text("일치하는 정보가 없습니다.");
+                    modal.modal('show');
+                    // console.log("success@@@@@@@");
+                }
+            }
+        })
+    }
+</script>
+</body>
+</html>

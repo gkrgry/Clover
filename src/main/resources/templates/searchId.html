@@ -15,6 +15,7 @@
     <script type="text/javascript" src="/js/bootstrap.js"></script>
 </head>
 <body>
+<th:block th:include="/include/navbar"> </th:block>
 <!-- 모달창 -->
 <div class="modal fade" id="defaultModal">
     <div class="modal-dialog">
@@ -49,14 +50,11 @@
                     <span class="err emailerr">이메일를 입력해주세요</span>
                 </div>
                 <input type="button" onclick="searchId()"  value="찾기">
-
-
-        </form>
     </div>
 <script>
     var modalContents = $(".modal-contents");
     var modal = $("#defaultModal");
-    var boolck= false;
+    // var boolck= false;
 
 
     $('#email').keyup(function(event){
@@ -140,7 +138,7 @@
             return false;
         } else if($('.elchk').val()==emailcheking){
             console.log("인증완");
-            boolck=true;
+            // boolck=true;
             $('.elchk').css("display","none");
             $('.echking_2').css("display","inline-block");
 

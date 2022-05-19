@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Clover</title>
 </head>
 <link rel="stylesheet" href="/css/bootstrap.css">
 <link rel="stylesheet" href="/css/list.css">
@@ -29,8 +29,13 @@
 </script>
 <body>
 
-
+<div>
+    <br>
+    <h2 class="text-center" th:text="|${session.sUserId} 님의 개시글|"></h2>
+    <br>
+</div>
 <div id="totalList">
+
     <table>
         <thead>
         <tr id="theadTh">
@@ -56,7 +61,7 @@
             </div>
         </td>
         <td>
-            <div id="listDivCol">
+            <div id="listDivCol2">
                 <p th:text="${boardList.tagBigName}"></p><br>
                 <p th:text="${boardList.tagSmallName}"></p>
             </div>

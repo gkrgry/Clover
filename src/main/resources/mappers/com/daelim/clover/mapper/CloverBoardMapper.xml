@@ -247,7 +247,7 @@
         user_id = #{userId}
 
     </select>
-    <!-- 마이페이지 페이징 -->
+    <!-- 메인페이지 카드 -->
     <select id="mainList"
             resultType="com.daelim.clover.board.domain.Board">
 
@@ -255,6 +255,7 @@
              , user_id      as userId
              , title
              , content
+             , image
              , gen_address   as genAddress
              , update_date    as updateDate
              , week

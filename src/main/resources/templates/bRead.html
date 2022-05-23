@@ -81,6 +81,7 @@
             var modalRemoveBtn = $("#modalRemoveBtn");
             var modalRegisterBtn = $("#modalRegisterBtn");
             var seUserId = "[[${session.sUserId}]]";
+            var applyIs = 0;
             $("#addCommentBtn").on("click",function (e){
                 if(seUserId === null || seUserId === ""){
                     alert("로그인을 해주세요");
@@ -223,6 +224,33 @@
                 formObj.attr("action","/remove");
                 formObj.attr("method","post");
                 formObj.submit();
+            })
+            function applyEmail(){
+                $.ajax({
+                    url: "/applyEmail?boardId="+boardIdValue,
+                    data: boardIdValue,
+                    type: "post",
+
+                })
+            }
+            $("#btApplyEmail").on("click",function (){
+
+                console.log(applyIs)
+                if(seUserId === "" || seUserId === null){
+                    console.log("asd");
+                    alert("로그인을 해주세요");
+                }else{
+                    if(applyIs != 1){
+                        applyEmail();
+                        alert("메일을 보냈습니다.");
+                        applyIs = 1;
+                    }else{
+                        console.log(applyIs)
+                        alert("이미 메일을 보내셨습니다.")
+
+                    }
+
+                }
             })
         })
     </script>
@@ -411,11 +439,15 @@
                 <div th:unless="${session.sUserId} == ${board.userId}">
                 <div>
                     <button class="btn btn-primary btn-lg btn-block"
-                            type="submit" id="#">신청하기</button>
+                            type="submit" id="btApplyEmail">신청하기</button>
                 </div>
                 </div>
             </div>
         </div>
+
+
+
+        <!-- 댓글 -->
         <br>
         <hr>
         <br>
@@ -525,6 +557,7 @@
                 map.setCenter(coords);
             }
         });
+
     </script>
 </body>
 </html>

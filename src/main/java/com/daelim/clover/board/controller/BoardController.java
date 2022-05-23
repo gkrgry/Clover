@@ -2,6 +2,8 @@ package com.daelim.clover.board.controller;
 
 import com.daelim.clover.board.domain.*;
 import com.daelim.clover.board.service.BoardService;
+import com.daelim.clover.user.domain.User;
+import com.daelim.clover.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.IOUtils;
@@ -30,6 +32,7 @@ public class BoardController {
 
     private final BoardService boardService;
 
+    private final UserService userService;
 //    @GetMapping("/list")
 //    public String boardList(Model model) throws Exception{
 //        log.info("List 입니다");
@@ -195,6 +198,7 @@ public class BoardController {
         return "bModify";
     }
 
+    //게시글 수정
     @PostMapping("/modify")
     public String boardModifyForm(Board board, Model model,HttpSession session) throws Exception{
         //유효성 검사
@@ -213,7 +217,7 @@ public class BoardController {
     }
 
 
-
+    //게시글 삭제
     @PostMapping("/remove")
     public String boardRemove(@RequestParam("boardId") int boardId
                               ,@RequestParam("userId") String userId
@@ -237,7 +241,42 @@ public class BoardController {
         header.setContentType(MediaType.IMAGE_JPEG);
         return new ResponseEntity<byte[]>(IOUtils.toByteArray(new FileInputStream(
                 new File("C:\\uploadImg/"+ filename))), header, HttpStatus.CREATED);
-    }//바꿔야 할것
+    }
+
+    //동호회 이메일 신청
+    @PostMapping("/applyEmail")
+    @ResponseBody
+    public void applyEmail(@RequestParam int boardId,Model model,HttpServletRequest request,HttpServletResponse response)throws Exception{
+        HttpSession session = request.getSession();//이메일 신청자 세션으로 값 가져오기
+        String applyIs = (String) session.getAttribute("applyIs");
+
+        String toUser = boardService.boardRead(boardId).getUserId();//게시글 글쓴이 아이디
+        String to = userService.myPage(toUser).getEmail();//게시글 글쓴이 이메일
+
+        String userId = (String) session.getAttribute("sUserId");// 신청한 사람 아이디
+//        String userId = "rox123";
+        User user = userService.myPage(userId);
+        String fromEmail = user.getEmail(); //신청한 사람 이메일
+        String nickname = user.getNickname();//신청한 사람 닉네임
+        String name = user.getName();//신청한 사람 닉네임
+        String title = boardService.boardRead(boardId).getTitle();//신청한 게시글 제목
+
+
+        if(applyIs != "true"){
+            log.info("이메일 전송");
+            session.setAttribute("applyIs","true");
+            model.addAttribute("applyIs",true);
+            boardService.sendSimpleMessage(title,to,userId,fromEmail,nickname,name);
+        }else{
+            log.info("이미 이메일 전송");
+        }
+
+
+    }
+
+
+
+
 
 
 }

@@ -6,6 +6,8 @@ import com.daelim.clover.board.domain.Criteria;
 import com.daelim.clover.board.domain.PageDTO;
 import com.daelim.clover.board.service.BoardService;
 import com.daelim.clover.user.domain.User;
+import com.daelim.clover.user.kakao.KakaDTO;
+import com.daelim.clover.user.mapper.UserMapper;
 import com.daelim.clover.user.service.UserService;
 import com.daelim.clover.user.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -23,10 +25,8 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.FileInputStream;
@@ -48,8 +48,14 @@ public class UserController {
 
     User user;
 
+    // HttpSession 클래스 주입.
+    @Autowired
+    private HttpSession session;
 
-    
+
+    @Autowired
+    UserMapper userMapper;
+
 
     @GetMapping(value = "/upload/{filename}",produces = MediaType.IMAGE_PNG_VALUE)
     @ResponseBody
@@ -125,11 +131,12 @@ public class UserController {
         HttpSession session = request.getSession();
 
 
-        String pwd = (String) session.getAttribute("pwd");
+
         String userId = (String) session.getAttribute("sUserId");
-
+        int kakao= (int) session.getAttribute("kakao");
+      if(kakao==0){
+        String pwd = (String) session.getAttribute("pwd");
         System.out.println(pwd);
-
         System.out.println(user.getName());
         System.out.println(user.getPwd().equals(user.getName()));
         System.out.println(user.getPwd());
@@ -148,6 +155,8 @@ public class UserController {
                 return "notId";
             }
         }
+
+      }
         System.out.println(userId);
         user.setUserId(userId);
         System.out.println(user.getUserId());
@@ -170,6 +179,12 @@ public class UserController {
         return "mainpage";
     }
 
+    @RequestMapping("/profile")
+    public String Profile(HttpServletRequest request)throws Exception{
+        HttpSession session = request.getSession();
+        System.out.println(session.getAttribute("userImage"));
+        return "profile";
+    }
     @GetMapping("/mypage")
     public String myPage(HttpServletRequest request, Model model, Criteria cri)throws Exception{
         HttpSession session = request.getSession();
@@ -178,6 +193,7 @@ public class UserController {
         System.out.println("저장된변수"+userId);
         System.out.println("저장된변수"+Pwd);
       user=userService.myPage(userId);
+      System.out.println("수정내용 분석"+user);
       user.setPwd(Pwd);
         System.out.println(user);
         String userName=user.getName();
@@ -193,11 +209,19 @@ public class UserController {
         }
         System.out.println(image);
 
+
+
+
+
+
         session.setAttribute("userName",userName);
         session.setAttribute("userNickname",userNickname);
         session.setAttribute("userPwd",userPwd);
         session.setAttribute("userEmail",email);
         session.setAttribute("userImage",image);
+        session.setAttribute("phoneNumber",user.getPhone());
+        session.setAttribute("kakao",user.getKakao());
+
 
 //        System.out.println(userPwd);
 //        System.out.println(userName);
@@ -263,16 +287,31 @@ public class UserController {
     }
 
     @GetMapping("/kakaologin")
-    public String kakaoLogin(@RequestParam(value="code",required = false) String code) throws Exception{
+    public String kakaoLogin(@RequestParam(value="code",required = false) String code, User user) throws Exception{
         System.out.println("########"+code);//사용자 코드
+
         String access_Token = userService.getAccessToken(code);
 
-        HashMap<String,Object>userInfo = userService.getUserInfo(access_Token);
-
+        HashMap<String,Object> userInfo = userService.getUserInfo(access_Token, user);
+        KakaDTO kakaDTO= (KakaDTO) userInfo;
+        System.out.println(kakaDTO);
+        user = userMapper.selectionUser(kakaDTO.getK_email());
         System.out.println("####access_Token#### :"+access_Token);
-//        System.out.println("####access_Token#### :"+userInfo.get("nickname"));
-//        System.out.println("####access_Token#### :"+userInfo.get("email"));
+        System.out.println("####access_Token#### :"+user.getUserId());
+        System.out.println("####access_Token#### :"+user.getName());
+        System.out.println("####access_Token#### :"+user.getSex());
 
+        // 아래 코드가 추가되는 내용
+        session.invalidate();
+        // 위 코드는 session객체에 담긴 정보를 초기화 하는 코드.
+        session.setAttribute("name", user.getName());
+        session.setAttribute("email", user.getEmail());
+        session.setAttribute("sUserId",user.getUserId());
+
+        session.setAttribute("phoneNumber",user.getPhone());
+        session.setAttribute("kakao",user.getKakao());
+        // 위 2개의 코드는 닉네임과 이메일을 session객체에 담는 코드
+        // jsp에서 ${sessionScope.name} 이런 형식으로 사용할 수 있다.
         return "mainpage";
     }
 
@@ -310,6 +349,8 @@ public class UserController {
         log.info(""+sUserId);
         session.setAttribute("pwd",pwd);
         session.setAttribute("sUserId",sUserId);
+        session.setAttribute("kakao",user.getKakao());
+        session.setAttribute("phoneNumber",user.getPhone());
         model.addAttribute("info", user.getUserId()+"의 "+user.getName());//유저 아이디
 
         return  "mainpage";

@@ -3,6 +3,8 @@ package com.daelim.clover.user.service;
 //이메일
 
 import com.daelim.clover.user.domain.User;
+import com.daelim.clover.user.kakao.KakaDTO;
+import com.daelim.clover.user.kakao.UserRepository;
 import com.daelim.clover.user.mapper.UserMapper;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -53,49 +55,67 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Value("${profileImg.path}")
     private String uploadFolder;
 
+    // 클래스 주입
+    @Autowired
+    private UserRepository ur;
 
     //카카오 유저 정보
-    public HashMap<String, Object> getUserInfo(String access_Token){
+    public KakaDTO getUserInfo(String access_Token,User user){
 
         //요청하는 클라이언트마다 가진 정보가 다를 수 있기에 HashMap타입으로 선언
         HashMap<String, Object> userInfo = new HashMap<String, Object>();
         String reqURL = "https://kapi.kakao.com/v2/user/me";
         try {
             URL url = new URL(reqURL);
-            HttpURLConnection conn = (HttpURLConnection)  url.openConnection();
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
 
-            //요청에 필요한 Header에 포함될 내용
-            conn.setRequestProperty("Authorization", "Bearer "+access_Token);
+
+            conn.setRequestProperty("Authorization","Bearer "+access_Token);
 
             int responseCode = conn.getResponseCode();
             System.out.println("responseCode :" +responseCode);
 
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-
             String line ="";
-            String result ="";
+            String result = "";
 
             while ((line = br.readLine()) != null){
                 result +=line;
             }
-            System.out.println("response body :" +result);
+            System.out.println("response body 첫번째 :" + result);
+
             JsonParser parser = new JsonParser();
             JsonElement element = parser.parse(result);
+
             System.out.println(element);
             JsonObject properties = element.getAsJsonObject().get("properties").getAsJsonObject();
-            JsonObject kakao_account = element.getAsJsonObject().get("kakao_account").getAsJsonObject();
+            JsonObject kakao_account =element.getAsJsonObject().get("kakao_account").getAsJsonObject();
 
             String nickname =properties.getAsJsonObject().get("nickname").getAsString();
             String email = kakao_account.getAsJsonObject().get("email").getAsString();
-
+            String gender = kakao_account.getAsJsonObject().get("gender").getAsString();
             userInfo.put("nickname",nickname);
             userInfo.put("email",email);
+            userInfo.put("gender",gender);
         }catch (Exception e){
             e.printStackTrace();
         }
+        KakaDTO result = ur.findkakao(userInfo,user);
+        // 위 코드로 정보가 저장되었는 확인 하는 콛,
 
-        return null;
+        System.out.println("S :"+result);
+        if(result.getK_name()==null&&result.getK_gender()==null && result.getK_email()==null){
+            //result가 null 이면 정보가 저장이 안되있느거므로 정보를 저장.
+            System.out.println("ssssssssssss");
+            ur.kakaoinsert(userInfo,user);
+            System.out.println("정보없는거 확인후 사입");
+            return ur.findkakao(userInfo,user);
+            //정보 저장후 컨트롤러에 정보를 보내는코드
+        }else{
+            return result;
+            //정보가 이미 있는경우
+        }
     }
 
 
@@ -119,17 +139,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             StringBuilder sb = new StringBuilder();
             sb.append("grant_type=authorization_code");
 
-            sb.append("&client_id=28dfc81f8b3f5be575c5372c08509296"); //본인 발급받은 key
+            sb.append("&client_id=774f346686b648d662cb1d75ccbd5cd1"); //본인 발급받은 key
             sb.append("&redirect_url=http://localhost:8080/kakaologin"); //본인 설정한 주소
 
             sb.append("&code="+authorize_code);
             bw.write(sb.toString());
             bw.flush();
-            
+
             //결과 코드가 200이면 성공
             int responseCode = conn.getResponseCode();
             System.out.println("responseCode :"+responseCode);
-            
+
             //요청을 통해 얻은 JSON 타입의 Response 메세지 읽어오기
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String line ="";
@@ -138,7 +158,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             while ((line = br.readLine())!=null){
                 result +=line;
             }
-            System.out.println("response body :"+result);
+            System.out.println("response body 두번쨰 :"+result);
 
             // Gson 라이브러리에 포함된 클래스로 JSON 파싱 객체 생성
             JsonParser parser = new JsonParser();
@@ -146,6 +166,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
             access_Token = element.getAsJsonObject().get("access_token").getAsString();
             refresh_Token = element.getAsJsonObject().get("refresh_token").getAsString();
+
 
             System.out.println("access_token :"+access_Token);
             System.out.println("refresh_token :"+refresh_Token);

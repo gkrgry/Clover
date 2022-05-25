@@ -19,13 +19,14 @@ public class User implements UserDetails {
     private int indexId;        //유저인데스 넘버
     private String userId;      //유저아이디
     private String pwd;         //비번
-    private String name;        //이름
+     String name;        //이름
     private String nickname;    //별명
     private String email;       //이메일
     private String phone;       //연락처
     private int sex;            //성별
     Date regdate;       //가입날짜
     private String image; //이미지 Url
+    int kakao;
 
 
     @Override
@@ -42,8 +43,6 @@ public class User implements UserDetails {
             log.info("빌드");
             log.info(indexId);
             log.info(userId);
-            log.info(pwd);
-            log.info(name);
             this.userId=userId;
             this.pwd=pwd;
     }

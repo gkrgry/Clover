@@ -33,6 +33,7 @@
              ,  phone
              ,  sex
              ,  regdate
+             ,  phone
 
         FROM
             user_db
@@ -51,6 +52,7 @@
         ,  phone
         ,  sex
         ,  regdate
+        , kakao
         )
         VALUES
             (
@@ -62,6 +64,7 @@
             ,   #{phone}
             ,   #{sex}
             ,   sysdate()
+            ,   #{kakao}
             )
     </insert>
     <delete id="UserDrop">
@@ -85,6 +88,7 @@
         ,   nickname    =#{nickname}
         ,   name        =#{name}
         ,   email       =#{email}
+        ,   phone       =#{phone}
         WHERE user_id   =#{userId}
 
     </update>
@@ -92,12 +96,15 @@
     <!--유저 정보불러오기-->
     <select id="selectionUser" resultType="com.daelim.clover.user.domain.User">
         SELECT
-               user_id
-            ,  name
-            , password
-            , nickname
-            ,email
-            ,image
+                user_id
+            ,   name
+            ,   password
+            ,   nickname
+            ,   sex
+            ,   email
+            ,   image
+            ,   kakao
+            ,   phone
         FROM
             user_db
         WHERE

@@ -41,6 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/login")
+                .loginPage("/kakaologin")
                 .loginProcessingUrl("/login_proc")
                 .defaultSuccessUrl("/mainpage_In")//로그인 성공 후 리다이렉트 주소
                 .failureUrl("/access_denied")  //인증에 실패했을 떄 보여주는 화면

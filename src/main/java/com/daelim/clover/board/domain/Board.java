@@ -25,6 +25,4 @@ public class Board {
     private double lat;          //위도
     private double lon;          // 경도
 
-    private User user;          //유저 db
-
 }

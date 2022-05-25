@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>입력</title>
+    <title>Clover</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
@@ -96,9 +96,16 @@
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label>요일</label>
-                        <input type="text" name="week"
-                               class="form-control">
+                        <tr>
+                            <th>요일</th>
+                            <td width="600px">
+                                <select name="week" id="select1" class="form-control" onChange="chnQnaType(this.value)" >
+                                    <option value="평일">평일</option>
+                                    <option value="주말">주말</option>
+                                    <option value="미리언질">미리언질</option>
+                                </select>
+                            </td>
+                        </tr>
                         <div class="invalid-feedback">
                             요일을 입력해 주세요
                         </div>

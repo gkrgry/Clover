@@ -176,7 +176,7 @@ public class UserController {
 
         //session.setAttribute("sUserId",userId);
 
-        return "mainpage";
+        return "redirect:/main";
     }
 
     @RequestMapping("/profile")
@@ -275,7 +275,7 @@ public class UserController {
         log.info("DB데이터 전송");
         userService.userSingUp(user);
         model.addAttribute("msg","가입 성공하셨습니다.");
-        return "mainpage";
+        return "redirect:main";
     }
 
 
@@ -353,7 +353,7 @@ public class UserController {
         session.setAttribute("phoneNumber",user.getPhone());
         model.addAttribute("info", user.getUserId()+"의 "+user.getName());//유저 아이디
 
-        return  "mainpage";
+        return  "redirect:/main";
     }
 
 

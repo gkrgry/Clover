@@ -12,6 +12,8 @@ public interface CommentService {
     public Comment readComment(int commentId) throws Exception;
 
     public int modifyComment(Comment comment) throws  Exception;
+//회원 삭제시 모든 댓글 삭제
+    public void userCommentAllDelete(String userId) throws Exception;
 
     public int removeComment(int commentId) throws Exception;
 

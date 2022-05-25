@@ -39,4 +39,10 @@
         DELETE FROM     comment_db
         WHERE           comment_id = #{commentId}
     </delete>
+
+    <!-- 유저 삭제시 게시글 같이 삭제 기능 -->
+    <delete id="userCommentAllDelete">
+        DELETE FROM comment_db
+        WHERE user_id = #{userId}
+    </delete>
 </mapper>

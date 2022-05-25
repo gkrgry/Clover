@@ -18,7 +18,8 @@ public interface BoardService {
     public void boardModify(Board board) throws Exception;
     //게시글 삭제
     public void boardRemove(Integer boardId, String userId) throws Exception;
-
+    //유저 삭제시 게시글 삭제
+    public void userAllDelete(String userId) throws Exception;
     //게시글 리스트
     public List<Board> boardList(Criteria cri) throws Exception;
 

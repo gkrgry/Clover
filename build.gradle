@@ -28,7 +28,7 @@ dependencies {
     //이메일 인증확인
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 
-    //Gson라이브러리 추가
+//    //Gson라이브러리 추가
     implementation group: 'com.google.code.gson', name: 'gson', version: '2.9.0'
 
     implementation 'org.springframework.boot:spring-boot-starter-web'

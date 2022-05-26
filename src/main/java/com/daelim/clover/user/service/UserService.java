@@ -42,5 +42,5 @@ public interface UserService {
     //카카오 유저 토큰
     public String getAccessToken(String code) ;
     //카카오 유저 정보가져오기
-    public HashMap<String, Object> getUserInfo(String access_Token);
+    public HashMap<String, Object> getUserInfo(String access_Token,User user);
 }

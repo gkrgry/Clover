@@ -134,6 +134,15 @@
                 <br>
                 <a>이름: <a th:text="${session.userName}"></a></a>
                 <input  id="username" type="hidden" th:value="${session.userName}">
+                <br>
+                <a>전화번호: <a th:text="${session.phoneNumber}"></a></a>
+                <div th:if="${#strings.isEmpty(session.phoneNumber)}">
+                        <h4>연락처 입력해주세요!!</h4>
+                </div>
+                <dib th:unless="${#strings.isEmpty(session.phoneNumber)}">
+                    <input  id="userPhone" type="hidden" th:value="${session.phoneNumber}">
+                </dib>
+
             </div>
             <hr/>
             <p>
@@ -143,13 +152,19 @@
                 이름  &nbsp &nbsp &nbsp &nbsp <input  class="btn btn-outline-success" onclick="userNameUpdate()" type="button" value="수정">
             </p>
             <p>
+                연락처  &nbsp &nbsp <input  class="btn btn-outline-success" onclick="userPhone()" type="button" value="수정">
+            </p>
+
+            <div th:if="${session.kakao}==0">
+            <p>
                 비밀번호  <input  class="btn btn-outline-success" type="button" onclick="userpwdUpdate()" value="수정">
                 <input id="pwd" type="hidden" th:value="${session.userPwd}">
             </p>
             <p>
                 이메일 &nbsp  &nbsp <input  class="btn btn-outline-success" onclick="useremailUpdate()" type="button" value="수정">
-                <input id="email" type="hidden" th:value="${session.userEmail}">
             </p>
+            </div>
+            <input id="email" type="hidden" th:value="${session.userEmail}">
         </div>
 
         <div class="tab-pane fade "  id="boardList"><th:block th:include="/include/bMypageList"></th:block></div>
@@ -180,6 +195,7 @@
     var modifynickname=$('#nickname').val();
     var modifyemail=$('#email').val();
     var modifypwd=$('#pwd').val();
+    var modifyphone=$('#phoneNumber').val();
     var emailcheking;
 
     function mypageList(){
@@ -208,6 +224,69 @@ console.log("회원탈퇴");
             })
         })
     }
+
+    function  userPhone(event){
+        modalContents.html("<div className='form-group' id='divPhoneNumber'>"+
+            "<label className='col-lg-2 control-label'>휴대폰 번호</label>"+
+            "<div className='col-lg-10'>"+
+               " <input type='tel' name='phoneNumber' className='form-control onlyNumber' id='phoneNumber'"+
+                      " data-rule-required='true' placeholder='-를 제외하고 숫자만 입력하세요.' maxLength='11'>"+
+           " </div>"+
+            "<span className='err phoneerr'>연락처를 입력해주세요</span>"+
+        "</div>")
+
+        modal.modal('show');
+
+        var divPhoneNumber =$('#divPhoneNumber').val()
+        $('#modalSubmit').click(function (){
+                modifyphone=$('#phoneNumber').val();
+
+            //휴대폰 번호
+            if($('#phoneNumber').val()==""){
+                modalContent.text("휴대폰 번호를 입력하여 주시기 바랍니다.");
+                modalck.modal('show');
+
+                divPhoneNumber.removeClass("has-success");
+                divPhoneNumber.addClass("has-error");
+                $('#phoneNumber').focus();
+                return false;
+            }else{
+                console.log("거짓");
+                var data = {
+                    "name"    : modifyname,
+                    "nickname": modifynickname,
+                    "pwd"     : modifypwd,
+                    "email"   : modifyemail,
+                    "phone"   : modifyphone
+                };
+                jb.ajax({
+                    type:"post",
+                    data : data,
+                    url : "/update_popup",
+                    success:function (result){
+                        console.log("수정완료");
+                        console.log(result);
+                        if(result=="success"){
+                            console.log("새로고침");
+                             window.location.reload();
+                        }
+                    }
+                })
+            }
+        });
+
+
+
+        $(".onlyNumber").keyup(function(event){
+            if (!(event.keyCode >=37 && event.keyCode<=40)) {
+                var inputVal = $(this).val();
+                $(this).val(inputVal.replace(/[^0-9]/gi,''));
+            }
+        });
+
+
+
+    }
     //닉네임 수정 js
     function userNicknameUpdate(event) {
         console.log("닉네임입력해줘");
@@ -219,11 +298,11 @@ console.log("회원탈퇴");
         "<span class='err nicknameerr'>수정할 닉네임을 입력해주세요</span>"+
     "</div>");
         modal.modal('show');
-
+        var divNickname = $('#divNickname');
 
         $('#modifynickname').keyup(function(event){
 
-            var divNickname = $('#divNickname');
+
 
             if($.trim($('#modifynickname').val())==""){
                 divNickname.removeClass("has-success");
@@ -241,8 +320,8 @@ console.log("회원탈퇴");
 
         $('#modalSubmit').click(function (){
             modifynickname=$('#modifynickname').val();
-            // console.log(name);
-            // console.log(nickname);
+            console.log(name);
+            console.log(nickname);
             if(!$('#modifynickname').val()){
                 console.log("트루")
                 modalContent.text("닉네임을 입력해주세요");
@@ -254,7 +333,8 @@ console.log("회원탈퇴");
                     "name"    : modifyname,
                     "nickname": modifynickname,
                     "pwd"     : modifypwd,
-                    "email"   : modifyemail
+                    "email"   : modifyemail,
+                    "phone"   : modifyphone
                 };
                 jb.ajax({
                     type:"post",
@@ -299,7 +379,8 @@ console.log("회원탈퇴");
                     "name"    : modifyname,
                     "nickname": modifynickname,
                     "pwd"     : modifypwd,
-                    "email"   : modifyemail
+                    "email"   : modifyemail,
+                    "phone"   : modifyphone
                 };
                 jb.ajax({
                     type:"post",
@@ -398,7 +479,8 @@ console.log("회원탈퇴");
                     "name"    : modifyname,
                     "nickname": modifynickname,
                     "pwd"     : modifypwd,
-                    "email"   : modifyemail
+                    "email"   : modifyemail,
+                    "phone"   : modifyphone
                 };
                 jb.ajax({
                     type:"post",
@@ -484,7 +566,8 @@ console.log("회원탈퇴");
                     "name"    : modifyname,
                     "nickname": modifynickname,
                     "pwd"     : modifypwd,
-                    "email"   : modifyemail
+                    "email"   : modifyemail,
+                    "phone"   : modifyphone
                 };
                 jb.ajax({
                     type:"post",

@@ -8222,6 +8222,7 @@ h1, h2, h3, h4, h5,
   transition: all 0.3s; }
   #sidebar.active {
     margin-left: -300px; }
+
   #sidebar .logo {
     display: block;
     width: 200px;
@@ -8250,11 +8251,12 @@ h1, h2, h3, h4, h5,
       background: transparent;
       color: #000000;
       font-weight: bold}
-  @media (max-width: 991.98px) {
-    #sidebar {
-      margin-left: -300px; }
-      #sidebar.active {
-        margin-left: 0; } }
+
+@media (max-width: 1600.52px) {
+  #sidebar {
+    margin-left: -300px; }
+  #sidebar.active {
+    margin-left: 0; } }
 
 a[data-toggle="collapse"] {
   position: relative; }

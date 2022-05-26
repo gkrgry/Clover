@@ -16,6 +16,8 @@ public interface BoardMapper {
 
     public void boardDelete(Integer boardId, String userId) throws Exception;
 
+    public void userAllDelete(String userId) throws Exception;
+
     public List<Board> boardList() throws Exception;
 
     public List<Board> getBoardListPaging(Criteria cri) throws Exception;
@@ -34,6 +36,7 @@ public interface BoardMapper {
     public int mypageGetTotal(String userId) throws Exception;
 
     public List<Board> mainList() throws Exception;
+
 
 
 }

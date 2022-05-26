@@ -5,6 +5,7 @@ import com.daelim.clover.board.domain.Board;
 import com.daelim.clover.board.domain.Criteria;
 import com.daelim.clover.board.domain.PageDTO;
 import com.daelim.clover.board.service.BoardService;
+import com.daelim.clover.comment.service.CommentService;
 import com.daelim.clover.user.domain.User;
 import com.daelim.clover.user.service.UserService;
 import com.daelim.clover.user.service.UserServiceImpl;
@@ -44,6 +45,7 @@ public class UserController {
     @Autowired
     private final UserService userService;
     private final BoardService boardService;
+    private final CommentService commentService;
     UserServiceImpl service;
 
     User user;
@@ -109,12 +111,21 @@ public class UserController {
 
     @PostMapping("/dropUser")
     @ResponseBody
-    public String userDrop()throws Exception{
+    public String userDrop(HttpServletRequest request)throws Exception{
         log.info("유저삭제@@");
         log.info(user.getUserId());
+
+        HttpSession session = request.getSession();
+
+
         String userId=user.getUserId();
         userService.userDrop(userId);
-        return "success";
+        //유저 삭제시 관련 게시글 같이 삭제
+        boardService.userAllDelete(userId);
+        commentService.userCommentAllDelete(userId);
+        //세선 삭제 (로그아웃)
+        session.invalidate();
+        return "redirect:/main";
     }
 
     @PostMapping("/update_popup")

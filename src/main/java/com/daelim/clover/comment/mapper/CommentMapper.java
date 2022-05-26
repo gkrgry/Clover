@@ -14,6 +14,8 @@ public interface CommentMapper {
     public Comment selectComment(int boardId) throws Exception;
 
     public int deleteComment(int boardId) throws Exception;
+    //회원 삭제시 모든 댓글 삭제
+    public void userCommentAllDelete(String userId) throws Exception;
 
     public int updateComment(Comment comment) throws  Exception;
 

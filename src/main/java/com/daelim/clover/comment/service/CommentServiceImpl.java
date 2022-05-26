@@ -47,5 +47,10 @@ public class CommentServiceImpl implements CommentService{
     public List<Comment> getPagingList(Criteria cri, int boardId) throws Exception {
         return mapper.commentPagingList(cri,boardId);
     }
+
+    @Override
+    public void userCommentAllDelete(String userId) throws Exception {
+        mapper.userCommentAllDelete(userId);
+    }
 }
 

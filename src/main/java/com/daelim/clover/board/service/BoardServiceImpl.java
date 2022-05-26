@@ -139,4 +139,9 @@ public class BoardServiceImpl implements BoardService {
     public List<Board> mainList() throws Exception {
         return boardMapper.mainList();
     }
+
+    @Override
+    public void userAllDelete(String userId) throws Exception {
+        boardMapper.userAllDelete(userId);
+    }
 }

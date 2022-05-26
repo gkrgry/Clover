@@ -206,13 +206,17 @@
             WHERE board_id = #{boardId}
             AND   user_id = #{userId}
         </update>
-    <!-- 게시글 기능 -->
+    <!-- 게시글 삭제 기능 -->
         <delete id="boardDelete">
             DELETE FROM board_db
             WHERE board_id = #{boardId}
             AND   user_id = #{userId}
         </delete>
-
+    <!-- 유저 삭제시 게시글 같이 삭제 기능 -->
+    <delete id="userAllDelete">
+        DELETE FROM board_db
+        WHERE user_id = #{userId}
+    </delete>
 
     <!-- 마이페이지 페이징 -->
     <select id="mypageListPaging"

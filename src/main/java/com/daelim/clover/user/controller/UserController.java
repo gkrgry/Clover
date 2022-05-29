@@ -323,7 +323,7 @@ public class UserController {
         session.setAttribute("kakao",user.getKakao());
         // 위 2개의 코드는 닉네임과 이메일을 session객체에 담는 코드
         // jsp에서 ${sessionScope.name} 이런 형식으로 사용할 수 있다.
-        return "mainpage";
+        return "redirect:/main";
     }
 
     @GetMapping("/logoutpage")

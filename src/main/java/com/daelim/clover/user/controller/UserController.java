@@ -190,12 +190,6 @@ public class UserController {
         return "redirect:/main";
     }
 
-    @RequestMapping("/profile")
-    public String Profile(HttpServletRequest request)throws Exception{
-        HttpSession session = request.getSession();
-        System.out.println(session.getAttribute("userImage"));
-        return "profile";
-    }
     @GetMapping("/mypage")
     public String myPage(HttpServletRequest request, Model model, Criteria cri)throws Exception{
         HttpSession session = request.getSession();
@@ -318,6 +312,7 @@ public class UserController {
         session.setAttribute("name", user.getName());
         session.setAttribute("email", user.getEmail());
         session.setAttribute("sUserId",user.getUserId());
+        session.setAttribute("userImage",user.getImage());
 
         session.setAttribute("phoneNumber",user.getPhone());
         session.setAttribute("kakao",user.getKakao());
@@ -362,6 +357,7 @@ public class UserController {
         session.setAttribute("sUserId",sUserId);
         session.setAttribute("kakao",user.getKakao());
         session.setAttribute("phoneNumber",user.getPhone());
+        session.setAttribute("userImage",user.getImage());
         model.addAttribute("info", user.getUserId()+"의 "+user.getName());//유저 아이디
 
         return  "redirect:/main";

@@ -291,7 +291,13 @@
                         <div class="row people">
                             <div class=" item">
                                 <div class="box">
-                                    <img class="img logo rounded-circle mb-5" th:src="|uploadImg/*{user.image}|">
+<!--                                    <div th:if="|*{not #strings.isEmpty(user.image)}|">-->
+                                        <img th:if="|*{not #strings.isEmpty(user.image)}|" class="img logo rounded-circle mb-5" th:src="|uploadImg/*{user.image}|">
+                                    <img th:unless="|*{not #strings.isEmpty(user.image)}|" class="img logo rounded-circle mb-5" th:src="|uploadImg/defult.png|">
+
+<!--                                        <img class="img logo rounded-circle mb-5" th:src="|uploadImg/default.png|">-->
+
+
                                     <h3 class="name" th:text="| *{user.userId}|" ></h3>
                                     <h5 class="title" th:text="| *{user.email}|"></h5>
                                     <h5 class="title" th:text="| *{user.phone}|"></h5>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--===============================================================================================-->
-    <link rel="icon" type="image/png" href="/login/images/icons/favicon.ico"/>
+<!--    <link rel="icon" type="image/png" href="/login/images/icons/favicon.ico"/>-->
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="/login/vendor/bootstrap/css/bootstrap.min.css">
     <!--===============================================================================================-->
@@ -31,42 +31,45 @@
 <!--    <script type="application/octet-stream" src="/static/js/bootstrap.min.js"></script>-->
 </head>
 <body>
-<th:block th:include="/include/navbar"> </th:block>
+<!--<th:block th:include="/include/navbar"> </th:block>-->
 
 <div class="limiter">
     <div class="container-login100">
         <div class="wrap-login100">
-            <form class="login100-form validate-form">
+            <form class="login100-form validate-form"  th:action="@{/login_proc}" method="post">
+
 					<span class="login100-form-title p-b-43">
-						Login to continue
+						  <a class="navbar-brand" href="main"><h1 style="color: #2E8B57;">Clover</h1></a>
+                        <br/><br/><br/>
+                        Login
 					</span>
 
 
                 <div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
-                    <input class="input100" type="text" name="email">
+                    <input class="input100" type="text" name="username" >
                     <span class="focus-input100"></span>
-                    <span class="label-input100">Email</span>
+                    <span th:for class="label-input100">ID</span>
                 </div>
 
 
                 <div class="wrap-input100 validate-input" data-validate="Password is required">
-                    <input class="input100" type="password" name="pass">
+                    <input class="input100" type="password" name="password">
                     <span class="focus-input100"></span>
-                    <span class="label-input100">Password</span>
+                    <span th:for class="label-input100">Password</span>
                 </div>
 
                 <div class="flex-sb-m w-full p-t-3 p-b-32">
-                    <div class="contact100-form-checkbox">
-                        <input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
-                        <label class="label-checkbox100" for="ckb1">
-                            Remember me
-                        </label>
-                    </div>
+<!--                    <div class="contact100-form-checkbox">-->
+<!--                        <input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">-->
+<!--                        <label class="label-checkbox100" for="ckb1">-->
+<!--                            Remember me-->
+<!--                        </label>-->
+<!--                    </div>-->
+
 
                     <div>
-                        <a href="#" class="txt1">
-                            Forgot Password?
-                        </a>
+                        <a href="searchId" >아이디 찾기 </a>|
+                        <a href="searchPwd"> 비밀번호 찾기 </a>
                     </div>
                 </div>
 
@@ -79,23 +82,31 @@
 
                 <div class="text-center p-t-46 p-b-20">
 						<span class="txt2">
-							or sign up using
+
+                    <button type="submit">login</button> |
+                    <button type="button" onclick="location.href='sign'">signUp</button>
+
 						</span>
                 </div>
 
                 <div class="login100-form-social flex-c-m">
-                    <a href="#" class="login100-form-social-item flex-c-m bg1 m-r-5">
-                        <i class="fa fa-facebook-f" aria-hidden="true"></i>
-                    </a>
+<!--                    <a href="#" class="login100-form-social-item flex-c-m bg1 m-r-5">-->
+<!--                        <i class="fa fa-facebook-f" aria-hidden="true"></i>-->
+<!--                    </a>-->
 
-                    <a href="#" class="login100-form-social-item flex-c-m bg2 m-r-5">
-                        <i class="fa fa-twitter" aria-hidden="true"></i>
-                    </a>
+<!--                    <a href="#" class="login100-form-social-item flex-c-m bg2 m-r-5">-->
+<!--                        <i class="fa fa-twitter" aria-hidden="true"></i>-->
+<!--                    </a>-->
+                </div>
+                <a class="container-login100-form-btn" href="https://kauth.kakao.com/oauth/authorize?client_id=774f346686b648d662cb1d75ccbd5cd1&redirect_uri=http://localhost:8080/kakaologin&response_type=code">
+                    <img src="/images/kakao_login_medium_wide.png">
+                </a>
+                <div>
                 </div>
             </form>
 
-            <div class="login100-more" style="background-image: url('uploadImg/defult.png');">
-            </div>
+<!--            <div class="login100-more" style="background-image: url('uploadImg/defult.png');">-->
+<!--            </div>-->
         </div>
     </div>
 </div>
@@ -121,32 +132,32 @@
 <!--===============================================================================================-->
 <script src="/login/js/main.js"></script>
 
-        <div class="container">
-            <h1>로그인</h1>
-            <form th:action="@{/login_proc}" method="post">
-                <div>
-                    <label th:for>아이디</label>
-                    <input type="text" name="username" placeholder="아이디 입력해주세요."/>
-                </div>
-                <div>
-                    <label th:for>비밀번호</label>
-                    <input type="password" name="password" placeholder="비밀번호 입력해주세요."/>
-                </div>
-                <a class="p-2" href="https://kauth.kakao.com/oauth/authorize?client_id=774f346686b648d662cb1d75ccbd5cd1&redirect_uri=http://localhost:8080/kakaologin&response_type=code">
-                    <img src="/images/kakao_login_medium_wide.png">
-                </a>
-                <div>
-                    <button type="submit">로그인</button>
-                    <button type="button" onclick="location.href='sign'">회원가입</button>
-                </div>
+<!--        <div class="container">-->
+<!--            <h1>로그인</h1>-->
+<!--            <form th:action="@{/login_proc}" method="post">-->
+<!--                <div>-->
+<!--                    <label th:for>아이디</label>-->
+<!--                    <input type="text" name="username" placeholder="아이디 입력해주세요."/>-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                    <label th:for>비밀번호</label>-->
+<!--                    <input type="password" name="password" placeholder="비밀번호 입력해주세요."/>-->
+<!--                </div>-->
+<!--                <a class="p-2" href="https://kauth.kakao.com/oauth/authorize?client_id=774f346686b648d662cb1d75ccbd5cd1&redirect_uri=http://localhost:8080/kakaologin&response_type=code">-->
+<!--                    <img src="/images/kakao_login_medium_wide.png">-->
+<!--                </a>-->
+<!--                <div>-->
+<!--                    <button type="submit">로그인</button>-->
+<!--                    <button type="button" onclick="location.href='sign'">회원가입</button>-->
+<!--                </div>-->
 
-            </form>
-        </div>
-        <div class="search">
-            <a href="searchId" >아이디 찾기</a>
-            <a href="searchPwd">비밀번호 찾기</a>
-        </div>
-</div>
+<!--            </form>-->
+<!--        </div>-->
+<!--        <div class="search">-->
+<!--            <a href="searchId" >아이디 찾기</a>-->
+<!--            <a href="searchPwd">비밀번호 찾기</a>-->
+<!--        </div>-->
+<!--</div>-->
 
 </body>
 </html>

@@ -290,7 +290,18 @@
             })
         })
         const drawStar = (target) => {
-            document.querySelector(`.star span`).style.width = `${target.value * 10}%`;
+            var starValP = `${target.value * 10}%`;
+
+            document.querySelector(`.star span`).style.width = starValP;
+            function starValue(){
+                var starVal = `${target.value * 10}`;
+                $.ajax({
+                    url: "",
+                    type: "post",
+                    dataType: "json",
+                    success: alert( starVal + "점을 주었습니다.")
+                })
+            }
         }
     </script>
 </head>
@@ -330,7 +341,7 @@
                             <span class="star">
                             ★★★★★
                             <span>★★★★★</span>
-                            <input type="range" oninput="drawStar(this)" value="1" step="1" min="0" max="10">
+                            <input type="range" onclick="" oninput="drawStar(this)" value="1" step="1" min="0" max="10">
                             </span>
                             <!-- /별점주기 -->
                         </div>

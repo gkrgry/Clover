@@ -43,6 +43,13 @@
             color: #ddd;
         }
 
+        .inserStarModal
+        {
+            position: relative;
+            font-size: 2rem;
+            color: #ddd;
+        }
+
         .star input {
             width: 100%;
             height: 100%;
@@ -51,7 +58,14 @@
             opacity: 0;
             cursor: pointer;
         }
-
+        .inserStarModal input {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
         .star span {
             width: 0;
             position: absolute;
@@ -60,7 +74,14 @@
             overflow: hidden;
             pointer-events: none;
         }
-
+        .inserStarModal span {
+            width: 0;
+            position: absolute;
+            left: 0;
+            color: red;
+            overflow: hidden;
+            pointer-events: none;
+        }
         @media (min-width: 768px) {
             .bd-placeholder-img-lg {
                 font-size: 3.5rem;
@@ -83,6 +104,7 @@
             var commentUL = $(".chat");
             var boardIdValue = $("#boardId").val();
             showList(1);
+            showStar();
 
             function showList(pageNum){
                 commentService.getList({boardId:boardIdValue, pageNum: pageNum || 1}, function (commentCnt,list){
@@ -288,20 +310,24 @@
 
                 }
             })
-        })
-        const drawStar = (target) => {
-            var starValP = `${target.value * 10}%`;
-
-            document.querySelector(`.star span`).style.width = starValP;
-            function starValue(){
-                var starVal = `${target.value * 10}`;
-                $.ajax({
-                    url: "",
-                    type: "post",
-                    dataType: "json",
-                    success: alert( starVal + "점을 주었습니다.")
+            function showStar(){
+                $.getJSON("listList/likeListAvg?boardId="+boardIdValue, function (data){
+                    document.querySelector(`.star span`).style.width = data+"%";
+                    $("#starAvg").text(`${data/10} / 10`)
+                    console.log("asd" + data);
                 })
             }
+            $("#insertStar").on("click", function(){
+                console.log("asd")
+                $("#starModal").modal('show');
+            })
+        })
+
+        const drawStar = (target) => {
+            var starVal = `${target.value}`;
+            var starValP = `${target.value * 10}%`;
+            document.querySelector(`.inserStarModal span`).style.width = starValP;
+            $("#insertStarScore").text(starVal + "/ 10")
         }
     </script>
 </head>
@@ -341,9 +367,11 @@
                             <span class="star">
                             ★★★★★
                             <span>★★★★★</span>
-                            <input type="range" onclick="" oninput="drawStar(this)" value="1" step="1" min="0" max="10">
+                            <input type="range" onclick=""  value="1" step="1" min="0" max="10">
                             </span>
                             <!-- /별점주기 -->
+                            <p id="starAvg"></p>
+                            <button type="button" id="insertStar" class="btn btn-success" >별점 주기</button>
                         </div>
                     </li>
                 </ul>
@@ -474,7 +502,31 @@
                 </div>
             </div>
         </div>
-
+        <!-- 별점 모달-->
+        <div class="modal fade" id="starModal" role="dialog" aria-labelledby="starModalLabel" aria-hidden="true" tabindex="-1" >
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="starModalLabel">별점</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <span class="inserStarModal">
+                            ★★★★★
+                            <span>★★★★★</span>
+                            <input type="range" oninput="drawStar(this)" value="1" step="1" min="0" max="10">
+                            </span>
+                            <p id="insertStarScore"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
         <!-- 댓글 -->

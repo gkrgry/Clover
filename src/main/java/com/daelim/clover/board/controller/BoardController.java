@@ -248,7 +248,7 @@ public class BoardController {
     //동호회 이메일 신청
     @PostMapping("/applyEmail")
     @ResponseBody
-    public void applyEmail(@RequestParam int boardId, Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public void applyEmail(@RequestParam int boardId, Model model, HttpServletRequest request) throws Exception {
         HttpSession session = request.getSession();//이메일 신청자 세션으로 값 가져오기
         String applyIs = (String) session.getAttribute("applyIs");
 
@@ -275,6 +275,8 @@ public class BoardController {
 
 
     }
+
+
 
 
 }

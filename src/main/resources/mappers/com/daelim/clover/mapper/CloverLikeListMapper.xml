@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daelim.clover.likeList.mapper.LikeListMapper">
+    <!-- 별점 넣기 -->
+    <insert id="insertLikeList">
+        INSERT INTO like_list_db (board_id, user_id, grade, regdate, update_date)
+        VALUES (#{boardId}, #{userId}, #{grade}, NOW(), NOW())
+    </insert>
+    <!--평점이 있는지 없는지 확인-->
+    <select id="selectLikeList"
+            resultType="int">
+        SELECT      count(*)
+        FROM        like_list_db
+        WHERE       board_id = #{boardId} and user_id = #{userId}
+    </select>
+
+    <select id="selectLikeListGrade"
+            resultType="int">
+        SELECT      grade
+        FROM        like_list_db
+        WHERE       board_id = #{boardId} and user_id = #{userId}
+    </select>
+
+    <!-- 별점 평균 가져오기 -->
+    <select id="likeListAvg" resultType="int">
+        select avg(grade) from like_list_db where board_id = #{boardId} group by board_id
+    </select>
+
+    <!-- 별점 업데이트 -->
+    <update id="updateLikeList">
+        UPDATE  like_list_db
+        SET     grade = #{grade}, update_date = NOW()
+        WHERE   board_id = #{boardId} and user_id = #{userId}
+    </update>
+
+    <!-- 별점삭제 -->
+    <delete id="deleteLikeList">
+        DELETE FROM     like_list_db
+        WHERE           user_id = #{userId} and board_id = #{boardId}
+    </delete>
+
+    <!-- 유저 삭제시 별점 같이 삭제 기능 -->
+    <delete id="userLikeAllDelete">
+        DELETE FROM like_list_db
+        WHERE user_id = #{userId}
+    </delete>
+</mapper>

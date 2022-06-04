@@ -47,7 +47,51 @@
             object-fit: cover;
 
         }
+        .star {
+            position: relative;
+            font-size: 2rem;
+            color: #ddd;
+        }
 
+        .inserStarModal
+        {
+            position: relative;
+            font-size: 2rem;
+            color: #ddd;
+        }
+
+        .star input {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .inserStarModal input {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .star span {
+            width: 0;
+            position: absolute;
+            left: 0;
+            color: red;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .inserStarModal span {
+            width: 0;
+            position: absolute;
+            left: 0;
+            color: red;
+            overflow: hidden;
+            pointer-events: none;
+        }
         @media (min-width: 768px) {
             .bd-placeholder-img-lg {
                 font-size: 3.5rem;
@@ -70,6 +114,7 @@
             var commentUL = $(".chat");
             var boardIdValue = $("#boardId").val();
             showList(1);
+            showStar();
 
             function showList(pageNum){
                 commentService.getList({boardId:boardIdValue, pageNum: pageNum || 1}, function (commentCnt,list){
@@ -275,7 +320,95 @@
 
                 }
             })
+            //별점 평균 보여주기
+            function showStar(){
+                $.getJSON("likeList/likeListAvg?boardId="+boardIdValue, function (data){
+                    document.querySelector(`.star span`).style.width = data+"%";
+                    $("#starAvg").text(`${data/10} / 10`)
+                })
+            }
+            //별점 모달창
+            $("#insertStar").on("click", function(){
+                var starModal = $("#starModal");
+                starModal.modal('show');
+                $.getJSON(`likeList/selectLike?boardId=${boardIdValue}`,function(data){
+                    if(data >= 1){
+                        $("#bt_giveStar").hide();
+                        $.getJSON("likeList/selectLikeGrade?boardId="+boardIdValue,function (data){
+                            document.querySelector(`.inserStarModal span`).style.width = data+"%";
+                            $("#insertStarScore").text(`${data/10} / 10`)
+                        })
+                    }else{
+                        $("#bt_updateStar").hide();
+                        $("#bt_deleteStar").hide();
+                    }
+                })
+            })
+            //별점 입력
+            $("#bt_giveStar").on("click",function (){
+                var starVal = $("#drawStar").val() * 10;
+                if(seUserId === "" || seUserId === null){
+                    alert("로그인을 해주세요");
+                }else{
+                    $.ajax({
+                        url: `/likeList/insertLike?boardId=${boardIdValue}&grade=${starVal}`,
+                        data: JSON,
+                        type: "post",
+                        success: function (data){
+                            alert("별점 입력");
+                            showStar();
+                        },
+                        error: function (err){
+                            alert("오류가 발생했습니다.")
+                        }
+
+                    })
+                    $("#starModal").modal('hide');
+
+                }
+            })
+            //별점 수정
+            $("#bt_updateStar").on("click", function (){
+                var starVal = $("#drawStar").val() * 10;
+                $.ajax({
+                    url: `http://localhost:8080/likeList/updateLikeList?boardId=${boardIdValue}&grade=${starVal}`,
+                    data: JSON,
+                    type: "PUT",
+                    success: function (data){
+                        alert("별점을 수정하셨습니다.");
+                        showStar();
+                    },
+                    error: function (err){
+                        alert("오류가 발생했습니다.")
+                    }
+                })
+                $("#starModal").modal('hide');
+            })
+
+            //별점 삭제
+            $("#bt_deleteStar").on("click",function (){
+                $.ajax({
+                    url : `likeList/deleteLikeList?boardId=${boardIdValue}`,
+                    data : JSON,
+                    type: "DELETE",
+                    success: function (data){
+                        alert("별점 입력하셨습니다.");
+                        showStar();
+                    },
+                    error: function (err){
+                        alert("오류가 발생했습니다.")
+                    }
+                })
+                $("#starModal").modal('hide');
+            })
         })
+
+        const drawStar = (target) => {
+            var starVal = `${target.value}`;
+            var starValP = `${target.value * 10}%`;
+            document.querySelector(`.inserStarModal span`).style.width = starValP;
+            $("#insertStarScore").text(starVal + "/ 10")
+        }
     </script>
 </head>
 <body class="bg-light">
@@ -301,6 +434,18 @@
                                     <h3 class="name" th:text="| *{user.userId}|" ></h3>
                                     <h5 class="title" th:text="| *{user.email}|"></h5>
                                     <h5 class="title" th:text="| *{user.phone}|"></h5>
+                                   <div>
+                            <h6 class="my-0">게시글 별점</h6>
+                            <!-- 별점주기 -->
+                            <span class="star">
+                            ★★★★★
+                            <span>★★★★★</span>
+                            <input type="range" onclick=""  value="1" step="1" min="0" max="10">
+                            </span>
+                            <!-- /별점주기 -->
+                            <p id="starAvg"></p>
+                            <button type="button" id="insertStar" class="btn btn-success" >별점 주기</button>
+                        </div>
                                     <!--          <p class="description">Aenean tortor est, vulputate quis leo in, vehicula rhoncus lacus. Praesent aliquam in tellus eu gravida. Aliquam varius finibus est, et interdum justo suscipit id. Etiam dictum feugiat tellus, a semper massa. </p>-->
                                     <div class="social">
                                         <a href="#"><i class="fa fa-facebook-official"></i></a><a href="#"><i class="fa fa-twitter"></i></a><a href="#"><i class="fa fa-instagram"></i></a>
@@ -327,6 +472,45 @@
 <!--                        </div>-->
 <!--                    </li>-->
 <!--                </ul>-->
+
+        <!--    <div class="col-md-4 order-md-2 mb-4">
+                <br>
+                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-muted">글쓴이</span>
+                </h4>
+                <ul class="list-group mb-3">
+                    <li class="list-group-item d-flex justify-content-between lh-condensed">
+                        <div class="box">
+                            <img th:src="|uploadImg/*{user.image}|" class="profile my-4">
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between lh-condensed">
+                        <div>
+                            <h6 class="my-0" th:text="|아이디 : *{user.userId}|"></h6>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between lh-condensed">
+                        <div>
+                            <h6 class="my-0" th:text="|이메일 : *{user.email}|"></h6>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between lh-condensed">
+                        <div>
+                            <h6 class="my-0">게시글 별점</h6>
+                            <!-- 별점주기 -->
+                            <span class="star">
+                            ★★★★★
+                            <span>★★★★★</span>
+                            <input type="range" onclick=""  value="1" step="1" min="0" max="10">
+                            </span>
+                            <!-- /별점주기 -->
+                            <p id="starAvg"></p>
+                            <button type="button" id="insertStar" class="btn btn-success" >별점 주기</button>
+                        </div>
+                    </li>
+                </ul>
+
+-->
             </div>
 
             <!-- /작성자 프로필 -->
@@ -454,7 +638,33 @@
                 </div>
             </div>
         </div>
-
+        <!-- 별점 모달-->
+        <div class="modal fade" id="starModal" role="dialog" aria-labelledby="starModalLabel" aria-hidden="true" tabindex="-1" >
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="starModalLabel">별점</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <span class="inserStarModal">
+                            ★★★★★
+                            <span>★★★★★</span>
+                            <input type="range" oninput="drawStar(this)" id="drawStar" value="1" step="1" min="0" max="10">
+                            </span>
+                            <p id="insertStarScore"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="bt_deleteStar" class="btn btn-danger">삭제</button>
+                        <button type="button" id="bt_updateStar" class="btn btn-warning">수정</button>
+                        <button type="button" id="bt_giveStar" class="btn btn-success">주기</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
         <!-- 댓글 -->

@@ -43,4 +43,6 @@ public interface UserService {
     public String getAccessToken(String code) ;
     //카카오 유저 정보가져오기
     public HashMap<String, Object> getUserInfo(String access_Token,User user);
+    //카카오 유저 회원탈퇴
+    public String KakaoDropuser(String Token)throws Exception;
 }

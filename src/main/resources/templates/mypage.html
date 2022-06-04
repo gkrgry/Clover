@@ -51,6 +51,7 @@
                 </p>
             </div>
             <div class="modal-footer">
+                <button id="mainbtn" type="button" class="btn btn-success" data-dismiss="modal">확인</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
             </div>
         </div><!-- /.modal-content -->
@@ -96,9 +97,13 @@
                 <li>
                     <a href="#">Portfolio</a>
                 </li>
-                <li>
+                <li th:if="${user.kakao==0}">
                     <a href="#secession"  onclick="secession()">회원탈퇴</a>
                 </li>
+                <li th:unless="${user.kakao==0}">
+                    <a href="#secession" onclick="kakaoDrop()"  >카카오 회원탈퇴</a>
+                </li>
+                <input id="Token" type="hidden" th:value="${session.Token}"/>
             </ul>
 
             <div class="footer">
@@ -202,6 +207,28 @@
         window.open("/mypageList")
     }
     //회원 탈퇴
+
+    function kakaoDrop(event){
+        secessionContent.text("정말 탈퇴 하시겠습니까?");
+        modalSecession.modal('show');
+        $('#secessionbtn').click(function (){
+            jb.ajax({
+                type:"get",
+                url :"/kakaodrop",
+                success:function (result){
+                    if(result="success"){
+                        modalContent.text("정상적으로 탈퇴 되었습니다.");
+                        modalck.modal('show');
+                        $('#mainbtn').click(function (){
+                            location.href="/main"
+                        })
+
+                    }
+
+                }
+            })
+        })
+    }
     function secession(event){
 console.log("회원탈퇴");
         secessionContent.text("정말 탈퇴 하시겠습니까?");
@@ -224,7 +251,6 @@ console.log("회원탈퇴");
             })
         })
     }
-
     function  userPhone(event){
         modalContents.html("<div className='form-group' id='divPhoneNumber'>"+
             "<label className='col-lg-2 control-label'>휴대폰 번호</label>"+

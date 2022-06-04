@@ -118,6 +118,25 @@ public class UserController {
         return str="";
     }
 
+    @GetMapping("/kakaodrop")
+    @ResponseBody
+    public String KakaoDrop(HttpServletRequest request)throws  Exception{
+
+        HttpSession session = request.getSession();
+
+        String Token =(String) session.getAttribute("Token");
+        String userId = (String) session.getAttribute("sUserId");
+        userService.userDrop(userId);
+        String result=userService.KakaoDropuser(Token);
+        //유저 삭제시 관련 게시글 같이 삭제
+        boardService.userAllDelete(userId);
+        commentService.userCommentAllDelete(userId);
+        //세선 삭제 (로그아웃)
+        session.invalidate();
+        return result;
+
+    }
+
     @PostMapping("/dropUser")
     @ResponseBody
     public String userDrop(HttpServletRequest request)throws Exception{
@@ -191,20 +210,16 @@ public class UserController {
 
         //session.setAttribute("sUserId",userId);
 
-        return "redirect:/main";
+        return "";
     }
 
-    @RequestMapping("/profile")
-    public String Profile(HttpServletRequest request)throws Exception{
-        HttpSession session = request.getSession();
-        System.out.println(session.getAttribute("userImage"));
-        return "profile";
-    }
     @GetMapping("/mypage")
     public String myPage(HttpServletRequest request, Model model, Criteria cri)throws Exception{
         HttpSession session = request.getSession();
         String userId = (String) session.getAttribute("sUserId");
        String Pwd = (String) session.getAttribute("pwd");
+       String Token = (String) session.getAttribute("Token");
+
         System.out.println("저장된변수"+userId);
         System.out.println("저장된변수"+Pwd);
       user=userService.myPage(userId);
@@ -236,7 +251,7 @@ public class UserController {
         session.setAttribute("userImage",image);
         session.setAttribute("phoneNumber",user.getPhone());
         session.setAttribute("kakao",user.getKakao());
-
+        session.setAttribute("Token",Token);
 
 //        System.out.println(userPwd);
 //        System.out.println(userName);
@@ -247,8 +262,10 @@ public class UserController {
         model.addAttribute("total",total);
         model.addAttribute("boardList", boardList);
         model.addAttribute("pageMaker",new PageDTO(cri,total));
+        model.addAttribute("user",user);
+        System.out.println(user);
 
-        return "mypage";
+        return "/mypage";
 
     }
 
@@ -306,7 +323,7 @@ public class UserController {
         System.out.println("########"+code);//사용자 코드
 
         String access_Token = userService.getAccessToken(code);
-
+//        userService.KakaoDropuser(access_Token);
         HashMap<String,Object> userInfo = userService.getUserInfo(access_Token, user);
         KakaDTO kakaDTO= (KakaDTO) userInfo;
         System.out.println(kakaDTO);
@@ -322,7 +339,8 @@ public class UserController {
         session.setAttribute("name", user.getName());
         session.setAttribute("email", user.getEmail());
         session.setAttribute("sUserId",user.getUserId());
-
+        session.setAttribute("userImage",user.getImage());
+        session.setAttribute("Token",access_Token);
         session.setAttribute("phoneNumber",user.getPhone());
         session.setAttribute("kakao",user.getKakao());
         // 위 2개의 코드는 닉네임과 이메일을 session객체에 담는 코드
@@ -352,7 +370,7 @@ public class UserController {
 
     }
     @GetMapping("/mainpage_In")
-    public String userAccess(Model model, HttpServletRequest request, Authentication authentication){
+    public String userAccess(Model model, HttpServletRequest request, Authentication authentication) throws Exception {
 
         log.info("로그인 성공!!");
         //Authentication객체를 통해 유저 정보를 가져올 수 있다.
@@ -360,12 +378,15 @@ public class UserController {
         HttpSession session= request.getSession();
         String sUserId = user.getUserId();
         String pwd = user.getPwd();
+        String Token = (String) session.getAttribute("Token");
+        String result=userService.KakaoDropuser(Token);
         log.info(""+pwd);
         log.info(""+sUserId);
         session.setAttribute("pwd",pwd);
         session.setAttribute("sUserId",sUserId);
         session.setAttribute("kakao",user.getKakao());
         session.setAttribute("phoneNumber",user.getPhone());
+        session.setAttribute("userImage",user.getImage());
         model.addAttribute("info", user.getUserId()+"의 "+user.getName());//유저 아이디
 
         return  "redirect:/main";

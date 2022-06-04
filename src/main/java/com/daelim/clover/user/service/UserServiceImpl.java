@@ -59,6 +59,25 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Autowired
     private UserRepository ur;
 
+
+    //카카오 유저 회원탈퇴
+    public String KakaoDropuser(String Token)throws Exception{
+        String rqlURL = "https://kapi.kakao.com/v1/user/unlink";
+        try {
+            URL url = new URL(rqlURL);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+
+            conn.setRequestProperty("Authorization","Bearer "+Token);
+            int responseCode = conn.getResponseCode();
+            System.out.println("responseCode: "+responseCode);
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println("회원탈퇴오류");
+        }
+        return "success";
+    }
+
     //카카오 유저 정보
     public KakaDTO getUserInfo(String access_Token,User user){
 

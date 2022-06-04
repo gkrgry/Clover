@@ -18,8 +18,13 @@ public class ListListServiceImpl implements LikeListService {
     }
 
     @Override
-    public LikeList selectLikeList(Integer boardId, String userId) throws Exception {
+    public int selectLikeList(Integer boardId, String userId) throws Exception {
         return likeListMapper.selectLikeList(boardId,userId);
+    }
+
+    @Override
+    public int selectLikeListGrade(Integer boardId, String userId) throws Exception {
+        return likeListMapper.selectLikeListGrade(boardId,userId);
     }
 
     @Override

@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 @RequiredArgsConstructor
 @Log4j2
 @Controller
-@RequestMapping("/listList")
+@RequestMapping("/likeList")
 public class LikeListController {
 
     private final LikeListService likeListService;
@@ -27,8 +27,8 @@ public class LikeListController {
 
         HttpSession session = request.getSession();
         //로그인한 아이디
-//        String userId = (String)session.getAttribute("sUserId");
-        String userId = "qwe";
+        String userId = (String)session.getAttribute("sUserId");
+//        String userId = "qwe";
         if(userId !="" || userId != null){//유효성
             likeListService.insertLikeList(boardId,userId,grade);
         }else{
@@ -37,21 +37,39 @@ public class LikeListController {
 
     }
 
-    //select
+    //별점 있는지 없는지 조회
     @GetMapping("/selectLike")
     @ResponseBody
-    public void selectLikeList(@RequestParam int boardId, Model model, HttpServletRequest request) throws Exception{
+    public int selectLikeList(@RequestParam int boardId, Model model, HttpServletRequest request) throws Exception{
         HttpSession session = request.getSession();
         //로그인한 아이디
         String userId = (String)session.getAttribute("sUserId");
-        LikeList likeList = likeListService.selectLikeList(boardId,userId);
+        if(userId == null){
+            userId = "";
+        }
+//        String userId = "qwe";
+        return likeListService.selectLikeList(boardId,userId);
+    }
+
+    //있다면 넣은 점수 가져오기
+    @GetMapping("/selectLikeGrade")
+    @ResponseBody
+    public int selectLikeListGrade(@RequestParam int boardId, Model model, HttpServletRequest request) throws Exception{
+        HttpSession session = request.getSession();
+        //로그인한 아이디
+        String userId = (String)session.getAttribute("sUserId");
+        if(userId == null){
+            userId = "";
+        }
+//        String userId = "qwe";
+        return likeListService.selectLikeListGrade(boardId,userId);
     }
 
     //평균 점수 가져오기
     @GetMapping("/likeListAvg")
     @ResponseBody
     public int likeListAvg(@RequestParam int boardId) throws Exception{
-        return likeListService.likeListAvg(boardId);
+        return Math.round(likeListService.likeListAvg(boardId)) ;
     }
 
     // 점수 수정

@@ -5,7 +5,9 @@ import com.daelim.clover.likeList.domain.LikeList;
 public interface LikeListService {
     public void insertLikeList(Integer boardId, String userId, Integer grade) throws Exception;
 
-    public LikeList selectLikeList(Integer boardId, String userId) throws Exception;
+    public int selectLikeList(Integer boardId, String userId) throws Exception;
+
+    public int selectLikeListGrade(Integer boardId, String userId) throws Exception;
 
     public int likeListAvg(Integer boardId) throws Exception;
 

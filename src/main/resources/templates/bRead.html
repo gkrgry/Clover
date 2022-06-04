@@ -310,16 +310,86 @@
 
                 }
             })
+            //별점 평균 보여주기
             function showStar(){
-                $.getJSON("listList/likeListAvg?boardId="+boardIdValue, function (data){
+                $.getJSON("likeList/likeListAvg?boardId="+boardIdValue, function (data){
                     document.querySelector(`.star span`).style.width = data+"%";
                     $("#starAvg").text(`${data/10} / 10`)
-                    console.log("asd" + data);
                 })
             }
+            //별점 모달창
             $("#insertStar").on("click", function(){
-                console.log("asd")
-                $("#starModal").modal('show');
+                var starModal = $("#starModal");
+                starModal.modal('show');
+                $.getJSON(`likeList/selectLike?boardId=${boardIdValue}`,function(data){
+                    if(data >= 1){
+                        $("#bt_giveStar").hide();
+                        $.getJSON("likeList/selectLikeGrade?boardId="+boardIdValue,function (data){
+                            document.querySelector(`.inserStarModal span`).style.width = data+"%";
+                            $("#insertStarScore").text(`${data/10} / 10`)
+                        })
+                    }else{
+                        $("#bt_updateStar").hide();
+                        $("#bt_deleteStar").hide();
+                    }
+                })
+            })
+            //별점 입력
+            $("#bt_giveStar").on("click",function (){
+                var starVal = $("#drawStar").val() * 10;
+                if(seUserId === "" || seUserId === null){
+                    alert("로그인을 해주세요");
+                }else{
+                    $.ajax({
+                        url: `/likeList/insertLike?boardId=${boardIdValue}&grade=${starVal}`,
+                        data: JSON,
+                        type: "post",
+                        success: function (data){
+                            alert("별점 입력");
+                            showStar();
+                        },
+                        error: function (err){
+                            alert("오류가 발생했습니다.")
+                        }
+
+                    })
+                    $("#starModal").modal('hide');
+
+                }
+            })
+            //별점 수정
+            $("#bt_updateStar").on("click", function (){
+                var starVal = $("#drawStar").val() * 10;
+                $.ajax({
+                    url: `http://localhost:8080/likeList/updateLikeList?boardId=${boardIdValue}&grade=${starVal}`,
+                    data: JSON,
+                    type: "PUT",
+                    success: function (data){
+                        alert("별점을 수정하셨습니다.");
+                        showStar();
+                    },
+                    error: function (err){
+                        alert("오류가 발생했습니다.")
+                    }
+                })
+                $("#starModal").modal('hide');
+            })
+
+            //별점 삭제
+            $("#bt_deleteStar").on("click",function (){
+                $.ajax({
+                    url : `likeList/deleteLikeList?boardId=${boardIdValue}`,
+                    data : JSON,
+                    type: "DELETE",
+                    success: function (data){
+                        alert("별점 입력하셨습니다.");
+                        showStar();
+                    },
+                    error: function (err){
+                        alert("오류가 발생했습니다.")
+                    }
+                })
+                $("#starModal").modal('hide');
             })
         })
 
@@ -516,13 +586,15 @@
                         <span class="inserStarModal">
                             ★★★★★
                             <span>★★★★★</span>
-                            <input type="range" oninput="drawStar(this)" value="1" step="1" min="0" max="10">
+                            <input type="range" oninput="drawStar(this)" id="drawStar" value="1" step="1" min="0" max="10">
                             </span>
                             <p id="insertStarScore"></p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" id="bt_deleteStar" class="btn btn-danger">삭제</button>
+                        <button type="button" id="bt_updateStar" class="btn btn-warning">수정</button>
+                        <button type="button" id="bt_giveStar" class="btn btn-success">주기</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
                     </div>
                 </div>
             </div>

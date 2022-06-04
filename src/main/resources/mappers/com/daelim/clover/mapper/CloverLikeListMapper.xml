@@ -7,10 +7,17 @@
         INSERT INTO like_list_db (board_id, user_id, grade, regdate, update_date)
         VALUES (#{boardId}, #{userId}, #{grade}, NOW(), NOW())
     </insert>
-
+    <!--평점이 있는지 없는지 확인-->
     <select id="selectLikeList"
-            resultType="com.daelim.clover.likeList.domain.LikeList">
-        SELECT      like_id, board_id, user_id, grade, update_date
+            resultType="int">
+        SELECT      count(*)
+        FROM        like_list_db
+        WHERE       board_id = #{boardId} and user_id = #{userId}
+    </select>
+
+    <select id="selectLikeListGrade"
+            resultType="int">
+        SELECT      grade
         FROM        like_list_db
         WHERE       board_id = #{boardId} and user_id = #{userId}
     </select>

@@ -106,7 +106,7 @@ public class BoardController {
 
     @GetMapping("/register")
     public String boardRegisterForm(Board board, Model model) throws Exception {
-        log.info("get 입력 입니다.");
+        log.info("register get 입력 입니다.");
 
         return "bRegister";
     }
@@ -192,7 +192,7 @@ public class BoardController {
 
     @GetMapping("/modify")
     public String boardModify(@RequestParam("boardId") int boardId, Model model) throws Exception {
-
+        log.info("modify get");
 
         Board board = boardService.boardRead(boardId);
 
@@ -205,6 +205,7 @@ public class BoardController {
     //게시글 수정
     @PostMapping("/modify")
     public String boardModifyForm(Board board, Model model, HttpSession session) throws Exception {
+        log.info("modify post");
         //유효성 검사
         if (board.getUserId() == session.getAttribute("sUserId")) {
 
@@ -231,7 +232,8 @@ public class BoardController {
         return "redirect:/main";
     }
 
-    @GetMapping(value = "/uploadImg/{filename}", produces = MediaType.IMAGE_PNG_VALUE)
+    @GetMapping(value = "/uploadImg/{filename}", produces = {MediaType.IMAGE_PNG_VALUE,
+            MediaType.IMAGE_GIF_VALUE,MediaType.IMAGE_JPEG_VALUE})
     @ResponseBody
     public ResponseEntity<byte[]> showImage(@PathVariable String filename) throws Exception {
         log.info(filename);
@@ -242,7 +244,7 @@ public class BoardController {
         HttpHeaders header = new HttpHeaders();
         header.setContentType(MediaType.IMAGE_JPEG);
         return new ResponseEntity<byte[]>(IOUtils.toByteArray(new FileInputStream(
-                new File("C:\\uploadImg/" + filename))), header, HttpStatus.CREATED);
+                new File("/home/ubuntu/uploadImg/" + filename))), header, HttpStatus.CREATED);
     }
 
     //동호회 이메일 신청

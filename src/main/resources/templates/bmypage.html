@@ -80,7 +80,7 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 <!--// 모달창 -->
-<th:block th:include="/include/navbar"> </th:block>
+<th:block th:include="include/navbar"> </th:block>
 <div class="wrapper d-flex align-items-stretch">
     <nav id="sidebar" class="active">
         <div class="p-4 pt-5">
@@ -172,7 +172,7 @@
             <input id="email" type="hidden" th:value="${session.userEmail}">
         </div>
 
-        <div class="tab-pane fade "  id="boardList"><th:block th:include="/include/bMypageList"></th:block></div>
+        <div class="tab-pane fade "  id="boardList"><th:block th:include="include/bMypageList"></th:block></div>
     </div>
 
     </div>
@@ -219,6 +219,7 @@
                     if(result="success"){
                         modalContent.text("정상적으로 탈퇴 되었습니다.");
                         modalck.modal('show');
+                        location.href="/main"
                         $('#mainbtn').click(function (){
                             location.href="/main"
                         })

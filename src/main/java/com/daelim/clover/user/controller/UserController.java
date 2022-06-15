@@ -6,7 +6,6 @@ import com.daelim.clover.board.domain.Criteria;
 import com.daelim.clover.board.domain.PageDTO;
 import com.daelim.clover.board.service.BoardService;
 import com.daelim.clover.comment.service.CommentService;
-import com.daelim.clover.likeList.domain.LikeList;
 import com.daelim.clover.likeList.service.LikeListService;
 import com.daelim.clover.user.domain.User;
 import com.daelim.clover.user.kakao.KakaDTO;
@@ -62,7 +61,7 @@ public class UserController {
     UserMapper userMapper;
 
 
-    @GetMapping(value = "/upload/{filename}",produces = MediaType.IMAGE_PNG_VALUE)
+    @GetMapping(value = "/upload/{filename}",produces = {MediaType.IMAGE_PNG_VALUE,MediaType.IMAGE_GIF_VALUE,MediaType.IMAGE_JPEG_VALUE})
     @ResponseBody
     public ResponseEntity<byte[]>showImage(@PathVariable String filename) throws Exception{
         log.info(filename);
@@ -73,7 +72,7 @@ public class UserController {
         HttpHeaders header = new HttpHeaders();
         header.setContentType(MediaType.IMAGE_JPEG);
         return new ResponseEntity<byte[]>(IOUtils.toByteArray(new FileInputStream(
-                new File("C:\\uploadImg/"+ filename))), header, HttpStatus.CREATED);
+                new File("/home/ubuntu/uploadImg/"+ filename))), header, HttpStatus.CREATED);
     }//바꿔야 할것
 
     @PostMapping("imageupload")
@@ -100,9 +99,9 @@ public class UserController {
     @PostMapping("/search")
     @ResponseBody
     public String search(String email,String userId)throws Exception{
-        String str;
+        String str = "";
         System.out.println(userId);
-        if(userId==""){
+        if(userId==null){
             System.out.println("이메일로 아이디찾는중");
             str=userService.searchUser(email);
 
@@ -115,7 +114,7 @@ public class UserController {
                 return str="success";
             }
         }
-        return str="";
+        return str;
     }
 
     @GetMapping("/kakaodrop")
@@ -160,46 +159,58 @@ public class UserController {
     @PostMapping("/update_popup")
     public @ResponseBody String userUpdate(HttpServletRequest request,User user) throws Exception{
 //        log.info("유저 업뎃");
-        log.info(user.getNickname());
+        log.info(user.getUserId()+"유저 아이디");
 //        log.info(name);
         HttpSession session = request.getSession();
 
-
-
+        User kakaouser=userMapper.selectionUser(user.getUserId());
+        int kakao=0;
         String userId = (String) session.getAttribute("sUserId");
-        int kakao= (int) session.getAttribute("kakao");
-      if(kakao==0){
-        String pwd = (String) session.getAttribute("pwd");
-        System.out.println(pwd);
-        System.out.println(user.getName());
-        System.out.println(user.getPwd().equals(user.getName()));
-        System.out.println(user.getPwd());
-        if(user.getPwd().equals(user.getName())){
-            user.setPwd(pwd);
-        }else{
-            if(pwd==user.getPwd()){
-                user.setPwd(pwd);
-                return "faild";
-            }else if(user.getPwd()!=null ){
 
-                BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-                user.setPwd(passwordEncoder.encode(user.getPassword()));
-                System.out.println(user.getPwd()+"바꿔지는 패스워드");
-            }else if(userId==null){
-                return "notId";
-            }
+        if(session.getAttribute("kakao")==null){
+            kakao=kakaouser.getKakao();
+        }else{
+            kakao=(int) session.getAttribute("kakao");
         }
 
-      }
+        if(kakao==0){
+            String pwd = (String) session.getAttribute("pwd");
+//        System.out.println(pwd);
+//        System.out.println(user.getName());
+//        System.out.println(user.getPwd().equals(user.getName()));
+//        System.out.println(user.getPwd());
+            if(user.getPwd().equals(user.getName())){
+                user.setPwd(pwd);
+            }else{
+                if(pwd==user.getPwd()){
+                    user.setPwd(pwd);
+                    return "faild";
+                }else if(user.getPwd()!=null ){
+
+                    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+                    user.setPwd(passwordEncoder.encode(user.getPassword()));
+                    System.out.println(user.getPwd()+"바꿔지는 패스워드");
+                }else if(userId==null){
+                    return "notId";
+                }
+            }
+
+        }
         System.out.println(userId);
-        user.setUserId(userId);
+        if(userId!=null){
+            user.setUserId(userId);
+        }else{
+            user.setNickname(kakaouser.getNickname());
+            user.setName(kakaouser.getName());
+            user.setPhone(kakaouser.getPhone());
+        }
         System.out.println(user.getUserId());
 
 
         System.out.println(user+"패끝");
 
-       // System.out.println(this.user.getNickname()+"현재닉네임");
-       // System.out.println(user.getNickname()+"바꿀 닉네임");
+        // System.out.println(this.user.getNickname()+"현재닉네임");
+        // System.out.println(user.getNickname()+"바꿀 닉네임");
         userService.userUpdate(user);
 
         return "success";
@@ -233,7 +244,7 @@ public class UserController {
         String image;
 
         if(user.getImage()==null){
-            image="defult.png";
+            image="default.png";
         }else{
             image= user.getImage();
         }
@@ -265,7 +276,7 @@ public class UserController {
         model.addAttribute("user",user);
         System.out.println(user);
 
-        return "/mypage";
+        return "bmypage";
 
     }
 
@@ -315,7 +326,7 @@ public class UserController {
     public String userSignForm() throws Exception{
         log.info("회원가입 페이지");
 
-        return "sign";
+        return "bsign";
     }
 
     @GetMapping("/kakaologin")
@@ -358,7 +369,7 @@ public class UserController {
     public String userLogin() throws Exception{
         log.info("로그인 페이지");
 
-        return "login";
+        return "blogin";
     }
     @GetMapping("/access_denied")
     public  String accessDenied(){

@@ -22,7 +22,7 @@
 </head>
 <body>
     <!-- header -->
-    <th:block th:include="/include/navbar"> </th:block>
+    <th:block th:include="include/navbar"> </th:block>
     <!-- search -->
     <form class="form-inline my-2 my-lg-0" action="mapSearch">
         <input class="form-control mr-lg-6 mapSearch" name="keyword" type="search" placeholder="지역구를 입력히세요" aria-label="Search">
@@ -123,7 +123,7 @@
         </div>
     </div>
     <!-- footer -->
-    <th:block th:include="/include/footer"> </th:block>
+    <th:block th:include="include/footer"> </th:block>
     <script th:javascript>
         /* ![CDATA[ */
         function movePage(uri, queryString) {
@@ -200,7 +200,7 @@
             });
             <!-- 추가 -->
             var infowindow = new kakao.maps.InfoWindow({
-                content : "<a href=read?boardId=" + positions[i].boardId +">" +positions[i].content + " (" + positions[i].bigTag +")" + "</a>",
+                content : "<a href=read?boardId=" + positions[i].boardId +">" +positions[i].content + "</a>",
                 removable : true
             });
 

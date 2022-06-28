@@ -141,7 +141,7 @@
                 });
             };
 
-            var modal = $(".modal");
+            var modal = $("#myModal");
             var modalInputContent = modal.find("input[name='content']");
             var modalInputWriter = modal.find("input[name='writer']");
 
@@ -160,7 +160,7 @@
 
                     modalRegisterBtn.show();
 
-                    $('.modal').modal('show');
+                    $('#myModal').modal('show');
                 }
             });
             $("#modalRegisterBtn").on("click", function (){
@@ -371,7 +371,7 @@
             $("#bt_updateStar").on("click", function (){
                 var starVal = $("#drawStar").val() * 10;
                 $.ajax({
-                    url: `http://localhost:8080/likeList/updateLikeList?boardId=${boardIdValue}&grade=${starVal}`,
+                    url: `/likeList/updateLikeList?boardId=${boardIdValue}&grade=${starVal}`,
                     data: JSON,
                     type: "PUT",
                     success: function (data){
@@ -426,7 +426,7 @@
                                 <div class="box">
 <!--                                    <div th:if="|*{not #strings.isEmpty(user.image)}|">-->
                                         <img th:if="|*{not #strings.isEmpty(user.image)}|" class="img logo rounded-circle mb-5" th:src="|uploadImg/*{user.image}|">
-                                    <img th:unless="|*{not #strings.isEmpty(user.image)}|" class="img logo rounded-circle mb-5" th:src="|uploadImg/defult.png|">
+                                    <img th:unless="|*{not #strings.isEmpty(user.image)}|" class="img logo rounded-circle mb-5" th:src="|uploadImg/default.png|">
 
 <!--                                        <img class="img logo rounded-circle mb-5" th:src="|uploadImg/default.png|">-->
 
